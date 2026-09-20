@@ -1,0 +1,1595 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAIT | Students Association of Information Technology — SOE, CUSAT</title>
+  <meta name="description" content="Official website of the Students Association of Information Technology (SAIT), Division of Information Technology, School of Engineering, CUSAT. Discover events, careers, student activities, and tech innovations.">
+  <meta name="keywords" content="SAIT, CUSAT, School of Engineering, Information Technology, Student Association, Engineering, Tech Events, Coding, Hackathon">
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Scroll Progress Indicator -->
+  <div id="scrollProgressBar" class="scroll-progress-bar" aria-hidden="true"></div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Atmospheric Dark Green & Emerald Ambient Lighting Layer -->
+  <div class="ambient-bg-layer" aria-hidden="true">
+    <div class="ambient-glow-orb glow-orb-1"></div>
+    <div class="ambient-glow-orb glow-orb-2"></div>
+    <div class="ambient-glow-orb glow-orb-3"></div>
+    <div class="ambient-glow-orb glow-orb-4"></div>
+    <div class="ambient-grid-overlay"></div>
+  </div>
+
+  <!-- 1. HEADER & NAVIGATION -->
+  <header class="site-header" id="siteHeader">
+    <div class="nav-container">
+      <a href="#home" class="brand-logo" aria-label="SAIT Home">
+        <div class="logo-symbol">
+          <img src="sait-logo.jpg" alt="SAIT Logo" class="brand-logo-img">
+        </div>
+        <div class="logo-text">
+          <span class="logo-title">SAIT<span class="logo-dot">.</span></span>
+          <span class="logo-subtitle">SOE CUSAT &bull; IT</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Menu -->
+      <nav class="desktop-nav" id="desktopNav" aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="#home" class="nav-link active">Home</a></li>
+          <li><a href="#about" class="nav-link">About</a></li>
+          <li><a href="#events" class="nav-link">Events</a></li>
+          <li><a href="#announcements" class="nav-link">Announcements</a></li>
+          <li><a href="#achievements" class="nav-link">Hall of Fame</a></li>
+          <li><a href="#activity-logger" class="nav-link">Activity Logger</a></li>
+          <li><a href="#people" class="nav-link">People</a></li>
+          <li><a href="#careers" class="nav-link">Careers</a></li>
+          <li><a href="#alumni" class="nav-link">Alumni</a></li>
+          <li><a href="#resources" class="nav-link">Resources</a></li>
+          <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <!-- Nav Action Controls -->
+      <div class="nav-actions">
+        <!-- Global Search Trigger Pill -->
+        <button type="button" class="nav-search-pill" id="searchTriggerBtn" title="Global Search (Ctrl+K)" aria-label="Search website">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <span>Search...</span>
+          <span class="kbd-badge">Ctrl K</span>
+        </button>
+
+        <!-- Theme Mode Toggle -->
+        <button type="button" class="btn-icon" id="themeToggleBtn" title="Toggle Theme" aria-label="Toggle light or dark theme">
+          <i class="fa-solid fa-moon theme-icon-moon"></i>
+          <i class="fa-solid fa-sun theme-icon-sun"></i>
+        </button>
+
+        <!-- Student Portal Quick Dashboard Button -->
+        <button type="button" class="btn-portal" id="studentPortalBtn" aria-label="Open Student Portal Modal">
+          <i class="fa-solid fa-user-graduate"></i>
+          <span>Student Portal</span>
+        </button>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button type="button" class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Open navigation menu" aria-expanded="false">
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Menu -->
+    <div class="mobile-nav-drawer" id="mobileNavDrawer" aria-hidden="true">
+      <div class="mobile-nav-header">
+        <span class="mobile-drawer-title">Navigation Menu</span>
+        <button type="button" class="btn-close-drawer" id="closeMobileDrawerBtn" aria-label="Close menu">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <ul class="mobile-nav-links">
+        <li><a href="#home" class="mobile-nav-link active"><i class="fa-solid fa-house"></i> Home</a></li>
+        <li><a href="#about" class="mobile-nav-link"><i class="fa-solid fa-circle-info"></i> About</a></li>
+        <li><a href="#events" class="mobile-nav-link"><i class="fa-solid fa-calendar-days"></i> Events &amp; Workshops</a></li>
+        <li><a href="#announcements" class="mobile-nav-link"><i class="fa-solid fa-bullhorn"></i> Announcements</a></li>
+        <li><a href="#achievements" class="mobile-nav-link"><i class="fa-solid fa-trophy"></i> Hall of Fame</a></li>
+        <li><a href="#activity-logger" class="mobile-nav-link highlight-link"><i class="fa-solid fa-clipboard-check"></i> Activity Logger</a></li>
+        <li><a href="#people" class="mobile-nav-link"><i class="fa-solid fa-users"></i> People &amp; Teams</a></li>
+        <li><a href="#careers" class="mobile-nav-link"><i class="fa-solid fa-briefcase"></i> Careers &amp; Placements</a></li>
+        <li><a href="#alumni" class="mobile-nav-link"><i class="fa-solid fa-user-tie"></i> Alumni Network</a></li>
+        <li><a href="#resources" class="mobile-nav-link"><i class="fa-solid fa-folder-open"></i> Resource Hub</a></li>
+        <li><a href="#contact" class="mobile-nav-link"><i class="fa-solid fa-envelope"></i> Contact</a></li>
+      </ul>
+      <div class="mobile-drawer-footer">
+        <button type="button" class="btn btn-primary w-full" id="mobilePortalBtn">
+          <i class="fa-solid fa-user-graduate"></i> My Student Dashboard
+        </button>
+      </div>
+    </div>
+    <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
+  </header>
+
+  <main id="mainContent">
+    <!-- 2. HERO SECTION -->
+    <section class="hero-section" id="home">
+      <div class="hero-bg-grid" aria-hidden="true"></div>
+      <div class="hero-glow hero-glow-1" aria-hidden="true"></div>
+      <div class="hero-glow hero-glow-2" aria-hidden="true"></div>
+
+      <div class="container hero-container">
+        <!-- Hero Left Column: Brand Typography & Action Hierarchy -->
+        <div class="hero-content">
+          <div class="hero-eyebrow animate-fade-in">
+            <span class="eyebrow-dot">&bull;</span>
+            <span>LEARN &nbsp;&bull;&nbsp; BUILD &nbsp;&bull;&nbsp; GROW</span>
+          </div>
+
+          <h1 class="hero-brand-title animate-fade-in delay-1">
+            SAIT <span class="hero-brand-dash"></span>
+          </h1>
+
+          <h2 class="hero-full-name animate-fade-in delay-2">
+            Students Association of<br>Information Technology
+          </h2>
+
+          <div class="hero-dept-subtitle animate-fade-in delay-2">
+            <strong>Division of Information Technology</strong><br>
+            <span>School of Engineering, CUSAT</span>
+          </div>
+
+          <p class="hero-desc animate-fade-in delay-3">
+            A community of innovators, learners and creators, building a stronger tech culture together at Cochin University of Science and Technology.
+          </p>
+
+          <div class="hero-actions animate-fade-in delay-4">
+            <a href="#about" class="btn-pill-primary">
+              <span>Explore SAIT</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+            <a href="#events" class="btn-pill-secondary">
+              <span>View Events</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Hero Right Column: Official SAIT Logo with Dark Green Cosmic Rings -->
+        <div class="hero-visual animate-fade-in delay-2" aria-label="Official SAIT Logo Presentation">
+          <div class="hero-orbital-stage">
+            <div class="orbital-glow-aura"></div>
+            <!-- Outer and Inner Orbit Rings -->
+            <div class="orbit-ring ring-outer"></div>
+            <div class="orbit-ring ring-mid"></div>
+            <div class="orbit-ring ring-inner"></div>
+
+            <!-- Glowing Cosmic Particles on Orbit -->
+            <div class="orbit-star star-1"></div>
+            <div class="orbit-star star-2"></div>
+            <div class="orbit-star star-3"></div>
+            <div class="orbit-star star-4"></div>
+
+            <!-- Official SAIT Logo Presentation -->
+            <div class="hero-official-logo-box">
+              <img src="sait-logo.jpg" alt="Official SAIT Logo — SOE CUSAT" class="hero-logo-img">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flowing Dark-Green Light Wave Stream Across Base of Hero -->
+      <div class="hero-wave-stream" aria-hidden="true">
+        <svg viewBox="0 0 1440 160" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+          <path d="M0 90 C 320 20, 640 140, 980 60 C 1200 10, 1340 70, 1440 50 L 1440 160 L 0 160 Z" fill="url(#heroWaveGrad)" opacity="0.6" />
+          <path d="M0 80 C 360 130, 720 30, 1080 90 C 1260 130, 1360 80, 1440 85" stroke="url(#heroWaveStroke)" stroke-width="2.5" fill="none" opacity="0.85" />
+          <defs>
+            <linearGradient id="heroWaveGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#22C55E" stop-opacity="0.18" />
+              <stop offset="60%" stop-color="#4ADE80" stop-opacity="0.06" />
+              <stop offset="100%" stop-color="#0B1F17" stop-opacity="0" />
+            </linearGradient>
+            <linearGradient id="heroWaveStroke" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#22C55E" stop-opacity="0.2" />
+              <stop offset="50%" stop-color="#4ADE80" stop-opacity="0.9" />
+              <stop offset="100%" stop-color="#86EFAC" stop-opacity="0.25" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+    </section>
+
+    <!-- 3. QUICK STATISTICS STRIP -->
+    <section class="stats-strip-section" id="quick-stats">
+      <div class="container">
+        <div class="stats-strip-grid">
+          <div class="stat-strip-card">
+            <div class="stat-strip-num-wrap">
+              <span class="stat-strip-number" data-target="50">0</span>
+              <span class="stat-strip-plus">+</span>
+            </div>
+            <div class="stat-strip-label">Events Conducted</div>
+            <p class="stat-strip-note">Sample / Demo Data</p>
+          </div>
+          <div class="stat-strip-card">
+            <div class="stat-strip-num-wrap">
+              <span class="stat-strip-number" data-target="500">0</span>
+              <span class="stat-strip-plus">+</span>
+            </div>
+            <div class="stat-strip-label">Active Students</div>
+            <p class="stat-strip-note">Sample / Demo Data</p>
+          </div>
+          <div class="stat-strip-card">
+            <div class="stat-strip-num-wrap">
+              <span class="stat-strip-number" data-target="25">0</span>
+              <span class="stat-strip-plus">+</span>
+            </div>
+            <div class="stat-strip-label">Achievements</div>
+            <p class="stat-strip-note">Sample / Demo Data</p>
+          </div>
+          <div class="stat-strip-card">
+            <div class="stat-strip-num-wrap">
+              <span class="stat-strip-number" data-target="20">0</span>
+              <span class="stat-strip-plus">+</span>
+            </div>
+            <div class="stat-strip-label">Industry Connections</div>
+            <p class="stat-strip-note">Sample / Demo Data</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. QUICK ACCESS FEATURE CARDS -->
+    <section class="quick-features-section" id="quick-features">
+      <div class="container">
+        <div class="feature-cards-grid">
+          <a href="#events" class="feature-card">
+            <div class="feature-icon-circle"><i class="fa-solid fa-calendar-check"></i></div>
+            <div class="feature-content">
+              <h3 class="feature-title">Events</h3>
+              <p class="feature-subtitle">Discover upcoming activities</p>
+            </div>
+          </a>
+
+          <a href="#activity-logger" class="feature-card">
+            <div class="feature-icon-circle"><i class="fa-solid fa-clipboard-check"></i></div>
+            <div class="feature-content">
+              <h3 class="feature-title">Activity Logger</h3>
+              <p class="feature-subtitle">Track your participation</p>
+            </div>
+          </a>
+
+          <a href="#achievements" class="feature-card">
+            <div class="feature-icon-circle"><i class="fa-solid fa-trophy"></i></div>
+            <div class="feature-content">
+              <h3 class="feature-title">Achievements</h3>
+              <p class="feature-subtitle">Explore milestones</p>
+            </div>
+          </a>
+
+          <a href="#careers" class="feature-card">
+            <div class="feature-icon-circle"><i class="fa-solid fa-briefcase"></i></div>
+            <div class="feature-content">
+              <h3 class="feature-title">Careers</h3>
+              <p class="feature-subtitle">Build your future</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. ABOUT SAIT & ACADEMIC HERITAGE -->
+    <section class="section-block about-section" id="about">
+      <div class="container">
+        <!-- Section Header -->
+        <div class="section-header">
+          <span class="section-tag"><i class="fa-solid fa-landmark"></i> Academic Heritage &amp; Vision</span>
+          <h2 class="section-title">About Division of IT &amp; SAIT</h2>
+          <p class="section-desc">
+            Discover the legacy of engineering at School of Engineering, CUSAT, and how SAIT serves as the catalyst uniting students, faculty, and industry pioneers.
+          </p>
+        </div>
+
+        <!-- Two-Column Highlight Showcase -->
+        <div class="about-showcase-grid">
+          <div class="aoc-content">
+            <span class="aoc-tag">ABOUT SAIT</span>
+            <h3 class="aoc-heading">Together Towards<br><span class="gradient-text">Technology</span></h3>
+            <p class="aoc-desc">
+              SAIT is the Students Association of Information Technology, representing and supporting the IT student community at CUSAT. We foster technical excellence, organize national symposiums, and bridge the gap between classroom theory and industry innovation.
+            </p>
+            <a href="#about-foundation" class="btn btn-pill-primary btn-sm">
+              <span>Know More</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+
+          <!-- Architectural Aesthetic Illustration -->
+          <div class="aoc-visual">
+            <div class="dept-image-frame">
+              <div class="dept-image-canvas">
+                <svg class="dept-svg" viewBox="0 0 360 210" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+                  <defs>
+                    <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#0B1F17"/>
+                      <stop offset="60%" stop-color="#07110D"/>
+                      <stop offset="100%" stop-color="#050807"/>
+                    </linearGradient>
+                    <linearGradient id="bldgFacade" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0%" stop-color="#4ADE80" stop-opacity="0.35"/>
+                      <stop offset="100%" stop-color="#16A34A" stop-opacity="0.55"/>
+                    </linearGradient>
+                  </defs>
+                  <rect width="360" height="210" fill="url(#skyGrad)"/>
+                  <!-- Building Structure -->
+                  <rect x="60" y="70" width="240" height="115" rx="3" fill="#0D2119" stroke="#16A34A" stroke-width="1.2" stroke-opacity="0.5"/>
+                  <rect x="50" y="65" width="260" height="10" rx="2" fill="#103526" stroke="#22C55E" stroke-width="1" stroke-opacity="0.4"/>
+                  <!-- Second Floor Windows & Balconies -->
+                  <g fill="#4ADE80" fill-opacity="0.3">
+                    <rect x="75" y="88" width="22" height="32" rx="2"/><rect x="108" y="88" width="22" height="32" rx="2"/>
+                    <rect x="141" y="88" width="22" height="32" rx="2"/><rect x="174" y="88" width="22" height="32" rx="2"/>
+                    <rect x="207" y="88" width="22" height="32" rx="2"/><rect x="240" y="88" width="22" height="32" rx="2"/>
+                    <rect x="268" y="88" width="22" height="32" rx="2"/>
+                  </g>
+                  <!-- First Floor Windows & Central Foyer -->
+                  <g fill="#22C55E" fill-opacity="0.35">
+                    <rect x="75" y="132" width="22" height="36" rx="2"/><rect x="108" y="132" width="22" height="36" rx="2"/>
+                    <rect x="141" y="132" width="22" height="36" rx="2"/>
+                    <!-- Grand Entrance Arch -->
+                    <path d="M 174 168 L 174 126 A 14 14 0 0 1 202 126 L 202 168 Z" fill="#16A34A" fill-opacity="0.5"/>
+                    <rect x="215" y="132" width="22" height="36" rx="2"/><rect x="248" y="132" width="22" height="36" rx="2"/>
+                  </g>
+                  <!-- Palm Foliage Silhouette -->
+                  <path d="M25 190 Q 45 110 35 60 M 35 60 Q 10 55 0 70 M 35 60 Q 15 40 10 50 M 35 60 Q 30 30 40 30 M 35 60 Q 55 40 65 55 M 35 60 Q 60 65 70 80" stroke="#052E16" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+                  <path d="M335 190 Q 315 100 325 50 M 325 50 Q 300 45 290 60 M 325 50 Q 305 30 300 40 M 325 50 Q 320 20 330 20 M 325 50 Q 345 30 355 45 M 325 50 Q 350 55 360 70" stroke="#052E16" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+                </svg>
+                <div class="dept-script-caption">
+                  <span>IT Dept</span>
+                  <small>SOE CUSAT &sim;</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vision & Mission Dual Cards -->
+        <div class="dual-cards-grid" id="about-foundation">
+          <!-- IT Department Card -->
+          <div class="glass-card about-card highlight-card">
+            <div class="card-header-icon">
+              <i class="fa-solid fa-building-columns"></i>
+            </div>
+            <span class="badge-pill badge-primary">Department Foundation</span>
+            <h3>Division of Information Technology</h3>
+            <p class="lead-text">
+              Established under the School of Engineering (SOE) at Cochin University of Science and Technology, the Division of IT offers undergraduate (B.Tech) and research programs engineered to solve complex global technological challenges.
+            </p>
+            <div class="mission-box">
+              <h4><i class="fa-solid fa-eye text-primary"></i> Department Vision</h4>
+              <p>To be an epicenter of excellence in Information Technology education and interdisciplinary research, producing ethical engineers and technological leaders capable of driving global innovation.</p>
+            </div>
+            <div class="mission-box">
+              <h4><i class="fa-solid fa-bullseye text-cyan"></i> Department Mission</h4>
+              <p>Provide an outcome-based academic curriculum, foster state-of-the-art computational infrastructure, promote research in AI, Cloud Computing, and Cyber Defense, and facilitate strong industry-academia collaboration.</p>
+            </div>
+            <div class="highlights-list">
+              <div class="hl-item"><i class="fa-solid fa-check-circle"></i> AICTE Approved &amp; NBA Accredited Curricula</div>
+              <div class="hl-item"><i class="fa-solid fa-check-circle"></i> Specialized High-Performance Compute &amp; IoT Labs</div>
+              <div class="hl-item"><i class="fa-solid fa-check-circle"></i> Global Research Collaborations &amp; Publications</div>
+            </div>
+          </div>
+
+          <!-- SAIT Association Card -->
+          <div class="glass-card about-card">
+            <div class="card-header-icon icon-secondary">
+              <i class="fa-solid fa-code-branch"></i>
+            </div>
+            <span class="badge-pill badge-secondary">Student Association</span>
+            <h3>SAIT — Students Association of IT</h3>
+            <p class="lead-text">
+              SAIT is the autonomous student body governing co-curricular technical initiatives, hackathons, skill-building workshops, and student welfare across all semesters in the IT Division.
+            </p>
+            <div class="mission-box">
+              <h4><i class="fa-solid fa-compass text-primary"></i> SAIT Purpose &amp; Vision</h4>
+              <p>To cultivate an inclusive, high-energy environment where every IT student transforms theoretical knowledge into deployable engineering artifacts, leadership capability, and community contribution.</p>
+            </div>
+            <div class="mission-box">
+              <h4><i class="fa-solid fa-rocket text-cyan"></i> Core Pillars of Action</h4>
+              <div class="pillars-grid">
+                <div class="pillar-tag"><i class="fa-solid fa-microchip"></i> Technology</div>
+                <div class="pillar-tag"><i class="fa-solid fa-users"></i> Community</div>
+                <div class="pillar-tag"><i class="fa-solid fa-lightbulb"></i> Innovation</div>
+                <div class="pillar-tag"><i class="fa-solid fa-handshake"></i> Professionalism</div>
+              </div>
+            </div>
+            <div class="highlights-list">
+              <div class="hl-item"><i class="fa-solid fa-check-circle"></i> Peer mentorship programs between seniors and juniors</div>
+              <div class="hl-item"><i class="fa-solid fa-check-circle"></i> Flagship annual symposiums, hackathons &amp; code jams</div>
+              <div class="hl-item"><i class="fa-solid fa-check-circle"></i> Career readiness &amp; open-source project incubators</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Faculty & Administration Showcase -->
+        <div class="sub-section">
+          <div class="sub-header">
+            <h3 class="sub-title"><i class="fa-solid fa-user-tie"></i> Faculty &amp; Administration Leadership</h3>
+            <p class="sub-desc">Guided by distinguished educators and researchers committed to student advancement.</p>
+          </div>
+
+          <div class="faculty-grid">
+            <!-- HoD Card -->
+            <div class="glass-card faculty-card">
+              <div class="faculty-avatar-wrapper">
+                <div class="avatar-placeholder"><i class="fa-solid fa-user-graduate"></i></div>
+                <span class="role-badge badge-primary">Head of Division</span>
+              </div>
+              <div class="faculty-details">
+                <h4 class="faculty-name">Dr. Preetha S.</h4>
+                <p class="faculty-designation">Professor &amp; Head, Division of IT</p>
+                <p class="faculty-qual">Ph.D. in Computer Science &bull; Distributed Systems</p>
+                <p class="faculty-bio">Directing academic rigor and research excellence across undergraduate and postgraduate divisions at SOE CUSAT.</p>
+                <div class="faculty-contact">
+                  <a href="mailto:hod_it@cusat.ac.in" class="contact-chip"><i class="fa-solid fa-envelope"></i> hod_it@cusat.ac.in</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Staff Coordinator 1 -->
+            <div class="glass-card faculty-card">
+              <div class="faculty-avatar-wrapper">
+                <div class="avatar-placeholder"><i class="fa-solid fa-chalkboard-user"></i></div>
+                <span class="role-badge badge-secondary">Faculty Coordinator</span>
+              </div>
+              <div class="faculty-details">
+                <h4 class="faculty-name">Prof. Rajesh Kumar V.</h4>
+                <p class="faculty-designation">Associate Professor &amp; SAIT Staff Advisor</p>
+                <p class="faculty-qual">M.Tech, Ph.D. &bull; AI &amp; Data Mining</p>
+                <p class="faculty-bio">Overseeing student council initiatives, technical workshops, and industry partnerships.</p>
+                <div class="faculty-contact">
+                  <a href="mailto:rajesh_it@cusat.ac.in" class="contact-chip"><i class="fa-solid fa-envelope"></i> rajesh_it@cusat.ac.in</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Staff Coordinator 2 -->
+            <div class="glass-card faculty-card">
+              <div class="faculty-avatar-wrapper">
+                <div class="avatar-placeholder"><i class="fa-solid fa-laptop-file"></i></div>
+                <span class="role-badge badge-secondary">Technical Advisor</span>
+              </div>
+              <div class="faculty-details">
+                <h4 class="faculty-name">Dr. Ananya Menon</h4>
+                <p class="faculty-designation">Assistant Professor &amp; Lab In-Charge</p>
+                <p class="faculty-qual">Ph.D. &bull; Cyber Security &amp; Blockchain</p>
+                <p class="faculty-bio">Mentoring students in hackathon projects, competitive coding, and scholarly research papers.</p>
+                <div class="faculty-contact">
+                  <a href="mailto:ananya_it@cusat.ac.in" class="contact-chip"><i class="fa-solid fa-envelope"></i> ananya_it@cusat.ac.in</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Milestone Timeline -->
+        <div class="sub-section">
+          <div class="sub-header">
+            <h3 class="sub-title"><i class="fa-solid fa-timeline"></i> Journey &amp; Milestones</h3>
+            <p class="sub-desc">Key historical achievements shaping the IT Division and SAIT community over the decades.</p>
+          </div>
+
+          <div class="milestone-timeline">
+            <div class="timeline-track"></div>
+            
+            <div class="timeline-node">
+              <div class="node-marker">1995</div>
+              <div class="glass-card node-content">
+                <span class="node-badge">Founding Era</span>
+                <h4>Department Establishment</h4>
+                <p>Establishment of the Division of Information Technology at School of Engineering, CUSAT, to pioneer computer engineering education in Kerala.</p>
+              </div>
+            </div>
+
+            <div class="timeline-node">
+              <div class="node-marker">2004</div>
+              <div class="glass-card node-content">
+                <span class="node-badge">Community Inception</span>
+                <h4>Birth of SAIT</h4>
+                <p>Students Association of Information Technology formally inaugurated to provide an autonomous platform for student technical endeavors.</p>
+              </div>
+            </div>
+
+            <div class="timeline-node">
+              <div class="node-marker">2014</div>
+              <div class="glass-card node-content">
+                <span class="node-badge">National Spotlight</span>
+                <h4>Infinitus &amp; National Hackathons</h4>
+                <p>Inception of Infinitus, SAIT's flagship national technology summit, drawing collegiate innovators across India.</p>
+              </div>
+            </div>
+
+            <div class="timeline-node">
+              <div class="node-marker">2021</div>
+              <div class="glass-card node-content">
+                <span class="node-badge">Modern Labs</span>
+                <h4>AI &amp; Cloud Research Labs</h4>
+                <p>Equipped specialized compute labs with high-end GPUs for AI/ML modeling, IoT prototypes, and distributed cloud computing.</p>
+              </div>
+            </div>
+
+            <div class="timeline-node">
+              <div class="node-marker">2026</div>
+              <div class="glass-card node-content">
+                <span class="node-badge">Next Generation</span>
+                <h4>Digital Redesign &amp; Activity Portal</h4>
+                <p>Rollout of the unified SAIT Digital Ecosystem with verified Activity Logger, dynamic alumni network, and automated event coordination.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. FEATURED EVENTS -->
+    <section class="section-block events-section" id="events">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag"><i class="fa-solid fa-calendar-star"></i> Discover &amp; Participate</span>
+          <h2 class="section-title">Upcoming Events</h2>
+          <p class="section-desc">
+            Discover what's happening at SAIT. Level up your engineering skills through hackathons, technical bootcamps, and masterclasses.
+          </p>
+        </div>
+
+        <!-- Flagship Event Showcase with Dynamic Live Countdown -->
+        <div class="flagship-card" id="flagshipEventCard">
+          <div class="flagship-glow"></div>
+          <div class="flagship-content">
+            <div class="flagship-badges">
+              <span class="badge-pill badge-accent"><i class="fa-solid fa-star"></i> Flagship Summit</span>
+              <span class="badge-pill badge-primary">Registration Open</span>
+              <span class="badge-pill badge-outline">Prize Pool: ₹1,00,000+</span>
+            </div>
+            <h3 class="flagship-title">INFINITUS '26: National Tech Conclave &amp; 24h Hackathon</h3>
+            <p class="flagship-desc">
+              The biggest technical symposium of School of Engineering CUSAT. Featuring a national 24-hour hackathon, AI innovation track, CTF cybersecurity challenges, and keynotes by senior software architects from top global tech firms.
+            </p>
+            <div class="flagship-meta">
+              <div class="meta-item"><i class="fa-solid fa-calendar-day"></i> November 14–15, 2026</div>
+              <div class="meta-item"><i class="fa-solid fa-location-dot"></i> SOE Seminar Complex &amp; IT Labs</div>
+              <div class="meta-item"><i class="fa-solid fa-users"></i> Teams of 2–4 Students</div>
+            </div>
+
+            <!-- Dynamic Live Countdown Timer -->
+            <div class="countdown-wrapper">
+              <span class="countdown-caption">Countdown to Hackathon Kickoff:</span>
+              <div class="countdown-boxes">
+                <div class="countdown-box">
+                  <span class="cd-val" id="cdDays">00</span>
+                  <span class="cd-unit">Days</span>
+                </div>
+                <div class="countdown-box">
+                  <span class="cd-val" id="cdHours">00</span>
+                  <span class="cd-unit">Hours</span>
+                </div>
+                <div class="countdown-box">
+                  <span class="cd-val" id="cdMinutes">00</span>
+                  <span class="cd-unit">Minutes</span>
+                </div>
+                <div class="countdown-box">
+                  <span class="cd-val" id="cdSeconds">00</span>
+                  <span class="cd-unit">Seconds</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="flagship-actions">
+              <button type="button" class="btn btn-primary btn-lg" onclick="window.saitEvents.openRegistrationModal('infinitus-26')">
+                <i class="fa-solid fa-bolt"></i> Register for Infinitus '26
+              </button>
+              <a href="#events-archive" class="btn btn-secondary" onclick="document.getElementById('eventCategoryAll').click()">
+                <i class="fa-solid fa-list-check"></i> Explore All Events
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Event Controls: Search & Category Filter -->
+        <div class="events-controls-row">
+          <div class="search-input-wrapper">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="eventSearchInput" class="form-input" placeholder="Search events by name, topic, or venue...">
+          </div>
+          <div class="filter-pills" id="eventCategoryPills" role="tablist" aria-label="Event Categories">
+            <button type="button" class="filter-pill active" id="eventCategoryAll" data-category="all">All Events</button>
+            <button type="button" class="filter-pill" data-category="Technical">Technical</button>
+            <button type="button" class="filter-pill" data-category="Workshop">Workshops</button>
+            <button type="button" class="filter-pill" data-category="Competition">Competitions</button>
+            <button type="button" class="filter-pill" data-category="Cultural">Cultural</button>
+            <button type="button" class="filter-pill" data-category="Community">Community</button>
+          </div>
+        </div>
+
+        <!-- Events Grid (Populated dynamically via script.js) -->
+        <div class="events-grid" id="eventsGridContainer">
+          <!-- Populated by script.js -->
+        </div>
+
+        <!-- Past Events Archive Toggle Area -->
+        <div class="past-events-wrapper" id="events-archive">
+          <div class="archive-toggle-bar">
+            <h4><i class="fa-solid fa-clock-rotate-left"></i> Past Events &amp; Activity Archive</h4>
+            <button type="button" class="btn btn-outline btn-sm" id="togglePastEventsBtn">
+              <span id="pastEventsBtnText">View Past Events</span>
+              <i class="fa-solid fa-chevron-down" id="pastEventsIcon"></i>
+            </button>
+          </div>
+          <div class="past-events-grid collapse" id="pastEventsGrid">
+            <!-- Populated by script.js -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. ANNOUNCEMENTS -->
+    <section class="section-block announcements-section" id="announcements">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag"><i class="fa-solid fa-bullhorn"></i> Department Notice Board</span>
+          <h2 class="section-title">Latest Announcements</h2>
+          <p class="section-desc">
+            Stay informed with official circulars, exam schedules, workshop notices, and deadlines from the IT Division and SAIT.
+          </p>
+        </div>
+
+        <!-- Notice Board Controls -->
+        <div class="notice-controls-row">
+          <div class="notice-filters-left">
+            <div class="filter-pills" id="announcementFilterPills" role="tablist" aria-label="Announcement Categories">
+              <button type="button" class="filter-pill active" data-category="all">All Notices</button>
+              <button type="button" class="filter-pill" data-category="Important">Important</button>
+              <button type="button" class="filter-pill" data-category="Event">Events</button>
+              <button type="button" class="filter-pill" data-category="Academic">Academic</button>
+              <button type="button" class="filter-pill" data-category="Deadline">Deadlines</button>
+            </div>
+          </div>
+
+          <div class="notice-actions-right">
+            <span class="unread-pill" id="unreadAnnouncementsCount">
+              <i class="fa-solid fa-bell"></i> <span>3 Unread</span>
+            </span>
+            <button type="button" class="btn btn-outline btn-sm" id="markAllReadBtn">
+              <i class="fa-solid fa-check-double"></i> Mark All as Read
+            </button>
+          </div>
+        </div>
+
+        <!-- Announcements Grid (Populated dynamically via script.js) -->
+        <div class="announcements-grid" id="announcementsGridContainer">
+          <!-- Populated by script.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. ACHIEVEMENTS & HALL OF FAME -->
+    <section class="section-block achievements-section" id="achievements">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag"><i class="fa-solid fa-trophy"></i> Honors &amp; Accolades</span>
+          <h2 class="section-title">Achievements &amp; Hall of Fame</h2>
+          <p class="section-desc">
+            Celebrating standout wins, national hackathon podiums, research publications, and academic milestones achieved by SOE IT students.
+          </p>
+        </div>
+
+        <!-- Category Filters -->
+        <div class="filter-wrapper">
+          <div class="filter-pills" id="achievementFilterPills" role="tablist" aria-label="Filter Achievements">
+            <button type="button" class="filter-pill active" data-filter="all">All Honors</button>
+            <button type="button" class="filter-pill" data-filter="Hackathon">Hackathons</button>
+            <button type="button" class="filter-pill" data-filter="Technical">Technical</button>
+            <button type="button" class="filter-pill" data-filter="Publications">Publications</button>
+            <button type="button" class="filter-pill" data-filter="Academic">Academic</button>
+          </div>
+        </div>
+
+        <!-- Achievement Cards Grid (Populated dynamically via script.js) -->
+        <div class="achievements-grid" id="achievementsGridContainer">
+          <!-- Populated by script.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. STUDENT ACTIVITY LOGGER -->
+    <section class="section-block activity-logger-section" id="activity-logger">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag badge-live"><i class="fa-solid fa-bolt"></i> Interactive Student Portal</span>
+          <h2 class="section-title">Student Activity Logger &amp; Tracker</h2>
+          <p class="section-desc">
+            Log your technical workshops, hackathons, publications, and volunteer initiatives. Track your verification pipeline, earn gamified badges, and build your verified portfolio for university credits.
+          </p>
+        </div>
+
+        <!-- Activity Logger Live Dashboard Metrics -->
+        <div class="logger-dashboard-panel">
+          <!-- Metrics Overview Cards -->
+          <div class="logger-metrics-grid">
+            <div class="glass-card lm-card">
+              <div class="lm-icon text-primary"><i class="fa-solid fa-layer-group"></i></div>
+              <div class="lm-details">
+                <span class="lm-label">Total Activities</span>
+                <span class="lm-value" id="statTotalActivities">0</span>
+              </div>
+            </div>
+
+            <div class="glass-card lm-card border-verified">
+              <div class="lm-icon text-success"><i class="fa-solid fa-circle-check"></i></div>
+              <div class="lm-details">
+                <span class="lm-label">Verified (Approved)</span>
+                <span class="lm-value text-success" id="statVerifiedActivities">0</span>
+              </div>
+            </div>
+
+            <div class="glass-card lm-card border-pending">
+              <div class="lm-icon text-warning"><i class="fa-solid fa-clock"></i></div>
+              <div class="lm-details">
+                <span class="lm-label">Pending Review</span>
+                <span class="lm-value text-warning" id="statPendingActivities">0</span>
+              </div>
+            </div>
+
+            <div class="glass-card lm-card border-rejected">
+              <div class="lm-icon text-danger"><i class="fa-solid fa-circle-xmark"></i></div>
+              <div class="lm-details">
+                <span class="lm-label">Rejected</span>
+                <span class="lm-value text-danger" id="statRejectedActivities">0</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Progress Track Bar & Badge Level -->
+          <div class="glass-card progress-tier-card">
+            <div class="ptc-header">
+              <div class="ptc-title">
+                <i class="fa-solid fa-medal text-warning"></i>
+                <span>Activity Tier Progress: <strong id="tierLevelName" class="gradient-text">Gold Innovator Tier</strong></span>
+              </div>
+              <div class="ptc-count" id="tierProgressText">7 / 10 Activities Completed</div>
+            </div>
+            <div class="progress-track" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">
+              <div class="progress-bar-fill" id="tierProgressBarFill" style="width: 70%;"></div>
+            </div>
+            <p class="ptc-tip"><i class="fa-solid fa-lightbulb"></i> Log 3 more verified activities to achieve <strong>SAIT Platinum Achiever</strong> status.</p>
+          </div>
+
+          <!-- Gamified Achievement Badges Shelf -->
+          <div class="badges-shelf">
+            <span class="shelf-label"><i class="fa-solid fa-shield-halved"></i> Earned Badges:</span>
+            <div class="badges-row" id="badgesRowContainer">
+              <div class="badge-item unlocked" title="First Activity Logged">
+                <div class="badge-icon"><i class="fa-solid fa-seedling"></i></div>
+                <span class="badge-name">First Step</span>
+              </div>
+              <div class="badge-item unlocked" title="Completed 3+ Technical Bootcamps">
+                <div class="badge-icon"><i class="fa-solid fa-laptop-code"></i></div>
+                <span class="badge-name">Tech Explorer</span>
+              </div>
+              <div class="badge-item unlocked" title="Organized or contributed to an official SAIT event">
+                <div class="badge-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                <span class="badge-name">Contributor</span>
+              </div>
+              <div class="badge-item unlocked" title="Participated in a 24h Hackathon">
+                <div class="badge-icon"><i class="fa-solid fa-fire"></i></div>
+                <span class="badge-name">Hackathon Warrior</span>
+              </div>
+              <div class="badge-item" id="badgeCommunity" title="Community Builder (Locked - Requires 8 activities)">
+                <div class="badge-icon"><i class="fa-solid fa-lock"></i></div>
+                <span class="badge-name">Community Pillar</span>
+              </div>
+              <div class="badge-item" id="badgeAchiever" title="SAIT Master Achiever (Locked - Requires 10 activities)">
+                <div class="badge-icon"><i class="fa-solid fa-crown"></i></div>
+                <span class="badge-name">Master Achiever</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Activity Logger Form & Interactive History Grid -->
+        <div class="logger-layout-grid">
+          <!-- Submission Form -->
+          <div class="glass-card form-card">
+            <div class="card-title-group">
+              <h3><i class="fa-solid fa-plus-circle text-primary"></i> Log New Student Activity</h3>
+              <p>Submit your activity or certification for faculty &amp; SAIT verification.</p>
+            </div>
+
+            <form id="activitySubmissionForm" novalidate>
+              <div class="form-group">
+                <label for="actEventName">Activity / Event Name <span class="req">*</span></label>
+                <div class="input-icon-box">
+                  <i class="fa-solid fa-tag"></i>
+                  <input type="text" id="actEventName" class="form-input" placeholder="e.g. Smart India Hackathon 2026 / AWS Cloud Bootcamp" required>
+                </div>
+                <span class="error-msg" id="actEventNameError">Please enter the activity title.</span>
+              </div>
+
+              <!-- Date & Category Row -->
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label for="actDate">Date of Activity <span class="req">*</span></label>
+                  <div class="input-icon-box">
+                    <i class="fa-solid fa-calendar"></i>
+                    <input type="date" id="actDate" class="form-input" required>
+                  </div>
+                  <span class="error-msg" id="actDateError">Please select a valid date.</span>
+                </div>
+
+                <div class="form-group">
+                  <label for="actCategory">Activity Category <span class="req">*</span></label>
+                  <div class="input-icon-box">
+                    <i class="fa-solid fa-shapes"></i>
+                    <select id="actCategory" class="form-input" required>
+                      <option value="" disabled selected>Select category...</option>
+                      <option value="Technical">Technical</option>
+                      <option value="Workshop">Workshop</option>
+                      <option value="Competition">Competition / Hackathon</option>
+                      <option value="Cultural">Cultural</option>
+                      <option value="Volunteering">Volunteering</option>
+                      <option value="Leadership">Leadership</option>
+                      <option value="Publication">Publication / Research</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                  <span class="error-msg" id="actCategoryError">Please select a category.</span>
+                </div>
+              </div>
+
+              <!-- Student Role & Proof URL Row -->
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label for="actRole">Your Role <span class="req">*</span></label>
+                  <div class="input-icon-box">
+                    <i class="fa-solid fa-user-check"></i>
+                    <select id="actRole" class="form-input" required>
+                      <option value="" disabled selected>Select role...</option>
+                      <option value="Participant">Participant</option>
+                      <option value="Organizer">Organizer / Coordinator</option>
+                      <option value="Speaker">Speaker / Mentor</option>
+                      <option value="Winner">Winner / Runner-up</option>
+                      <option value="Volunteer">Volunteer</option>
+                    </select>
+                  </div>
+                  <span class="error-msg" id="actRoleError">Please choose your role.</span>
+                </div>
+
+                <div class="form-group">
+                  <label for="actProof">Certificate / Proof Link <span class="req">*</span></label>
+                  <div class="input-icon-box">
+                    <i class="fa-solid fa-link"></i>
+                    <input type="url" id="actProof" class="form-input" placeholder="https://drive.google.com/..." required>
+                  </div>
+                  <span class="error-msg" id="actProofError">Please enter a valid link or URL.</span>
+                </div>
+              </div>
+
+              <!-- Description -->
+              <div class="form-group">
+                <label for="actDesc">Description &amp; Key Learnings <span class="req">*</span></label>
+                <textarea id="actDesc" class="form-input textarea" rows="3" placeholder="Briefly describe what was accomplished, technologies used, or outcome..." required></textarea>
+                <span class="error-msg" id="actDescError">Please provide a brief description (min 15 characters).</span>
+              </div>
+
+              <button type="submit" class="btn btn-primary w-full" id="submitActivityBtn">
+                <i class="fa-solid fa-paper-plane"></i>
+                <span>Submit Activity for Verification</span>
+              </button>
+            </form>
+          </div>
+
+          <!-- Activity History & Filter View -->
+          <div class="glass-card history-card">
+            <div class="history-header">
+              <div>
+                <h3><i class="fa-solid fa-clock-rotate-left text-primary"></i> Activity Submission History</h3>
+                <p>Real-time log stored dynamically in your browser session.</p>
+              </div>
+
+              <div class="history-controls">
+                <!-- Status Filter -->
+                <select id="activityStatusFilter" class="form-input select-sm" aria-label="Filter activities by status">
+                  <option value="all">All Statuses</option>
+                  <option value="Verified">Verified</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Rejected">Rejected</option>
+                </select>
+
+                <!-- Search Filter -->
+                <input type="text" id="activitySearchInput" class="form-input input-sm" placeholder="Filter by keyword...">
+              </div>
+            </div>
+
+            <!-- Activity List (Populated dynamically via script.js) -->
+            <div class="activity-history-list" id="activityHistoryList">
+              <!-- Populated by script.js -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. PEOPLE / EXECUTIVE TEAM -->
+    <section class="section-block people-section" id="people">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag"><i class="fa-solid fa-users"></i> Student Leadership</span>
+          <h2 class="section-title">People &amp; Executive Teams</h2>
+          <p class="section-desc">
+            Meet the driven student executives, team leads, and committee members championing SAIT initiatives for the 2025–2026 academic year.
+          </p>
+        </div>
+
+        <!-- Filter Buttons -->
+        <div class="filter-wrapper">
+          <div class="filter-pills" id="peopleFilterPills" role="tablist" aria-label="Filter People">
+            <button type="button" class="filter-pill active" data-filter="all">All Members</button>
+            <button type="button" class="filter-pill" data-filter="Executive">Executive Council</button>
+            <button type="button" class="filter-pill" data-filter="Tech">Tech Team</button>
+            <button type="button" class="filter-pill" data-filter="Media">Media &amp; Design</button>
+            <button type="button" class="filter-pill" data-filter="Events">Events Team</button>
+            <button type="button" class="filter-pill" data-filter="PR">PR &amp; Outreach</button>
+            <button type="button" class="filter-pill" data-filter="Content">Content Team</button>
+          </div>
+        </div>
+
+        <!-- People Grid Container (Populated dynamically via script.js) -->
+        <div class="people-grid" id="peopleGridContainer">
+          <!-- Populated by script.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 11. CAREERS & PLACEMENTS -->
+    <section class="section-block careers-section" id="careers">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag"><i class="fa-solid fa-briefcase"></i> Industry &amp; Placements</span>
+          <h2 class="section-title">Careers, Placements &amp; Training</h2>
+          <p class="section-desc">
+            Empowering IT graduates with industry-aligned competencies, recruitment drives, and comprehensive technical interview training.
+          </p>
+        </div>
+
+        <!-- Sample / Demo Data Notice Badge -->
+        <div class="demo-data-banner">
+          <i class="fa-solid fa-circle-info"></i>
+          <div>
+            <strong>Sample / Demo Data:</strong> Placement statistics and recruiter figures below are mock representations designed specifically for the SAIT Website Redesign demonstration.
+          </div>
+        </div>
+
+        <!-- Placement Animated Statistics Cards -->
+        <div class="stats-grid placement-stats-grid">
+          <div class="glass-card stat-card">
+            <div class="stat-icon-wrapper text-primary"><i class="fa-solid fa-money-bill-trend-up"></i></div>
+            <div class="stat-info">
+              <div class="stat-number">₹<span data-target="36.5" data-decimal="1">0</span> LPA</div>
+              <div class="stat-label">Highest Package (Sample)</div>
+            </div>
+          </div>
+          <div class="glass-card stat-card">
+            <div class="stat-icon-wrapper text-cyan"><i class="fa-solid fa-chart-line"></i></div>
+            <div class="stat-info">
+              <div class="stat-number">₹<span data-target="9.8" data-decimal="1">0</span> LPA</div>
+              <div class="stat-label">Average Package (Sample)</div>
+            </div>
+          </div>
+          <div class="glass-card stat-card">
+            <div class="stat-icon-wrapper text-success"><i class="fa-solid fa-user-check"></i></div>
+            <div class="stat-info">
+              <div class="stat-number"><span data-target="94.2" data-decimal="1">0</span>%</div>
+              <div class="stat-label">Placement Track Rate</div>
+            </div>
+          </div>
+          <div class="glass-card stat-card">
+            <div class="stat-icon-wrapper text-warning"><i class="fa-solid fa-building"></i></div>
+            <div class="stat-info">
+              <div class="stat-number"><span data-target="48">0</span>+</div>
+              <div class="stat-label">Recruiting Companies (Sample)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recruiter Logos & Companies Grid -->
+        <div class="sub-section">
+          <div class="sub-header text-center">
+            <h3 class="sub-title"><i class="fa-solid fa-handshake"></i> Prominent Recruiting Partners</h3>
+            <p class="sub-desc">Organizations where SOE IT students regularly intern and secure engineering roles.</p>
+          </div>
+
+          <div class="recruiters-grid">
+            <div class="recruiter-badge">
+              <i class="fa-brands fa-google"></i>
+              <span>Google</span>
+            </div>
+            <div class="recruiter-badge">
+              <i class="fa-brands fa-microsoft"></i>
+              <span>Microsoft</span>
+            </div>
+            <div class="recruiter-badge">
+              <i class="fa-brands fa-amazon"></i>
+              <span>Amazon</span>
+            </div>
+            <div class="recruiter-badge">
+              <i class="fa-solid fa-network-wired"></i>
+              <span>Cisco Systems</span>
+            </div>
+            <div class="recruiter-badge">
+              <i class="fa-solid fa-microchip"></i>
+              <span>Intel Corp</span>
+            </div>
+            <div class="recruiter-badge">
+              <i class="fa-solid fa-laptop-code"></i>
+              <span>TCS Digital</span>
+            </div>
+            <div class="recruiter-badge">
+              <i class="fa-solid fa-terminal"></i>
+              <span>Cognizant</span>
+            </div>
+            <div class="recruiter-badge">
+              <i class="fa-solid fa-server"></i>
+              <span>Zoho Corp</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Career Preparation Resources -->
+        <div class="sub-section">
+          <div class="sub-header">
+            <h3 class="sub-title"><i class="fa-solid fa-graduation-cap"></i> Student Career Preparation Hub</h3>
+            <p class="sub-desc">Free curated guides, roadmaps, and cheat sheets prepared by SAIT Alumni and Placement cell.</p>
+          </div>
+
+          <div class="career-resources-grid">
+            <div class="glass-card resource-card">
+              <div class="rc-icon"><i class="fa-solid fa-file-lines"></i></div>
+              <div class="rc-content">
+                <h4>Resume &amp; Portfolio Guide</h4>
+                <p>ATS-friendly LaTeX resume templates tailored for software engineering, frontend, and data roles.</p>
+                <button type="button" class="btn-link" onclick="window.saitUI.showToast('Opening Resume Guide & LaTeX Template...', 'info')">
+                  <span>Access Template</span> <i class="fa-solid fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="glass-card resource-card">
+              <div class="rc-icon"><i class="fa-solid fa-code"></i></div>
+              <div class="rc-content">
+                <h4>DSA &amp; LeetCode Roadmap</h4>
+                <p>Curated 150 must-solve Data Structures &amp; Algorithms questions categorized by pattern.</p>
+                <button type="button" class="btn-link" onclick="window.saitUI.showToast('Loading DSA 150 Pattern Roadmap...', 'info')">
+                  <span>Explore Roadmap</span> <i class="fa-solid fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="glass-card resource-card">
+              <div class="rc-icon"><i class="fa-solid fa-diagram-project"></i></div>
+              <div class="rc-content">
+                <h4>System Design Primer</h4>
+                <p>Essential architectural patterns, load balancing, caching, databases, and mock design interviews.</p>
+                <button type="button" class="btn-link" onclick="window.saitUI.showToast('Opening System Design Primer...', 'info')">
+                  <span>View Notes</span> <i class="fa-solid fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="glass-card resource-card">
+              <div class="rc-icon"><i class="fa-solid fa-compass"></i></div>
+              <div class="rc-content">
+                <h4>Internship &amp; GSOC Playbook</h4>
+                <p>Step-by-step guidance on open-source contributions, research fellowships, and cold-emailing.</p>
+                <button type="button" class="btn-link" onclick="window.saitUI.showToast('Opening Open-Source Fellowship Playbook...', 'info')">
+                  <span>Read Playbook</span> <i class="fa-solid fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 12. ALUMNI -->
+    <section class="section-block alumni-section" id="alumni">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag"><i class="fa-solid fa-user-tie"></i> Global Alumni Network</span>
+          <h2 class="section-title">Alumni Spotlight</h2>
+          <p class="section-desc">
+            Connecting current IT students with our accomplished alumni working across global engineering hubs, research institutes, and venture-backed startups.
+          </p>
+        </div>
+
+        <!-- Featured Alumni Spotlight -->
+        <div class="glass-card alumni-spotlight-card">
+          <div class="spotlight-badge"><i class="fa-solid fa-star"></i> Featured Alumni Spotlight</div>
+          <div class="spotlight-inner">
+            <div class="spotlight-avatar-box">
+              <div class="spotlight-avatar"><i class="fa-solid fa-user-astronaut"></i></div>
+              <div class="spotlight-grad">Class of 2017 &bull; B.Tech IT</div>
+            </div>
+            <div class="spotlight-info">
+              <h3 class="spotlight-name">Rohit Varma</h3>
+              <p class="spotlight-current"><i class="fa-solid fa-briefcase"></i> Senior Staff Software Engineer at Google Cloud, Bengaluru</p>
+              <blockquote class="spotlight-quote">
+                &ldquo;SAIT and the IT Division at SOE CUSAT gave me the playground to fail fast, build real-world distributed systems, and organize Infinitus. The collaborative ethos here prepares you for the highest engineering bars anywhere in Silicon Valley or Bengaluru.&rdquo;
+              </blockquote>
+              <div class="spotlight-tags">
+                <span class="tag-chip"><i class="fa-solid fa-check"></i> Ex-SAIT President (2016-17)</span>
+                <span class="tag-chip"><i class="fa-solid fa-check"></i> ACM ICPC Regional Finalist</span>
+                <span class="tag-chip"><i class="fa-solid fa-check"></i> Active SAIT Student Mentor</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Alumni Directory Grid (Populated dynamically via script.js) -->
+        <div class="alumni-grid" id="alumniGridContainer">
+          <!-- Populated by script.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 13. RESOURCE HUB -->
+    <section class="section-block resources-section" id="resources">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag"><i class="fa-solid fa-folder-open"></i> Curated Academic Repository</span>
+          <h2 class="section-title">Student Resource Hub</h2>
+          <p class="section-desc">
+            Direct access to semester syllabi, previous university question papers, lab setup guides, and project templates.
+          </p>
+        </div>
+
+        <!-- Resource Hub Search & Filters -->
+        <div class="events-controls-row">
+          <div class="search-input-wrapper">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="resourceSearchInput" class="form-input" placeholder="Search resources (e.g. Operating Systems, S6 Syllabus, Lab Manual)...">
+          </div>
+
+          <div class="filter-pills" id="resourceCategoryPills" role="tablist" aria-label="Resource Categories">
+            <button type="button" class="filter-pill active" data-category="all">All Resources</button>
+            <button type="button" class="filter-pill" data-category="Academic">Academic &amp; Syllabus</button>
+            <button type="button" class="filter-pill" data-category="Lab">Lab Manuals</button>
+            <button type="button" class="filter-pill" data-category="Forms">University Forms</button>
+            <button type="button" class="filter-pill" data-category="Tools">Useful Tools</button>
+          </div>
+        </div>
+
+        <!-- Resource Cards Grid (Populated dynamically via script.js) -->
+        <div class="resources-grid" id="resourcesGridContainer">
+          <!-- Populated by script.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 14. FINAL CALL TO ACTION -->
+    <section class="cta-banner-section" id="cta-banner">
+      <div class="container">
+        <div class="cta-banner-content">
+          <div class="cta-banner-glow" aria-hidden="true"></div>
+          <span class="cta-eyebrow">JOIN THE COMMUNITY</span>
+          <h2 class="cta-heading">BE PART OF THE<br><span class="gradient-text">SAIT COMMUNITY</span></h2>
+          <p class="cta-subtext">Learn. Build. Grow. Together we shape the future of technology and engineering leadership at School of Engineering, CUSAT.</p>
+          <div class="cta-actions">
+            <a href="#events" class="btn btn-primary btn-lg">
+              <i class="fa-solid fa-calendar-star"></i>
+              <span>Explore Events</span>
+            </a>
+            <a href="#about" class="btn btn-pill-secondary btn-lg">
+              <span>Discover SAIT</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 15. CONTACT & CAMPUS LOCATION -->
+    <section class="section-block contact-section" id="contact">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag"><i class="fa-solid fa-map-location-dot"></i> Get In Touch</span>
+          <h2 class="section-title">Connect with SAIT &amp; IT Division</h2>
+          <p class="section-desc">
+            Have an inquiry regarding events, sponsorship, academic collaborations, or student initiatives? We are here to help.
+          </p>
+        </div>
+
+        <div class="contact-layout-grid">
+          <!-- Contact Info & Campus Location Card -->
+          <div class="contact-info-col">
+            <div class="glass-card contact-info-card">
+              <h3><i class="fa-solid fa-building text-primary"></i> Office &amp; Department Information</h3>
+              <p class="info-lead">Division of Information Technology, School of Engineering, Cochin University of Science and Technology.</p>
+
+              <div class="contact-details-list">
+                <div class="cd-item">
+                  <div class="cd-icon"><i class="fa-solid fa-location-dot"></i></div>
+                  <div class="cd-text">
+                    <strong>Location</strong>
+                    <span>School of Engineering (SOE) Campus, South Kalamassery, Kochi, Kerala 682022, India</span>
+                  </div>
+                </div>
+
+                <div class="cd-item">
+                  <div class="cd-icon"><i class="fa-solid fa-envelope"></i></div>
+                  <div class="cd-text">
+                    <strong>Email Addresses</strong>
+                    <span><a href="mailto:sait.cusat@gmail.com">sait.cusat@gmail.com</a> &bull; <a href="mailto:itdept@cusat.ac.in">itdept@cusat.ac.in</a></span>
+                  </div>
+                </div>
+
+                <div class="cd-item">
+                  <div class="cd-icon"><i class="fa-solid fa-phone"></i></div>
+                  <div class="cd-text">
+                    <strong>Department Office Phone</strong>
+                    <span>+91 484 2575370 &bull; Extension: 224</span>
+                  </div>
+                </div>
+
+                <div class="cd-item">
+                  <div class="cd-icon"><i class="fa-solid fa-clock"></i></div>
+                  <div class="cd-text">
+                    <strong>Working Hours</strong>
+                    <span>Monday &ndash; Friday: 9:00 AM &ndash; 4:30 PM (IST)</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Map Representation Card -->
+              <div class="campus-map-card">
+                <div class="map-placeholder">
+                  <div class="map-overlay">
+                    <i class="fa-solid fa-map-pin map-pin-pulse"></i>
+                    <div class="map-caption">
+                      <strong>SOE CUSAT Campus</strong>
+                      <span>9.0436° N, 76.3262° E</span>
+                    </div>
+                    <a href="https://maps.google.com/?q=School+of+Engineering+CUSAT+Kochi" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">
+                      <i class="fa-solid fa-arrow-up-right-from-square"></i> Open in Google Maps
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Social Links -->
+              <div class="social-connect-bar">
+                <span>Follow SAIT Online:</span>
+                <div class="social-links-row">
+                  <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                  <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+                  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                  <a href="https://discord.com" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Discord"><i class="fa-brands fa-discord"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact Form Card -->
+          <div class="contact-form-col">
+            <div class="glass-card contact-form-card">
+              <h3><i class="fa-solid fa-paper-plane text-primary"></i> Send an Inquiry</h3>
+              <p class="info-lead">Fill out this form and our student council coordinator will respond within 24 hours.</p>
+
+              <form id="contactInquiryForm" novalidate>
+                <div class="form-group">
+                  <label for="contactName">Your Full Name <span class="req">*</span></label>
+                  <div class="input-icon-box">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" id="contactName" class="form-input" placeholder="e.g. Arjun Nair" required>
+                  </div>
+                  <span class="error-msg" id="contactNameError">Please enter your name.</span>
+                </div>
+
+                <div class="form-group">
+                  <label for="contactEmail">Email Address <span class="req">*</span></label>
+                  <div class="input-icon-box">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" id="contactEmail" class="form-input" placeholder="e.g. arjun@example.com" required>
+                  </div>
+                  <span class="error-msg" id="contactEmailError">Please enter a valid email address.</span>
+                </div>
+
+                <div class="form-group">
+                  <label for="contactSubject">Subject / Topic <span class="req">*</span></label>
+                  <div class="input-icon-box">
+                    <i class="fa-solid fa-heading"></i>
+                    <input type="text" id="contactSubject" class="form-input" placeholder="e.g. Hackathon Sponsorship / Activity Logger Query" required>
+                  </div>
+                  <span class="error-msg" id="contactSubjectError">Please specify a subject.</span>
+                </div>
+
+                <div class="form-group">
+                  <label for="contactMessage">Your Message <span class="req">*</span></label>
+                  <textarea id="contactMessage" class="form-input textarea" rows="4" placeholder="How can we assist you?" required></textarea>
+                  <span class="error-msg" id="contactMessageError">Please enter a message (min 20 characters).</span>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-full" id="contactSubmitBtn">
+                  <i class="fa-solid fa-paper-plane"></i>
+                  <span>Send Message</span>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 16. FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-container">
+      <div class="footer-grid">
+        <!-- Col 1: Brand & Identity -->
+        <div class="footer-col brand-col">
+          <div class="footer-brand">
+            <div class="logo-symbol"><img src="sait-logo.jpg" alt="SAIT Logo" class="brand-logo-img"></div>
+            <span class="logo-title">SAIT<span class="logo-dot">.</span></span>
+          </div>
+          <p class="footer-tagline">
+            Students Association of Information Technology &bull; Division of IT, School of Engineering, Cochin University of Science and Technology (CUSAT).
+          </p>
+          <div class="footer-accreditation">
+            <span><i class="fa-solid fa-award"></i> NAAC A+ Accredited University</span>
+          </div>
+        </div>
+
+        <!-- Col 2: Navigation Links -->
+        <div class="footer-col">
+          <h4 class="footer-heading">Platform Navigation</h4>
+          <ul class="footer-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About Department</a></li>
+            <li><a href="#people">People &amp; Teams</a></li>
+            <li><a href="#events">Upcoming Events</a></li>
+            <li><a href="#careers">Careers &amp; Placements</a></li>
+            <li><a href="#alumni">Alumni Spotlight</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Student Hub -->
+        <div class="footer-col">
+          <h4 class="footer-heading">Student Services</h4>
+          <ul class="footer-links">
+            <li><a href="#activity-logger">Student Activity Logger</a></li>
+            <li><a href="#announcements">Circulars &amp; Notices</a></li>
+            <li><a href="#resources">Syllabus &amp; Lab Manuals</a></li>
+            <li><a href="#achievements">Hall of Fame</a></li>
+            <li><a href="https://cusat.ac.in" target="_blank" rel="noopener noreferrer">CUSAT Official Portal</a></li>
+            <li><a href="https://soe.cusat.ac.in" target="_blank" rel="noopener noreferrer">SOE CUSAT Website</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Stay Connected & Newsletter -->
+        <div class="footer-col">
+          <h4 class="footer-heading">Stay Connected</h4>
+          <p class="footer-newsletter-text">Subscribe to SAIT email bulletins for upcoming hackathon registrations and tech talks.</p>
+          <form class="footer-subscribe-form" id="newsletterForm" onsubmit="event.preventDefault(); window.saitUI.handleNewsletter(this);">
+            <div class="subscribe-input-group">
+              <input type="email" class="form-input" placeholder="student@cusat.ac.in" required>
+              <button type="submit" class="btn btn-primary" aria-label="Subscribe to newsletter"><i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+          </form>
+          <div class="footer-social-icons">
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="mailto:sait.cusat@gmail.com" class="social-btn" aria-label="Email SAIT"><i class="fa-solid fa-envelope"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Bottom Bar -->
+      <div class="footer-bottom">
+        <div class="fb-copy">
+          &copy; 2026 Students Association of Information Technology (SAIT). All rights reserved.
+        </div>
+        <div class="fb-credits">
+          Engineered for the <strong>SAIT Website Redesign Challenge</strong> &bull; School of Engineering, CUSAT.
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- BACK TO TOP BUTTON -->
+  <button type="button" class="btn-back-to-top" id="backToTopBtn" title="Back to top" aria-label="Back to top">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- 1. GLOBAL SEARCH MODAL (Ctrl + K) -->
+  <div class="modal-overlay" id="searchModalOverlay" aria-hidden="true">
+    <div class="search-modal-card" role="dialog" aria-modal="true" aria-labelledby="globalSearchModalTitle">
+      <div class="sm-header">
+        <i class="fa-solid fa-magnifying-glass search-modal-icon"></i>
+        <input type="text" id="globalSearchInput" class="search-modal-input" placeholder="Search events, people, achievements, announcements, resources..." autocomplete="off">
+        <button type="button" class="btn-close-modal" id="closeSearchModalBtn" aria-label="Close search modal">
+          <kbd>ESC</kbd>
+        </button>
+      </div>
+
+      <div class="sm-body">
+        <div class="search-shortcuts-bar">
+          <span>Filter shortcuts:</span>
+          <button type="button" class="shortcut-pill" onclick="window.saitSearch.setPrefix('event:')">Events</button>
+          <button type="button" class="shortcut-pill" onclick="window.saitSearch.setPrefix('people:')">People</button>
+          <button type="button" class="shortcut-pill" onclick="window.saitSearch.setPrefix('notice:')">Notices</button>
+          <button type="button" class="shortcut-pill" onclick="window.saitSearch.setPrefix('resource:')">Resources</button>
+        </div>
+
+        <div class="search-results-list" id="globalSearchResults">
+          <div class="search-empty-state">
+            <i class="fa-solid fa-terminal"></i>
+            <p>Type keywords to search across the entire SAIT digital platform.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. EVENT REGISTRATION MODAL -->
+  <div class="modal-overlay" id="eventModalOverlay" aria-hidden="true">
+    <div class="glass-modal-card" role="dialog" aria-modal="true" aria-labelledby="eventModalTitle">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <span class="badge-pill badge-primary" id="eventModalCategory">Technical</span>
+          <h3 id="eventModalTitle">Register for Event</h3>
+        </div>
+        <button type="button" class="btn-close-modal" id="closeEventModalBtn" aria-label="Close registration modal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="event-modal-info" id="eventModalMeta">
+          <!-- Meta details inserted by JS -->
+        </div>
+
+        <form id="eventRegistrationForm" novalidate>
+          <input type="hidden" id="regEventId" value="">
+          
+          <div class="form-group">
+            <label for="regStudentName">Full Name <span class="req">*</span></label>
+            <input type="text" id="regStudentName" class="form-input" placeholder="e.g. Arjun Nair" required>
+            <span class="error-msg" id="regNameError">Name is required.</span>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="regStudentNo">CUSAT Register No. <span class="req">*</span></label>
+              <input type="text" id="regStudentNo" class="form-input" placeholder="e.g. 2023IT104" required>
+              <span class="error-msg" id="regNoError">Register number is required.</span>
+            </div>
+
+            <div class="form-group">
+              <label for="regSemester">Semester / Year <span class="req">*</span></label>
+              <select id="regSemester" class="form-input" required>
+                <option value="S2">Semester 2 (1st Year)</option>
+                <option value="S4">Semester 4 (2nd Year)</option>
+                <option value="S6" selected>Semester 6 (3rd Year)</option>
+                <option value="S8">Semester 8 (4th Year)</option>
+                <option value="Other">Other / PG</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="regStudentEmail">Email Address <span class="req">*</span></label>
+            <input type="email" id="regStudentEmail" class="form-input" placeholder="student@cusat.ac.in" required>
+            <span class="error-msg" id="regEmailError">Valid email is required.</span>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-full" id="confirmRegBtn">
+            <i class="fa-solid fa-ticket"></i> Confirm Free Registration
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. ACTIVITY DETAILS MODAL -->
+  <div class="modal-overlay" id="activityModalOverlay" aria-hidden="true">
+    <div class="glass-modal-card" role="dialog" aria-modal="true" aria-labelledby="actDetailTitle">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <span class="badge-pill" id="actDetailStatusBadge">Status</span>
+          <h3 id="actDetailTitle">Activity Details</h3>
+        </div>
+        <button type="button" class="btn-close-modal" id="closeActivityModalBtn" aria-label="Close details modal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="modal-body" id="activityModalBody">
+        <!-- Content filled dynamically via script.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. STUDENT PORTAL DASHBOARD MODAL -->
+  <div class="modal-overlay" id="portalModalOverlay" aria-hidden="true">
+    <div class="portal-modal-card" role="dialog" aria-modal="true" aria-labelledby="portalModalTitle">
+      <div class="portal-header">
+        <div class="portal-user-badge">
+          <div class="portal-avatar"><i class="fa-solid fa-user-astronaut"></i></div>
+          <div class="portal-user-info">
+            <h3 id="portalModalTitle">Arjun K. Nair</h3>
+            <p>B.Tech Information Technology &bull; Semester 6 &bull; Reg: 2023IT142</p>
+          </div>
+        </div>
+        <button type="button" class="btn-close-modal" id="closePortalModalBtn" aria-label="Close portal modal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="portal-body">
+        <div class="portal-stats-row">
+          <div class="portal-mini-stat">
+            <span class="pms-val" id="portalVerifiedCount">5</span>
+            <span class="pms-label">Verified Activities</span>
+          </div>
+          <div class="portal-mini-stat">
+            <span class="pms-val" id="portalRegisteredEventsCount">2</span>
+            <span class="pms-label">Registered Events</span>
+          </div>
+          <div class="portal-mini-stat">
+            <span class="pms-val">Gold</span>
+            <span class="pms-label">Activity Level</span>
+          </div>
+        </div>
+
+        <div class="portal-section">
+          <h4><i class="fa-solid fa-ticket text-primary"></i> My Registered Events</h4>
+          <div class="portal-events-list" id="portalEventsList">
+            <!-- Populated via script.js -->
+          </div>
+        </div>
+
+        <div class="portal-section">
+          <h4><i class="fa-solid fa-bolt text-cyan"></i> Quick Actions</h4>
+          <div class="portal-quick-actions">
+            <button type="button" class="btn btn-outline btn-sm" onclick="window.saitUI.closeModals(); window.location.hash = '#activity-logger';">
+              <i class="fa-solid fa-plus"></i> Submit New Activity
+            </button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="window.saitUI.closeModals(); window.location.hash = '#events';">
+              <i class="fa-solid fa-calendar"></i> Browse Events
+            </button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="window.saitUI.closeModals(); window.location.hash = '#resources';">
+              <i class="fa-solid fa-book"></i> Resource Hub
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Master Controller Script -->
+  <script src="script.js"></script>
+</body>
+</html>
