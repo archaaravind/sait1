@@ -559,7 +559,7 @@
      ========================================================================== */
 
   const STATE = {
-    theme: localStorage.getItem('sait_theme') || 'dark',
+    theme: localStorage.getItem('sait_theme') || 'light',
     registeredEvents: JSON.parse(localStorage.getItem('sait_registered_events') || '["infinitus-26", "ai-bootcamp"]'),
     activities: [],
     announcements: [],
@@ -683,7 +683,7 @@
           STATE.theme = STATE.theme === 'dark' ? 'light' : 'dark';
           localStorage.setItem('sait_theme', STATE.theme);
           this.applyTheme(STATE.theme);
-          ToastManager.show(`Switched to ${STATE.theme === 'dark' ? 'Deep Charcoal & Electric Purple' : 'Light'} Mode`, 'info');
+          ToastManager.show(`Switched to ${STATE.theme === 'dark' ? 'Deep Navy Night' : 'Ivory & Navy'} Mode`, 'info');
         });
       }
     },

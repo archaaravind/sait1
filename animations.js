@@ -2,8 +2,8 @@
  * SAIT Animation System — animations.js
  * Premium Tech Animation System for SAIT (Students Association of Information Technology)
  * SOE, CUSAT — Cochin University of Science and Technology
- * Theme: Burgundy & Nude / Deep Wine
- * Palette: #160B0D, #241216, #5A1824, #7A2635, #963B4D, #D8B9A6, #E8D5C8, #F4E9E1
+ * Theme: Ivory + Navy Blue + Warm Gold
+ * Palette: #F8F4EA (Ivory), #082B4C (Deep Navy), #0B355C (Navy Blue), #174A73 (Mid Navy), #B58A3A (Warm Gold), #D0AA5B (Soft Gold)
  */
 
 (function () {
@@ -135,7 +135,7 @@
   };
 
   /* ==========================================================================
-     2. LIVE BURGUNDY & NUDE AMBIENT CANVAS SYSTEM
+     2. LIVE IVORY, NAVY & WARM GOLD AMBIENT CANVAS SYSTEM
      ========================================================================== */
   const AmbientCanvasSystem = {
     canvas: null,
@@ -148,14 +148,14 @@
     isRunning: false,
     mouse: { x: -1000, y: -1000, active: false },
 
-    // Theme palette particles: Burgundy tones & Nude/Ivory tones
+    // Ivory + Navy + Gold palette: Navy tones, Gold accents, Warm Ivory nodes
     colors: [
-      { r: 122, g: 38,  b: 53 },  // #7A2635 Primary burgundy
-      { r: 150, g: 59,  b: 77 },  // #963B4D Bright burgundy
-      { r: 90,  g: 24,  b: 36 },  // #5A1824 Deep burgundy
-      { r: 216, g: 185, b: 166 }, // #D8B9A6 Nude accent
-      { r: 232, g: 213, b: 200 }, // #E8D5C8 Light nude
-      { r: 244, g: 233, b: 225 }  // #F4E9E1 Soft ivory
+      { r: 8,   g: 43,  b: 76 },  // #082B4C Primary Navy
+      { r: 11,  g: 53,  b: 92 },  // #0B355C Navy Blue
+      { r: 23,  g: 74,  b: 115 }, // #174A73 Lighter Navy
+      { r: 181, g: 138, b: 58 },  // #B58A3A Warm Gold
+      { r: 208, g: 170, b: 91 },  // #D0AA5B Soft Gold
+      { r: 140, g: 105, b: 40 }   // #8C6928 Deep Gold
     ],
 
     init() {
@@ -197,21 +197,21 @@
       this.particles = [];
       const isMobile = this.width < 768;
       const isTablet = this.width < 1024;
-      // Particle count optimized for silky 60fps
-      const count = isMobile ? 18 : isTablet ? 28 : 42;
+      // Particle count optimized for smooth performance
+      const count = isMobile ? 18 : isTablet ? 28 : 40;
 
       for (let i = 0; i < count; i++) {
         const color = this.colors[Math.floor(Math.random() * this.colors.length)];
         this.particles.push({
           x: Math.random() * this.width,
           y: Math.random() * this.height,
-          vx: (Math.random() - 0.5) * (isMobile ? 0.25 : 0.4),
-          vy: (Math.random() - 0.5) * (isMobile ? 0.25 : 0.4),
+          vx: (Math.random() - 0.5) * (isMobile ? 0.22 : 0.35),
+          vy: (Math.random() - 0.5) * (isMobile ? 0.22 : 0.35),
           radius: Math.random() * 1.5 + 1.2,
           color: color,
-          baseAlpha: Math.random() * 0.35 + 0.25,
-          alpha: 0.3,
-          pulseSpeed: Math.random() * 0.02 + 0.015,
+          baseAlpha: Math.random() * 0.3 + 0.2,
+          alpha: 0.25,
+          pulseSpeed: Math.random() * 0.02 + 0.012,
           pulsePhase: Math.random() * Math.PI * 2
         });
       }
@@ -317,15 +317,15 @@
           const dy = p.y - this.mouse.y;
           const dSq = dx * dx + dy * dy;
           if (dSq < mouseDistSq && dSq > 0) {
-            const force = (1 - Math.sqrt(dSq) / mouseDistThreshold) * 0.8;
-            p.x += (dx / Math.sqrt(dSq)) * force * 1.5;
-            p.y += (dy / Math.sqrt(dSq)) * force * 1.5;
+            const force = (1 - Math.sqrt(dSq) / mouseDistThreshold) * 0.7;
+            p.x += (dx / Math.sqrt(dSq)) * force * 1.4;
+            p.y += (dy / Math.sqrt(dSq)) * force * 1.4;
           }
         }
 
         // Pulse alpha
         p.pulsePhase += p.pulseSpeed;
-        p.alpha = p.baseAlpha + Math.sin(p.pulsePhase) * 0.15;
+        p.alpha = p.baseAlpha + Math.sin(p.pulsePhase) * 0.12;
 
         // Draw particle
         ctx.beginPath();
@@ -333,7 +333,7 @@
         ctx.fillStyle = `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, ${Math.max(0.08, p.alpha)})`;
         ctx.fill();
 
-        // Connect nearby particles with subtle lines
+        // Connect nearby particles with subtle architectural lines
         for (let j = i + 1; j < pLen; j++) {
           const p2 = this.particles[j];
           const ldx = p.x - p2.x;
@@ -342,11 +342,11 @@
 
           if (ldSq < maxConnectDistSq) {
             const dist = Math.sqrt(ldSq);
-            const lineAlpha = (1 - dist / maxConnectDist) * 0.13;
+            const lineAlpha = (1 - dist / maxConnectDist) * 0.09;
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(216, 185, 166, ${lineAlpha})`;
+            ctx.strokeStyle = `rgba(8, 43, 76, ${lineAlpha})`;
             ctx.lineWidth = 0.75;
             ctx.stroke();
           }
@@ -452,7 +452,7 @@
   };
 
   /* ==========================================================================
-     4. HERO VISUAL 3D PARALLAX & LOGO STAGE
+     4. HERO VISUAL 3D PARALLAX & ARCHITECTURAL LOGO STAGE
      ========================================================================== */
   const HeroVisualController = {
     heroSection: null,
@@ -478,9 +478,9 @@
         const normX = (e.clientX - centerX) / (rect.width / 2);
         const normY = (e.clientY - centerY) / (rect.height / 2);
 
-        // Subtle 3D tilt (max 7 degrees)
-        this.targetRotY = normX * 7;
-        this.targetRotX = -normY * 7;
+        // Subtle architectural tilt (max 6 degrees)
+        this.targetRotY = normX * 6;
+        this.targetRotX = -normY * 6;
 
         if (!this.rafId) {
           this.startLoop();
@@ -500,7 +500,7 @@
 
         if (this.orbitalStage) {
           this.orbitalStage.style.transform =
-            `perspective(1000px) rotateX(${this.currRotX.toFixed(2)}deg) rotateY(${this.currRotY.toFixed(2)}deg)`;
+            `perspective(1100px) rotateX(${this.currRotX.toFixed(2)}deg) rotateY(${this.currRotY.toFixed(2)}deg)`;
         }
 
         // Stop loop when close to zero
@@ -528,7 +528,6 @@
   const ScrollRevealController = {
     init() {
       if (prefersReducedMotion) {
-        // In reduced motion, ensure all content is visible immediately
         document.querySelectorAll('.scroll-reveal').forEach(el => el.classList.add('revealed'));
         return;
       }
