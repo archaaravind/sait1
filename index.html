@@ -18,41 +18,60 @@
   <!-- Stylesheet -->
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <!-- CINEMATIC PRELOADER & INTRO EXPERIENCE (IVORY, NAVY & WARM GOLD) -->
-  <div id="saitIntroOverlay" class="sait-intro-overlay" aria-hidden="true">
-    <div class="intro-backdrop"></div>
-    <div class="intro-stage">
-      <div class="intro-visual">
-        <div class="intro-rings-wrap">
-          <div class="intro-ring intro-ring-outer"></div>
-          <div class="intro-ring intro-ring-mid"></div>
-          <div class="intro-ring intro-ring-glow"></div>
-          <div class="intro-light-sweep"></div>
-        </div>
-        <div class="intro-logo-box">
-          <img src="sait-logo.jpg" alt="SAIT Official Logo" class="intro-logo-img">
-        </div>
-        <div class="intro-aura"></div>
+<body class="intro-active">
+  <!-- CINEMATIC VIDEO INTRODUCTION OVERLAY (IVORY, NAVY & WARM GOLD) -->
+  <div id="saitIntroOverlay" class="sait-intro-overlay" aria-label="SAIT Introduction Experience">
+    <!-- Atmospheric Academic Backdrop -->
+    <div class="intro-backdrop" aria-hidden="true">
+      <div class="intro-grid-pattern"></div>
+      <div class="intro-ambient-ring intro-ambient-ring-1"></div>
+      <div class="intro-ambient-ring intro-ambient-ring-2"></div>
+      <div class="intro-ambient-glow"></div>
+    </div>
+
+    <!-- Centered Stage for 9:16 Portrait Video -->
+    <div class="intro-stage-wrapper">
+      <!-- Top Academic Eyebrow Badge -->
+      <div class="intro-header-badge">
+        <span class="intro-badge-dot"></span>
+        <span class="intro-badge-text">Division of IT &bull; School of Engineering, CUSAT</span>
       </div>
-      <div class="intro-text-block">
-        <div class="intro-title" id="introTitle" aria-label="SAIT">
-          <span class="intro-char">S</span>
-          <span class="intro-char">A</span>
-          <span class="intro-char">I</span>
-          <span class="intro-char">T</span>
+
+      <!-- 9:16 Portrait Video Frame -->
+      <div class="intro-video-container">
+        <div class="intro-video-frame">
+          <video 
+            id="saitIntroVideo" 
+            autoplay 
+            muted 
+            playsinline 
+            preload="auto" 
+            disablePictureInPicture
+            aria-label="SAIT Introduction Video"
+          >
+            <source src="videos/sait-intro.mp4" type="video/mp4">
+            <source src="sait-intro.mp4" type="video/mp4">
+          </video>
         </div>
-        <div class="intro-tagline" id="introTagline">
-          <span>LEARN</span>
-          <span class="intro-dot">•</span>
-          <span>BUILD</span>
-          <span class="intro-dot">•</span>
-          <span>GROW</span>
+      </div>
+
+      <!-- Bottom Branding & Progress Strip -->
+      <div class="intro-footer-branding">
+        <div class="intro-brand-title">
+          <span class="intro-brand-bold">SAIT</span>
+          <span class="intro-brand-sep">&bull;</span>
+          <span>Students Association of Information Technology</span>
+        </div>
+        <div class="intro-progress-track" aria-hidden="true">
+          <div class="intro-progress-bar" id="introProgressBar"></div>
         </div>
       </div>
     </div>
-    <button type="button" class="intro-skip-btn" id="introSkipBtn" aria-label="Skip introduction">
-      Skip <i class="fa-solid fa-forward"></i>
+
+    <!-- Skip Introduction Button -->
+    <button type="button" class="intro-skip-btn" id="introSkipBtn" aria-label="Skip introduction to homepage">
+      <span>Skip Intro</span>
+      <i class="fa-solid fa-forward"></i>
     </button>
   </div>
 

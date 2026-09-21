@@ -13,46 +13,40 @@
   const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ==========================================================================
-     1. CINEMATIC SAIT INTRO SEQUENCE CONTROLLER
+     1. CINEMATIC SAIT INTRO SEQUENCE CONTROLLER (PORTRAIT VIDEO)
      ========================================================================== */
   const IntroSequenceController = {
     overlay: null,
     skipBtn: null,
-    titleChars: [],
-    tagline: null,
+    video: null,
+    progressBar: null,
     timer: null,
-    charTimers: [],
+    isDismissed: false,
 
     init() {
       this.overlay = document.getElementById('saitIntroOverlay');
       if (!this.overlay) return;
 
       this.skipBtn = document.getElementById('introSkipBtn');
-      this.titleChars = Array.from(this.overlay.querySelectorAll('.intro-char'));
-      this.tagline = document.getElementById('introTagline');
+      this.video = document.getElementById('saitIntroVideo');
+      this.progressBar = document.getElementById('introProgressBar');
 
-      // Skip immediately if reduced motion is requested
+      // Accessibility: Respect prefers-reduced-motion
       if (prefersReducedMotion) {
-        this.dismiss(true);
+        setTimeout(() => this.dismiss(true), 600);
         return;
       }
 
-      // Check if intro was already seen in this browser session
-      const hasSeen = sessionStorage.getItem('sait_intro_seen');
-      const forceReplay = window.location.search.includes('intro=1') || window.location.search.includes('replay=1');
-
-      if (hasSeen && !forceReplay) {
-        // Fast skip for subsequent visits in the same session
-        this.dismiss(true);
-        return;
-      }
-
+      this.overlay.classList.remove('intro-exit', 'intro-hidden');
       this.overlay.setAttribute('aria-hidden', 'false');
       document.body.classList.add('intro-active');
 
       // Skip button listener
       if (this.skipBtn) {
-        this.skipBtn.addEventListener('click', () => this.dismiss(false));
+        this.skipBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.dismiss(false);
+        });
       }
 
       // Keyboard Esc to skip
@@ -68,43 +62,77 @@
     },
 
     playSequence() {
-      // Staggered reveal for intro characters S-A-I-T
-      const baseDelay = 450;
-      const charInterval = 200;
+      if (this.video) {
+        // Strictly set mute and inline parameters before playback
+        this.video.muted = true;
+        this.video.defaultMuted = true;
+        this.video.playsInline = true;
+        this.video.currentTime = 0;
 
-      this.titleChars.forEach((char, idx) => {
-        const t = setTimeout(() => {
-          char.classList.add('char-revealed');
-        }, baseDelay + (idx * charInterval));
-        this.charTimers.push(t);
-      });
+        // Fallback safety timer: Video is ~8s; auto-dismiss if playback stalls or hangs
+        this.timer = setTimeout(() => {
+          this.dismiss(false);
+        }, 11000);
 
-      // Reveal Tagline
-      const taglineDelay = baseDelay + (this.titleChars.length * charInterval) + 120;
-      const taglineTimer = setTimeout(() => {
-        if (this.tagline) {
-          this.tagline.classList.add('tagline-revealed');
+        // When video reaches natural end, smoothly transition to homepage
+        this.video.addEventListener('ended', () => {
+          if (this.progressBar) this.progressBar.style.width = '100%';
+          this.dismiss(false);
+        }, { once: true });
+
+        // Graceful error handling: If video cannot load, transition immediately
+        this.video.addEventListener('error', () => {
+          this.dismiss(false);
+        }, { once: true });
+
+        // Update progress bar
+        this.video.addEventListener('timeupdate', () => {
+          if (this.progressBar && this.video.duration) {
+            const pct = (this.video.currentTime / this.video.duration) * 100;
+            this.progressBar.style.width = Math.min(pct, 100) + '%';
+          }
+        });
+
+        // Trigger autoplay
+        const playPromise = this.video.play();
+        if (playPromise !== undefined) {
+          playPromise.catch((err) => {
+            console.warn('SAIT Intro Video Autoplay delayed or restricted:', err);
+            // Allow tap/click on screen or auto-proceed after 3.5s so user is never stuck
+            const playOnInteraction = () => {
+              this.video.play().catch(() => {});
+              window.removeEventListener('click', playOnInteraction);
+              window.removeEventListener('touchstart', playOnInteraction);
+            };
+            window.addEventListener('click', playOnInteraction, { once: true });
+            window.addEventListener('touchstart', playOnInteraction, { once: true });
+
+            setTimeout(() => {
+              this.dismiss(false);
+            }, 3500);
+          });
         }
-      }, taglineDelay);
-      this.charTimers.push(taglineTimer);
-
-      // Auto dismiss after ~2.4 seconds
-      this.timer = setTimeout(() => {
-        this.dismiss(false);
-      }, 2400);
+      } else {
+        // Fallback if video tag missing
+        this.timer = setTimeout(() => {
+          this.dismiss(false);
+        }, 2000);
+      }
     },
 
     dismiss(immediate) {
-      if (this.timer) clearTimeout(this.timer);
-      this.charTimers.forEach(t => clearTimeout(t));
+      if (this.isDismissed) return;
+      this.isDismissed = true;
 
-      try {
-        sessionStorage.setItem('sait_intro_seen', '1');
-      } catch (err) {
-        // Ignore storage errors in restricted contexts
-      }
+      if (this.timer) clearTimeout(this.timer);
 
       if (!this.overlay) return;
+
+      if (this.video) {
+        try {
+          this.video.pause();
+        } catch (e) {}
+      }
 
       if (immediate) {
         this.overlay.classList.add('intro-hidden');
@@ -114,7 +142,7 @@
         return;
       }
 
-      // Smooth exit
+      // Smooth cinematic exit transition
       this.overlay.classList.add('intro-exit');
       setTimeout(() => {
         if (this.overlay) {
@@ -123,7 +151,7 @@
         }
         document.body.classList.remove('intro-active');
         this.triggerHeroEntrance();
-      }, 650);
+      }, 700);
     },
 
     triggerHeroEntrance() {

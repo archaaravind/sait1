@@ -171,6 +171,7 @@ html {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
 }
 
 body {
@@ -178,7 +179,7 @@ body {
   background-color: var(--bg-page);
   color: var(--text-primary);
   line-height: 1.65;
-  overflow-x: hidden;
+  overflow-x: clip;
   position: relative;
   min-height: 100vh;
 }
@@ -246,6 +247,8 @@ ul, ol {
   pointer-events: none;
   z-index: 0;
   overflow: hidden;
+  contain: strict;
+  clip-path: inset(0);
 }
 
 .ambient-grid-overlay {
@@ -912,7 +915,7 @@ ul, ol {
 .mobile-nav-drawer {
   position: fixed;
   top: 0;
-  right: -320px;
+  right: 0;
   width: 300px;
   height: 100vh;
   background: var(--bg-page);
@@ -921,12 +924,17 @@ ul, ol {
   display: flex;
   flex-direction: column;
   z-index: 1050;
-  transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateX(100%);
+  visibility: hidden;
+  pointer-events: none;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s ease;
   overflow-y: auto;
 }
 
 .mobile-nav-drawer.active {
-  right: 0;
+  transform: translateX(0);
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .mobile-nav-header {
@@ -4015,28 +4023,46 @@ ul, ol {
    -------------------------------------------------------------------------- */
 
 /* Body locking during cinematic intro */
+/* Body locking during cinematic intro */
 body.intro-active {
-  overflow: hidden;
+  overflow: hidden !important;
+  width: 100vw;
+  max-width: 100vw;
+  height: 100vh;
+  max-height: 100vh;
 }
 
-/* Intro Overlay Container */
+/* ==========================================================================
+   CINEMATIC PORTRAIT VIDEO INTRODUCTION OVERLAY (IVORY, NAVY & WARM GOLD)
+   ========================================================================== */
+
+/* Intro Fullscreen Overlay */
 .sait-intro-overlay {
   position: fixed;
-  inset: 0;
-  z-index: 999999;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  max-width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  z-index: 9999999;
   display: flex;
   align-items: center;
   justify-content: center;
   background: #F8F4EA;
   overflow: hidden;
+  contain: strict;
+  clip-path: inset(0);
   opacity: 1;
-  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
+  visibility: visible;
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.75s ease;
+  will-change: opacity;
 }
 
 .sait-intro-overlay.intro-exit {
   opacity: 0;
-  transform: scale(1.03);
   pointer-events: none;
 }
 
@@ -4044,188 +4070,202 @@ body.intro-active {
   display: none !important;
 }
 
-/* Atmospheric Backdrop */
+/* Atmospheric Academic Backdrop (Ivory + Subtle Gold/Navy ambient) */
 .intro-backdrop {
   position: absolute;
   inset: 0;
-  background: 
-    radial-gradient(circle at 50% 45%, rgba(181, 138, 58, 0.14) 0%, rgba(241, 235, 221, 0.65) 45%, #F8F4EA 85%);
+  pointer-events: none;
+  overflow: hidden;
+  contain: strict;
+  clip-path: inset(0);
+  background: radial-gradient(ellipse at 50% 50%, rgba(255, 253, 248, 0.95) 0%, rgba(248, 244, 234, 0.98) 55%, #F1EBDD 100%);
+}
+
+.intro-grid-pattern {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(8, 43, 76, 0.032) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(8, 43, 76, 0.032) 1px, transparent 1px);
+  background-size: 36px 36px;
+  mask-image: radial-gradient(circle at center, black 35%, transparent 75%);
+  -webkit-mask-image: radial-gradient(circle at center, black 35%, transparent 75%);
+}
+
+.intro-ambient-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
   pointer-events: none;
 }
 
-.intro-stage {
+.intro-ambient-ring-1 {
+  width: 680px;
+  height: 680px;
+  border: 1px dashed rgba(181, 138, 58, 0.2);
+  animation: introSpin 55s linear infinite;
+}
+
+.intro-ambient-ring-2 {
+  width: 960px;
+  height: 960px;
+  border: 1px solid rgba(8, 43, 76, 0.06);
+  animation: introCounterSpin 80s linear infinite;
+}
+
+.intro-ambient-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(181, 138, 58, 0.12) 0%, rgba(8, 43, 76, 0.05) 50%, transparent 75%);
+  filter: blur(55px);
+  pointer-events: none;
+}
+
+/* Centered Stage Wrapper */
+.intro-stage-wrapper {
   position: relative;
   z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2.2rem;
-  padding: 2rem;
-}
-
-/* Intro Visual & Cosmic Rings */
-.intro-visual {
-  position: relative;
-  width: 220px;
-  height: 220px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.intro-rings-wrap {
-  position: absolute;
-  inset: -35px;
-  pointer-events: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.intro-ring {
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-.intro-ring-outer {
   width: 100%;
   height: 100%;
-  border: 1.5px dashed rgba(181, 138, 58, 0.45);
-  animation: introSpin 24s linear infinite;
+  max-height: 100vh;
+  padding: 1.25rem 1rem;
+  box-sizing: border-box;
 }
 
-.intro-ring-mid {
-  width: 82%;
-  height: 82%;
-  border: 1.5px solid rgba(8, 43, 76, 0.35);
-  animation: introCounterSpin 16s linear infinite;
-}
-
-.intro-ring-glow {
-  width: 90%;
-  height: 90%;
-  border-radius: 50%;
-  box-shadow: 0 0 35px rgba(181, 138, 58, 0.28);
-  animation: introPulseRing 3.5s ease-in-out infinite alternate;
-}
-
-.intro-light-sweep {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 50px;
-  height: 6px;
-  border-radius: 3px;
-  background: linear-gradient(90deg, transparent, var(--color-gold), #FFFDF8, transparent);
-  box-shadow: 0 0 20px rgba(181, 138, 58, 0.8), 0 0 35px rgba(8, 43, 76, 0.4);
-  animation: introSweepPulse 2.5s ease-in-out infinite alternate;
-}
-
-.intro-aura {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(181, 138, 58, 0.3) 0%, rgba(8, 43, 76, 0.12) 50%, transparent 75%);
-  filter: blur(40px);
-  pointer-events: none;
-  animation: introAuraBreath 3s ease-in-out infinite alternate;
-}
-
-.intro-logo-box {
-  position: relative;
-  width: 135px;
-  height: 135px;
-  border-radius: 28px;
+/* Academic Eyebrow Badge */
+.intro-header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.38rem 1rem;
   background: #FFFDF8;
-  border: 2px solid var(--color-gold);
-  box-shadow: 0 10px 40px rgba(8, 43, 76, 0.18), 0 0 30px rgba(181, 138, 58, 0.3);
-  overflow: hidden;
+  border: 1px solid rgba(181, 138, 58, 0.35);
+  border-radius: 9999px;
+  box-shadow: 0 4px 16px rgba(8, 43, 76, 0.06);
+  margin-bottom: 0.85rem;
+}
+
+.intro-badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #B58A3A;
+  box-shadow: 0 0 8px rgba(181, 138, 58, 0.8);
+}
+
+.intro-badge-text {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: #082B4C;
+  text-transform: uppercase;
+}
+
+/* 9:16 Portrait Video Stage */
+.intro-video-container {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.9rem;
-  z-index: 3;
-  animation: introLogoEntrance 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  max-width: 100%;
 }
 
-.intro-logo-img {
+.intro-video-frame {
+  position: relative;
+  width: auto;
+  max-width: min(85vw, 440px);
+  height: auto;
+  max-height: 72vh;
+  aspect-ratio: 9 / 16;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #061F38;
+  border: 2px solid rgba(181, 138, 58, 0.45);
+  box-shadow: 0 25px 60px rgba(8, 43, 76, 0.22), 0 0 35px rgba(181, 138, 58, 0.16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#saitIntroVideo {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  border-radius: 18px;
+  display: block;
+  background: #061F38;
 }
 
-/* Intro Typography */
-.intro-text-block {
-  text-align: center;
+/* Bottom Branding & Progress */
+.intro-footer-branding {
+  margin-top: 0.85rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.45rem;
+  width: 100%;
+  max-width: 440px;
 }
 
-.intro-title {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
+.intro-brand-title {
   font-family: var(--font-sans);
-  font-size: 2.85rem;
-  font-weight: 800;
-  letter-spacing: 0.22em;
-  color: var(--color-primary);
-  text-shadow: 0 4px 20px rgba(181, 138, 58, 0.3);
-}
-
-.intro-char {
-  display: inline-block;
-  opacity: 0;
-  transform: translateY(22px) scale(0.88);
-  filter: blur(8px);
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
-  will-change: opacity, transform, filter;
-}
-
-.intro-char.char-revealed {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-  filter: blur(0);
-}
-
-.intro-tagline {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 600;
-  letter-spacing: 0.3em;
-  color: var(--color-nude);
-  opacity: 0;
-  transform: translateY(12px);
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  color: #082B4C;
+  text-align: center;
+  letter-spacing: 0.03em;
 }
 
-.intro-tagline.tagline-revealed {
-  opacity: 0.9;
-  transform: translateY(0);
+.intro-brand-bold {
+  font-weight: 800;
+  color: #B58A3A;
+  letter-spacing: 0.08em;
 }
 
-.intro-dot {
-  color: var(--color-gold);
-  font-size: 0.9rem;
+.intro-brand-sep {
+  color: #B58A3A;
+  margin: 0 0.3rem;
 }
 
+.intro-progress-track {
+  width: 100%;
+  height: 3px;
+  background: rgba(8, 43, 76, 0.1);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.intro-progress-bar {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #B58A3A, #D0AA5B);
+  border-radius: 99px;
+  transition: width 0.12s linear;
+}
+
+/* Skip Introduction Button */
 .intro-skip-btn {
   position: absolute;
-  bottom: 2.5rem;
-  right: 2.5rem;
+  bottom: 2rem;
+  right: 2rem;
   background: #FFFDF8;
-  color: var(--color-primary);
-  border: 1px solid rgba(8, 43, 76, 0.18);
+  color: #082B4C;
+  border: 1.5px solid rgba(181, 138, 58, 0.4);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-radius: var(--radius-full);
@@ -4244,10 +4284,10 @@ body.intro-active {
 }
 
 .intro-skip-btn:hover {
-  background: var(--color-primary);
+  background: #082B4C;
   color: #FFFDF8;
-  border-color: var(--color-gold);
-  box-shadow: 0 6px 20px rgba(8, 43, 76, 0.2);
+  border-color: #B58A3A;
+  box-shadow: 0 8px 24px rgba(8, 43, 76, 0.22);
   transform: translateY(-2px);
 }
 
@@ -4504,74 +4544,91 @@ body.intro-active {
    30. RESPONSIVE MOBILE OPTIMIZATIONS & REDUCED MOTION
    -------------------------------------------------------------------------- */
 @media (max-width: 768px) {
-  .intro-stage {
-    gap: 1.5rem;
-    padding: 1.5rem;
+  .intro-ambient-ring,
+  .intro-ambient-glow {
+    display: none !important;
   }
-  .intro-visual {
-    width: 170px;
-    height: 170px;
+
+  .intro-stage-wrapper {
+    padding: 0.6rem 0.5rem 3.5rem 0.5rem;
   }
-  .intro-logo-box {
-  position: relative;
-  width: 135px;
-  height: 135px;
-  border-radius: 28px;
-  background: #FFFDF8;
-  border: 2px solid var(--color-gold);
-  box-shadow: 0 10px 40px rgba(8, 43, 76, 0.18), 0 0 30px rgba(181, 138, 58, 0.3);
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.9rem;
-  z-index: 3;
-  animation: introLogoEntrance 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-  .intro-title {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
-  font-family: var(--font-sans);
-  font-size: 2.85rem;
-  font-weight: 800;
-  letter-spacing: 0.22em;
-  color: var(--color-primary);
-  text-shadow: 0 4px 20px rgba(181, 138, 58, 0.3);
-}
-  .intro-tagline {
-    font-size: 0.75rem;
-    letter-spacing: 0.22em;
+
+  .intro-header-badge {
+    margin-bottom: 0.45rem;
+    padding: 0.25rem 0.75rem;
+    max-width: 92%;
+    box-sizing: border-box;
   }
+
+  .intro-badge-text {
+    font-size: 0.62rem;
+    letter-spacing: 0.07em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .intro-video-frame {
+    width: auto;
+    max-width: min(80vw, calc((100vh - 160px) * 9 / 16));
+    max-height: calc(100vh - 160px);
+    max-height: calc(100dvh - 160px);
+    aspect-ratio: 9 / 16;
+    border-radius: 16px;
+    box-shadow: 0 12px 36px rgba(8, 43, 76, 0.18), 0 0 20px rgba(181, 138, 58, 0.12);
+  }
+
+  .intro-footer-branding {
+    margin-top: 0.45rem;
+    width: 88%;
+    max-width: 320px;
+  }
+
+  .intro-brand-title {
+    font-size: 0.68rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   .intro-skip-btn {
-  position: absolute;
-  bottom: 2.5rem;
-  right: 2.5rem;
-  background: #FFFDF8;
-  color: var(--color-primary);
-  border: 1px solid rgba(8, 43, 76, 0.18);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-radius: var(--radius-full);
-  padding: 0.55rem 1.35rem;
-  font-family: var(--font-mono);
-  font-size: 0.82rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  box-shadow: 0 4px 16px rgba(8, 43, 76, 0.08);
-  transition: all var(--transition-fast);
-  z-index: 10;
-}
+    bottom: 0.85rem;
+    right: 0.85rem;
+    padding: 0.38rem 0.9rem;
+    font-size: 0.72rem;
+  }
+
   .cursor-ambient-glow {
     width: 280px;
     height: 280px;
     margin-left: -140px;
     margin-top: -140px;
+  }
+}
+
+@media (max-width: 480px) {
+  .intro-stage-wrapper {
+    padding: 0.4rem 0.4rem 3.2rem 0.4rem;
+  }
+
+  .intro-video-frame {
+    max-height: calc(100vh - 110px);
+    max-height: calc(100dvh - 110px);
+    max-width: 94vw;
+    border-radius: 12px;
+  }
+
+  .intro-header-badge {
+    margin-bottom: 0.35rem;
+    padding: 0.2rem 0.6rem;
+  }
+
+  .intro-badge-text {
+    font-size: 0.58rem;
+  }
+
+  .intro-footer-branding {
+    margin-top: 0.35rem;
   }
 }
 
