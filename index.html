@@ -19,19 +19,58 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- CINEMATIC PRELOADER & INTRO EXPERIENCE -->
+  <div id="saitIntroOverlay" class="sait-intro-overlay" aria-hidden="true">
+    <div class="intro-backdrop"></div>
+    <div class="intro-stage">
+      <div class="intro-visual">
+        <div class="intro-rings-wrap">
+          <div class="intro-ring intro-ring-outer"></div>
+          <div class="intro-ring intro-ring-mid"></div>
+          <div class="intro-ring intro-ring-glow"></div>
+          <div class="intro-light-sweep"></div>
+        </div>
+        <div class="intro-logo-box">
+          <img src="sait-logo.jpg" alt="SAIT Official Logo" class="intro-logo-img">
+        </div>
+        <div class="intro-aura"></div>
+      </div>
+      <div class="intro-text-block">
+        <div class="intro-title" id="introTitle" aria-label="SAIT">
+          <span class="intro-char">S</span>
+          <span class="intro-char">A</span>
+          <span class="intro-char">I</span>
+          <span class="intro-char">T</span>
+        </div>
+        <div class="intro-tagline" id="introTagline">
+          <span>LEARN</span>
+          <span class="intro-dot">•</span>
+          <span>BUILD</span>
+          <span class="intro-dot">•</span>
+          <span>GROW</span>
+        </div>
+      </div>
+    </div>
+    <button type="button" class="intro-skip-btn" id="introSkipBtn" aria-label="Skip introduction">
+      Skip <i class="fa-solid fa-forward"></i>
+    </button>
+  </div>
+
   <!-- Scroll Progress Indicator -->
   <div id="scrollProgressBar" class="scroll-progress-bar" aria-hidden="true"></div>
 
   <!-- Toast Notification Container -->
   <div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
 
-  <!-- Atmospheric Dark Green & Emerald Ambient Lighting Layer -->
+  <!-- Atmospheric Burgundy & Nude Ambient Living Lighting Layer -->
   <div class="ambient-bg-layer" aria-hidden="true">
     <div class="ambient-glow-orb glow-orb-1"></div>
     <div class="ambient-glow-orb glow-orb-2"></div>
     <div class="ambient-glow-orb glow-orb-3"></div>
     <div class="ambient-glow-orb glow-orb-4"></div>
     <div class="ambient-grid-overlay"></div>
+    <canvas id="ambientCanvas" class="ambient-canvas"></canvas>
+    <div id="cursorAmbientGlow" class="cursor-ambient-glow"></div>
   </div>
 
   <!-- 1. HEADER & NAVIGATION -->
@@ -139,8 +178,12 @@
             <span>LEARN &nbsp;&bull;&nbsp; BUILD &nbsp;&bull;&nbsp; GROW</span>
           </div>
 
-          <h1 class="hero-brand-title animate-fade-in delay-1">
-            SAIT <span class="hero-brand-dash"></span>
+          <h1 class="hero-brand-title animate-fade-in delay-1" id="heroBrandTitle" aria-label="SAIT">
+            <span class="title-char" style="--char-idx: 0">S</span>
+            <span class="title-char" style="--char-idx: 1">A</span>
+            <span class="title-char" style="--char-idx: 2">I</span>
+            <span class="title-char" style="--char-idx: 3">T</span>
+            <span class="hero-brand-dash"></span>
           </h1>
 
           <h2 class="hero-full-name animate-fade-in delay-2">
@@ -167,12 +210,14 @@
           </div>
         </div>
 
-        <!-- Hero Right Column: Official SAIT Logo with Dark Green Cosmic Rings -->
-        <div class="hero-visual animate-fade-in delay-2" aria-label="Official SAIT Logo Presentation">
-          <div class="hero-orbital-stage">
+        <!-- Hero Right Column: Official SAIT Logo with Burgundy & Nude Cosmic Rings -->
+        <div class="hero-visual animate-fade-in delay-2" id="heroVisualStage" aria-label="Official SAIT Logo Presentation">
+          <div class="hero-orbital-stage" id="heroOrbitalStage">
             <div class="orbital-glow-aura"></div>
             <!-- Outer and Inner Orbit Rings -->
-            <div class="orbit-ring ring-outer"></div>
+            <div class="orbit-ring ring-outer">
+              <div class="ring-sweep"></div>
+            </div>
             <div class="orbit-ring ring-mid"></div>
             <div class="orbit-ring ring-inner"></div>
 
@@ -183,7 +228,7 @@
             <div class="orbit-star star-4"></div>
 
             <!-- Official SAIT Logo Presentation -->
-            <div class="hero-official-logo-box">
+            <div class="hero-official-logo-box" id="heroOfficialLogoBox">
               <img src="sait-logo.jpg" alt="Official SAIT Logo — SOE CUSAT" class="hero-logo-img">
             </div>
           </div>
@@ -1591,5 +1636,7 @@
 
   <!-- JavaScript Master Controller Script -->
   <script src="script.js"></script>
+  <!-- Premium Tech Animation Controller -->
+  <script src="animations.js"></script>
 </body>
 </html>
