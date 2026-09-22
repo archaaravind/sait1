@@ -559,7 +559,7 @@
      ========================================================================== */
 
   const STATE = {
-    theme: localStorage.getItem('sait_theme') || document.documentElement.getAttribute('data-theme') || 'light',
+    theme: localStorage.getItem('sait_theme') || document.documentElement.getAttribute('data-theme') || 'dark',
     registeredEvents: JSON.parse(localStorage.getItem('sait_registered_events') || '["infinitus-26", "ai-bootcamp"]'),
     activities: [],
     announcements: [],

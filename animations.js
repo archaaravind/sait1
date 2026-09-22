@@ -45,9 +45,10 @@
       this.logoOrbit = document.getElementById('introLogoOrbit');
       this.textCluster = document.getElementById('introTextCluster');
 
-      // Accessibility: Respect prefers-reduced-motion
-      if (prefersReducedMotion) {
-        setTimeout(() => this.dismiss(true), 400);
+      // Skip intro if requested via query param or prefers-reduced-motion
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('nointro') || urlParams.has('skipintro') || prefersReducedMotion) {
+        this.dismiss(true);
         return;
       }
 
@@ -334,25 +335,103 @@
   };
 
   /* ==========================================================================
-     2. LIVE TECHNOLOGY BACKGROUND (CIRCUITS, PARTICLES, AMBIENT GLOW & GOLD STREAKS)
+     2. GLOBAL INTERACTIVE GALAXY & PARTICLE ENGINE (REUSABLE SYSTEM)
      ========================================================================== */
-  const AmbientCanvasSystem = {
+  const GalaxyBackground = {
     canvas: null,
     ctx: null,
-    particles: [],
-    circuits: [],
-    goldStreak: null,
-    nextStreakTime: 0,
-    animId: null,
     width: 0,
     height: 0,
     dpr: 1,
     isRunning: false,
-    mouse: { x: -1000, y: -1000, active: false },
+    animId: null,
     time: 0,
 
+    // Layers
+    starsLayer1: [], // Deep background starfield
+    dustLayer2: [],  // Mid nebula dust motes
+    starsLayer3: [], // Foreground interactive stars
+
+    // Cosmic Streaks / Shooting stars
+    cosmicStreak: null,
+    nextStreakTime: 0,
+
+    // Ripple wave queue
+    ripples: [],
+
+    // Pointer state (mouse or touch)
+    pointer: {
+      x: -1000,
+      y: -1000,
+      prevX: -1000,
+      prevY: -1000,
+      vx: 0,
+      vy: 0,
+      active: false,
+      isTouch: false
+    },
+
+    // Page-adaptive parameters
+    currentMode: 'home',
+    modeParams: {
+      home: {
+        speedMul: 1.0,
+        orbitCurvature: 0.0003,
+        constellationDist: 105,
+        nebulaAlpha: 0.18,
+        twinkleRate: 1.0
+      },
+      about: {
+        speedMul: 0.70,
+        orbitCurvature: 0.0005,
+        constellationDist: 85,
+        nebulaAlpha: 0.13,
+        twinkleRate: 0.8
+      },
+      events: {
+        speedMul: 1.25,
+        orbitCurvature: 0.0004,
+        constellationDist: 120,
+        nebulaAlpha: 0.22,
+        twinkleRate: 1.3
+      },
+      announcements: {
+        speedMul: 0.95,
+        orbitCurvature: 0.00035,
+        constellationDist: 100,
+        nebulaAlpha: 0.16,
+        twinkleRate: 1.1
+      },
+      people: {
+        speedMul: 0.75,
+        orbitCurvature: 0.00025,
+        constellationDist: 80,
+        nebulaAlpha: 0.12,
+        twinkleRate: 0.85
+      },
+      technology: {
+        speedMul: 1.15,
+        orbitCurvature: 0.0002,
+        constellationDist: 135,
+        nebulaAlpha: 0.19,
+        twinkleRate: 1.2
+      },
+      contact: {
+        speedMul: 0.60,
+        orbitCurvature: 0.00015,
+        constellationDist: 75,
+        nebulaAlpha: 0.11,
+        twinkleRate: 0.7
+      }
+    },
+    activeSpeed: 1.0,
+    activeOrbit: 0.0003,
+    activeConstellationDist: 105,
+    activeNebulaAlpha: 0.18,
+    activeTwinkleRate: 1.0,
+
     isDarkTheme() {
-      return document.documentElement.getAttribute('data-theme') === 'dark';
+      return document.documentElement.getAttribute('data-theme') !== 'light';
     },
 
     init() {
@@ -365,13 +444,14 @@
       this.resize();
 
       if (prefersReducedMotion) {
-        this.initEntities();
-        this.drawStatic();
+        this.initLayers();
+        this.drawStaticGalaxy();
         return;
       }
 
-      this.initEntities();
+      this.initLayers();
       this.bindEvents();
+      this.setupSectionObserver();
       this.start();
     },
 
@@ -389,74 +469,75 @@
       this.ctx.scale(this.dpr, this.dpr);
     },
 
-    initEntities() {
+    initLayers() {
       const isMobile = this.width < 768;
       const isTablet = this.width < 1024;
-      const dark = this.isDarkTheme();
 
-      // 1. Subtle Floating Particles
-      this.particles = [];
-      const pCount = isMobile ? 16 : isTablet ? 26 : 38;
-      const colors = dark ? [
-        { r: 0,   g: 180, b: 255 }, // Tech Cyan
-        { r: 208, g: 170, b: 91 },  // Soft Gold
-        { r: 23,  g: 74,  b: 115 }, // Mid Navy
-        { r: 248, g: 244, b: 234 }  // Light Ivory
-      ] : [
-        { r: 8,   g: 43,  b: 76 },  // Primary Navy
-        { r: 23,  g: 74,  b: 115 }, // Mid Navy
-        { r: 181, g: 138, b: 58 },  // Warm Gold
-        { r: 208, g: 170, b: 91 }   // Soft Gold
-      ];
-
-      for (let i = 0; i < pCount; i++) {
-        const c = colors[Math.floor(Math.random() * colors.length)];
-        this.particles.push({
+      // Layer 1: Deep Cosmic Starfield (Micro-stars)
+      const l1Count = isMobile ? 65 : isTablet ? 110 : 185;
+      this.starsLayer1 = [];
+      for (let i = 0; i < l1Count; i++) {
+        this.starsLayer1.push({
           x: Math.random() * this.width,
           y: Math.random() * this.height,
-          vx: (Math.random() - 0.5) * (isMobile ? 0.20 : 0.28),
-          vy: (Math.random() - 0.5) * (isMobile ? 0.20 : 0.28),
-          radius: Math.random() * 1.4 + 1.1,
-          color: c,
-          baseAlpha: Math.random() * 0.25 + 0.15,
-          alpha: 0.2,
-          pulseSpeed: Math.random() * 0.018 + 0.010,
-          pulsePhase: Math.random() * Math.PI * 2
+          vx: (Math.random() - 0.5) * 0.09,
+          vy: (Math.random() - 0.5) * 0.09 - 0.035, // subtle upward drift
+          radius: Math.random() * 0.85 + 0.65,
+          baseAlpha: Math.random() * 0.45 + 0.32,
+          alpha: 0.45,
+          twinkleSpeed: Math.random() * 0.022 + 0.009,
+          twinklePhase: Math.random() * Math.PI * 2,
+          color: Math.random() > 0.35 
+            ? (Math.random() > 0.4 ? '#F7F3EA' : '#B8CCE0') 
+            : (Math.random() > 0.5 ? '#D6B36A' : '#4D8DFF')
         });
       }
 
-      // 2. Architectural PCB Circuit Lines
-      this.circuits = [];
-      const cCount = isMobile ? 5 : isTablet ? 8 : 12;
-      const gridSize = 64;
-
-      for (let i = 0; i < cCount; i++) {
-        // Generate orthogonal circuit traces
-        const gx = Math.floor(Math.random() * (this.width / gridSize)) * gridSize;
-        const gy = Math.floor(Math.random() * (this.height / gridSize)) * gridSize;
-        const dir = Math.random() > 0.5 ? 1 : -1;
-        const hLen = (Math.floor(Math.random() * 3) + 2) * gridSize * dir;
-        const vLen = (Math.floor(Math.random() * 2) + 1) * gridSize * (Math.random() > 0.5 ? 1 : -1);
-
-        const p0 = { x: gx, y: gy };
-        const p1 = { x: gx + hLen, y: gy };
-        const p2 = { x: gx + hLen, y: gy + vLen };
-
-        const seg1Len = Math.abs(hLen);
-        const seg2Len = Math.abs(vLen);
-        const totalLen = seg1Len + seg2Len;
-
-        this.circuits.push({
-          p0, p1, p2,
-          seg1Len, seg2Len, totalLen,
-          speed: Math.random() * 0.35 + 0.35, // slow, dignified speed
-          dist: Math.random() * totalLen,
-          pulseLen: Math.random() * 25 + 35,
-          active: true
+      // Layer 2: Cosmic Dust & Nebula Motes
+      const l2Count = isMobile ? 24 : isTablet ? 38 : 55;
+      this.dustLayer2 = [];
+      for (let i = 0; i < l2Count; i++) {
+        const isGold = Math.random() > 0.70;
+        const isCyan = !isGold && Math.random() > 0.45;
+        this.dustLayer2.push({
+          x: Math.random() * this.width,
+          y: Math.random() * this.height,
+          vx: (Math.random() - 0.5) * 0.18,
+          vy: (Math.random() - 0.5) * 0.18 - 0.045,
+          radius: Math.random() * 1.8 + 1.4,
+          baseAlpha: Math.random() * 0.35 + 0.22,
+          alpha: 0.30,
+          colorRgb: isGold ? '214, 179, 106' : (isCyan ? '77, 141, 255' : '184, 204, 224'),
+          orbitRadius: Math.random() * 45 + 20,
+          orbitAngle: Math.random() * Math.PI * 2,
+          orbitSpeed: (Math.random() - 0.5) * 0.009
         });
       }
 
-      // Streak timer
+      // Layer 3: Foreground Interactive Constellation Stars
+      const l3Count = isMobile ? 18 : isTablet ? 28 : 42;
+      this.starsLayer3 = [];
+      for (let i = 0; i < l3Count; i++) {
+        const isGold = Math.random() > 0.60;
+        this.starsLayer3.push({
+          x: Math.random() * this.width,
+          y: Math.random() * this.height,
+          originX: 0,
+          originY: 0,
+          vx: (Math.random() - 0.5) * 0.24,
+          vy: (Math.random() - 0.5) * 0.24,
+          dispX: 0,
+          dispY: 0,
+          radius: Math.random() * 1.3 + 2.0,
+          baseAlpha: Math.random() * 0.30 + 0.65,
+          alpha: 0.8,
+          hoverBoost: 0,
+          colorRgb: isGold ? '214, 179, 106' : '77, 141, 255',
+          pulsePhase: Math.random() * Math.PI * 2,
+          pulseSpeed: Math.random() * 0.028 + 0.014
+        });
+      }
+
       this.nextStreakTime = Date.now() + 4000;
     },
 
@@ -466,31 +547,77 @@
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(() => {
           this.resize();
-          this.initEntities();
+          this.initLayers();
         }, 150);
       }, { passive: true });
 
-      // Listen for theme toggle to update colors smoothly
+      // Theme toggle observer
       const observer = new MutationObserver(() => {
-        this.initEntities();
+        this.initLayers();
       });
       observer.observe(document.documentElement, {
         attributes: true,
         attributeFilter: ['data-theme']
       });
 
-      // Mouse tracking
+      // Desktop Pointer Tracking
       window.addEventListener('mousemove', (e) => {
-        this.mouse.x = e.clientX;
-        this.mouse.y = e.clientY;
-        this.mouse.active = true;
+        const p = this.pointer;
+        p.prevX = p.x;
+        p.prevY = p.y;
+        p.x = e.clientX;
+        p.y = e.clientY;
+        p.vx = p.x - p.prevX;
+        p.vy = p.y - p.prevY;
+        p.active = true;
+        p.isTouch = false;
       }, { passive: true });
 
       window.addEventListener('mouseleave', () => {
-        this.mouse.active = false;
-        this.mouse.x = -1000;
-        this.mouse.y = -1000;
+        this.pointer.active = false;
+        this.pointer.x = -1000;
+        this.pointer.y = -1000;
       });
+
+      // Desktop Click Ripple
+      window.addEventListener('click', (e) => {
+        this.createRipple(e.clientX, e.clientY, 1.0);
+      }, { passive: true });
+
+      // Mobile Touch Handling (Passive & Non-blocking)
+      window.addEventListener('touchstart', (e) => {
+        if (e.touches && e.touches.length > 0) {
+          const t = e.touches[0];
+          this.pointer.x = t.clientX;
+          this.pointer.y = t.clientY;
+          this.pointer.active = true;
+          this.pointer.isTouch = true;
+          this.createRipple(t.clientX, t.clientY, 0.85);
+        }
+      }, { passive: true });
+
+      window.addEventListener('touchmove', (e) => {
+        if (e.touches && e.touches.length > 0) {
+          const t = e.touches[0];
+          this.pointer.prevX = this.pointer.x;
+          this.pointer.prevY = this.pointer.y;
+          this.pointer.x = t.clientX;
+          this.pointer.y = t.clientY;
+          this.pointer.vx = this.pointer.x - this.pointer.prevX;
+          this.pointer.vy = this.pointer.y - this.pointer.prevY;
+          this.pointer.active = true;
+          this.pointer.isTouch = true;
+        }
+      }, { passive: true });
+
+      window.addEventListener('touchend', () => {
+        setTimeout(() => {
+          if (!this.pointer.isTouch) return;
+          this.pointer.active = false;
+          this.pointer.x = -1000;
+          this.pointer.y = -1000;
+        }, 600);
+      }, { passive: true });
 
       // Tab visibility
       document.addEventListener('visibilitychange', () => {
@@ -500,6 +627,58 @@
           this.start();
         }
       });
+    },
+
+    createRipple(x, y, strength = 1.0) {
+      if (this.ripples.length > 6) {
+        this.ripples.shift();
+      }
+      this.ripples.push({
+        x,
+        y,
+        radius: 4,
+        maxRadius: Math.min(window.innerWidth, window.innerHeight) * 0.35,
+        speed: 5.2,
+        alpha: 0.65 * strength,
+        strength: strength
+      });
+    },
+
+    setupSectionObserver() {
+      const sectionMap = [
+        { id: 'home', mode: 'home' },
+        { id: 'about', mode: 'about' },
+        { id: 'events', mode: 'events' },
+        { id: 'announcements', mode: 'announcements' },
+        { id: 'people', mode: 'people' },
+        { id: 'careers', mode: 'technology' },
+        { id: 'resources', mode: 'technology' },
+        { id: 'achievements', mode: 'technology' },
+        { id: 'activity-logger', mode: 'technology' },
+        { id: 'contact', mode: 'contact' }
+      ];
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.25) {
+            const match = sectionMap.find(s => s.id === entry.target.id);
+            if (match) {
+              this.setMode(match.mode);
+            }
+          }
+        });
+      }, { threshold: [0.25, 0.5] });
+
+      sectionMap.forEach(item => {
+        const el = document.getElementById(item.id);
+        if (el) observer.observe(el);
+      });
+    },
+
+    setMode(mode) {
+      if (this.modeParams[mode]) {
+        this.currentMode = mode;
+      }
     },
 
     start() {
@@ -520,259 +699,330 @@
       }
     },
 
-    // Compute point along 2-segment circuit path
-    getPointOnCircuit(c, d) {
-      if (d <= c.seg1Len) {
-        const t = d / c.seg1Len;
-        return {
-          x: c.p0.x + (c.p1.x - c.p0.x) * t,
-          y: c.p0.y
-        };
-      } else {
-        const t = (d - c.seg1Len) / c.seg2Len;
-        return {
-          x: c.p1.x,
-          y: c.p1.y + (c.p2.y - c.p1.y) * t
-        };
-      }
-    },
-
     render(timestamp) {
       this.time = timestamp || performance.now();
       const ctx = this.ctx;
       const w = this.width;
       const h = this.height;
-      const dark = this.isDarkTheme();
+
+      // Smoothly interpolate page-adaptive mood parameters
+      const targetParams = this.modeParams[this.currentMode] || this.modeParams.home;
+      const lerpFactor = 0.04;
+      this.activeSpeed += (targetParams.speedMul - this.activeSpeed) * lerpFactor;
+      this.activeOrbit += (targetParams.orbitCurvature - this.activeOrbit) * lerpFactor;
+      this.activeConstellationDist += (targetParams.constellationDist - this.activeConstellationDist) * lerpFactor;
+      this.activeNebulaAlpha += (targetParams.nebulaAlpha - this.activeNebulaAlpha) * lerpFactor;
+      this.activeTwinkleRate += (targetParams.twinkleRate - this.activeTwinkleRate) * lerpFactor;
 
       ctx.clearRect(0, 0, w, h);
 
       // -------------------------------------------------------------
-      // 1. Slow Blue Ambient Light Movement
+      // 1. Living Atmospheric Nebula Light & Cosmic Gradients
       // -------------------------------------------------------------
       const t = this.time;
-      const glow1X = w * (0.28 + 0.12 * Math.sin(t * 0.00035));
-      const glow1Y = h * (0.32 + 0.08 * Math.cos(t * 0.00030));
-      const glow1R = Math.min(w, h) * 0.42;
+      const nAlpha = this.activeNebulaAlpha;
 
-      const grad1 = ctx.createRadialGradient(glow1X, glow1Y, 0, glow1X, glow1Y, glow1R);
-      if (dark) {
-        grad1.addColorStop(0, 'rgba(0, 180, 255, 0.075)');
-        grad1.addColorStop(0.5, 'rgba(11, 53, 92, 0.035)');
-        grad1.addColorStop(1, 'transparent');
-      } else {
-        grad1.addColorStop(0, 'rgba(11, 53, 92, 0.055)');
-        grad1.addColorStop(0.5, 'rgba(23, 74, 115, 0.025)');
-        grad1.addColorStop(1, 'transparent');
-      }
-      ctx.fillStyle = grad1;
+      // Cyan-blue celestial nebula
+      const neb1X = w * (0.30 + 0.12 * Math.sin(t * 0.00032));
+      const neb1Y = h * (0.34 + 0.09 * Math.cos(t * 0.00028));
+      const neb1R = Math.min(w, h) * 0.52;
+      const gradNeb1 = ctx.createRadialGradient(neb1X, neb1Y, 0, neb1X, neb1Y, neb1R);
+      gradNeb1.addColorStop(0, `rgba(77, 141, 255, ${nAlpha * 0.7})`);
+      gradNeb1.addColorStop(0.5, `rgba(18, 54, 92, ${nAlpha * 0.3})`);
+      gradNeb1.addColorStop(1, 'transparent');
+      ctx.fillStyle = gradNeb1;
       ctx.fillRect(0, 0, w, h);
 
-      const glow2X = w * (0.72 + 0.14 * Math.cos(t * 0.00028));
-      const glow2Y = h * (0.65 + 0.10 * Math.sin(t * 0.00038));
-      const glow2R = Math.min(w, h) * 0.46;
-
-      const grad2 = ctx.createRadialGradient(glow2X, glow2Y, 0, glow2X, glow2Y, glow2R);
-      if (dark) {
-        grad2.addColorStop(0, 'rgba(17, 74, 115, 0.065)');
-        grad2.addColorStop(0.6, 'rgba(3, 15, 28, 0.03)');
-        grad2.addColorStop(1, 'transparent');
-      } else {
-        grad2.addColorStop(0, 'rgba(8, 43, 76, 0.045)');
-        grad2.addColorStop(0.6, 'rgba(241, 235, 221, 0.02)');
-        grad2.addColorStop(1, 'transparent');
-      }
-      ctx.fillStyle = grad2;
+      // Warm gold starlight cluster nebula
+      const neb2X = w * (0.75 + 0.12 * Math.cos(t * 0.00026));
+      const neb2Y = h * (0.68 + 0.10 * Math.sin(t * 0.00034));
+      const neb2R = Math.min(w, h) * 0.48;
+      const gradNeb2 = ctx.createRadialGradient(neb2X, neb2Y, 0, neb2X, neb2Y, neb2R);
+      gradNeb2.addColorStop(0, `rgba(214, 179, 106, ${nAlpha * 0.5})`);
+      gradNeb2.addColorStop(0.55, `rgba(11, 35, 66, ${nAlpha * 0.25})`);
+      gradNeb2.addColorStop(1, 'transparent');
+      ctx.fillStyle = gradNeb2;
       ctx.fillRect(0, 0, w, h);
 
       // -------------------------------------------------------------
-      // 2. Slowly Moving Circuit Lines & Data Packets
+      // 2. Ripple Wave Processing & Rendering
       // -------------------------------------------------------------
-      const traceColor = dark ? 'rgba(0, 180, 255, 0.09)' : 'rgba(8, 43, 76, 0.08)';
-      const nodeColor = dark ? 'rgba(0, 180, 255, 0.22)' : 'rgba(181, 138, 58, 0.22)';
-      const pulseBaseColor = dark ? 'rgba(0, 210, 255,' : 'rgba(181, 138, 58,';
+      for (let rIdx = this.ripples.length - 1; rIdx >= 0; rIdx--) {
+        const rp = this.ripples[rIdx];
+        rp.radius += rp.speed;
+        rp.alpha *= 0.96;
 
-      const cLen = this.circuits.length;
-      for (let i = 0; i < cLen; i++) {
-        const c = this.circuits[i];
+        if (rp.alpha < 0.02 || rp.radius > rp.maxRadius) {
+          this.ripples.splice(rIdx, 1);
+          continue;
+        }
 
-        // Draw circuit trace lines
         ctx.beginPath();
-        ctx.moveTo(c.p0.x, c.p0.y);
-        ctx.lineTo(c.p1.x, c.p1.y);
-        ctx.lineTo(c.p2.x, c.p2.y);
-        ctx.strokeStyle = traceColor;
-        ctx.lineWidth = 1;
+        ctx.arc(rp.x, rp.y, rp.radius, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(77, 141, 255, ${rp.alpha * 0.45})`;
+        ctx.lineWidth = 1.6;
         ctx.stroke();
 
-        // Solder pad terminals at start, turn, and end
         ctx.beginPath();
-        ctx.arc(c.p0.x, c.p0.y, 2, 0, Math.PI * 2);
-        ctx.arc(c.p1.x, c.p1.y, 2, 0, Math.PI * 2);
-        ctx.arc(c.p2.x, c.p2.y, 2, 0, Math.PI * 2);
-        ctx.fillStyle = nodeColor;
-        ctx.fill();
-
-        // Advance pulse
-        c.dist += c.speed;
-        if (c.dist > c.totalLen) {
-          c.dist = 0;
-        }
-
-        // Draw moving light pulse packet
-        const headPt = this.getPointOnCircuit(c, c.dist);
-        const tailDist = Math.max(0, c.dist - c.pulseLen);
-        const tailPt = this.getPointOnCircuit(c, tailDist);
-
-        const pulseGrad = ctx.createLinearGradient(tailPt.x, tailPt.y, headPt.x, headPt.y);
-        pulseGrad.addColorStop(0, `${pulseBaseColor} 0)`);
-        pulseGrad.addColorStop(0.7, `${pulseBaseColor} 0.35)`);
-        pulseGrad.addColorStop(1, `${pulseBaseColor} 0.85)`);
-
-        ctx.beginPath();
-        ctx.moveTo(tailPt.x, tailPt.y);
-        if (c.dist > c.seg1Len && tailDist < c.seg1Len) {
-          ctx.lineTo(c.p1.x, c.p1.y);
-        }
-        ctx.lineTo(headPt.x, headPt.y);
-        ctx.strokeStyle = pulseGrad;
-        ctx.lineWidth = 1.8;
+        ctx.arc(rp.x, rp.y, Math.max(0, rp.radius - 8), 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(214, 179, 106, ${rp.alpha * 0.25})`;
+        ctx.lineWidth = 1.0;
         ctx.stroke();
-
-        // Head glowing dot
-        ctx.beginPath();
-        ctx.arc(headPt.x, headPt.y, 1.8, 0, Math.PI * 2);
-        ctx.fillStyle = `${pulseBaseColor} 0.95)`;
-        ctx.fill();
       }
 
-      // -------------------------------------------------------------
-      // 3. Occasional Subtle Gold Light Streaks
-      // -------------------------------------------------------------
-      const now = Date.now();
-      if (!this.goldStreak && now > this.nextStreakTime && cLen > 0) {
-        const picked = this.circuits[Math.floor(Math.random() * cLen)];
-        this.goldStreak = {
-          circuit: picked,
-          progress: 0,
-          speed: 0.007, // ~2.4 seconds duration
-          streakLen: 65
-        };
-      }
-
-      if (this.goldStreak) {
-        const gs = this.goldStreak;
-        gs.progress += gs.speed;
-
-        if (gs.progress >= 1) {
-          this.goldStreak = null;
-          this.nextStreakTime = now + (Math.random() * 3000 + 6000); // next in 6-9s
-        } else {
-          const headDist = gs.progress * gs.circuit.totalLen;
-          const tailDist = Math.max(0, headDist - gs.streakLen);
-          const headPt = this.getPointOnCircuit(gs.circuit, headDist);
-          const tailPt = this.getPointOnCircuit(gs.circuit, tailDist);
-
-          // Alpha fade in & out curve
-          const streakAlpha = Math.sin(gs.progress * Math.PI) * (dark ? 0.9 : 0.75);
-
-          const streakGrad = ctx.createLinearGradient(tailPt.x, tailPt.y, headPt.x, headPt.y);
-          streakGrad.addColorStop(0, 'rgba(181, 138, 58, 0)');
-          streakGrad.addColorStop(0.6, `rgba(181, 138, 58, ${streakAlpha * 0.5})`);
-          streakGrad.addColorStop(1, `rgba(208, 170, 91, ${streakAlpha})`);
-
-          ctx.beginPath();
-          ctx.moveTo(tailPt.x, tailPt.y);
-          if (headDist > gs.circuit.seg1Len && tailDist < gs.circuit.seg1Len) {
-            ctx.lineTo(gs.circuit.p1.x, gs.circuit.p1.y);
-          }
-          ctx.lineTo(headPt.x, headPt.y);
-          ctx.strokeStyle = streakGrad;
-          ctx.lineWidth = 2.4;
-          ctx.stroke();
-
-          // Golden pulse halo at head
-          ctx.beginPath();
-          ctx.arc(headPt.x, headPt.y, 3, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(208, 170, 91, ${streakAlpha})`;
-          ctx.shadowColor = 'rgba(208, 170, 91, 0.8)';
-          ctx.shadowBlur = 8;
-          ctx.fill();
-          ctx.shadowBlur = 0; // reset
-        }
-      }
-
-      // -------------------------------------------------------------
-      // 4. Subtle Floating Particles
-      // -------------------------------------------------------------
+      // Pointer radius constants
+      const ptr = this.pointer;
       const isMobile = w < 768;
-      const maxConnectDist = isMobile ? 80 : 115;
+      const hoverRadius = isMobile ? 85 : 120;
+      const hoverRadiusSq = hoverRadius * hoverRadius;
+
+      // -------------------------------------------------------------
+      // 3. Layer 1: Deep Cosmic Starfield (Slow drift & Twinkle)
+      // -------------------------------------------------------------
+      const l1Len = this.starsLayer1.length;
+      for (let i = 0; i < l1Len; i++) {
+        const s = this.starsLayer1[i];
+
+        s.x += s.vx * this.activeSpeed;
+        s.y += s.vy * this.activeSpeed;
+
+        // Subtle curved orbital drift
+        s.x += Math.sin(t * this.activeOrbit + i) * 0.12;
+
+        if (s.x < -10) s.x = w + 10;
+        else if (s.x > w + 10) s.x = -10;
+        if (s.y < -10) s.y = h + 10;
+        else if (s.y > h + 10) s.y = -10;
+
+        s.twinklePhase += s.twinkleSpeed * this.activeTwinkleRate;
+        const tw = Math.sin(s.twinklePhase);
+        s.alpha = s.baseAlpha + tw * 0.22;
+
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+        ctx.fillStyle = s.color;
+        ctx.globalAlpha = Math.max(0.08, Math.min(1, s.alpha));
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+
+      // -------------------------------------------------------------
+      // 4. Layer 2: Cosmic Dust & Nebula Motes (Soft Glow)
+      // -------------------------------------------------------------
+      const l2Len = this.dustLayer2.length;
+      for (let i = 0; i < l2Len; i++) {
+        const d = this.dustLayer2[i];
+
+        d.orbitAngle += d.orbitSpeed * this.activeSpeed;
+        d.x += (d.vx + Math.cos(d.orbitAngle) * 0.25) * this.activeSpeed;
+        d.y += (d.vy + Math.sin(d.orbitAngle) * 0.25) * this.activeSpeed;
+
+        if (d.x < -20) d.x = w + 20;
+        else if (d.x > w + 20) d.x = -20;
+        if (d.y < -20) d.y = h + 20;
+        else if (d.y > h + 20) d.y = -20;
+
+        // Soft radial glow mote
+        const moteGrad = ctx.createRadialGradient(d.x, d.y, 0, d.x, d.y, d.radius * 3.5);
+        moteGrad.addColorStop(0, `rgba(${d.colorRgb}, ${d.baseAlpha * 0.9})`);
+        moteGrad.addColorStop(0.4, `rgba(${d.colorRgb}, ${d.baseAlpha * 0.4})`);
+        moteGrad.addColorStop(1, `rgba(${d.colorRgb}, 0)`);
+
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, d.radius * 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = moteGrad;
+        ctx.fill();
+      }
+
+      // -------------------------------------------------------------
+      // 5. Layer 3: Foreground Interactive Constellation Stars
+      // -------------------------------------------------------------
+      const l3Len = this.starsLayer3.length;
+      const maxConnectDist = this.activeConstellationDist;
       const maxConnectDistSq = maxConnectDist * maxConnectDist;
-      const mouseDistThreshold = isMobile ? 90 : 130;
-      const mouseDistSq = mouseDistThreshold * mouseDistThreshold;
-      const connectColorBase = dark ? 'rgba(0, 180, 255,' : 'rgba(8, 43, 76,';
 
-      const pLen = this.particles.length;
-      for (let i = 0; i < pLen; i++) {
-        const p = this.particles[i];
+      for (let i = 0; i < l3Len; i++) {
+        const s = this.starsLayer3[i];
 
-        p.x += p.vx;
-        p.y += p.vy;
+        // Normal drift
+        s.x += s.vx * this.activeSpeed;
+        s.y += s.vy * this.activeSpeed;
 
-        if (p.x < -10) p.x = w + 10;
-        else if (p.x > w + 10) p.x = -10;
-        if (p.y < -10) p.y = h + 10;
-        else if (p.y > h + 10) p.y = -10;
+        // Screen wrap
+        if (s.x < -15) s.x = w + 15;
+        else if (s.x > w + 15) s.x = -15;
+        if (s.y < -15) s.y = h + 15;
+        else if (s.y > h + 15) s.y = -15;
 
-        if (this.mouse.active) {
-          const dx = p.x - this.mouse.x;
-          const dy = p.y - this.mouse.y;
-          const dSq = dx * dx + dy * dy;
-          if (dSq < mouseDistSq && dSq > 0) {
-            const force = (1 - Math.sqrt(dSq) / mouseDistThreshold) * 0.7;
-            p.x += (dx / Math.sqrt(dSq)) * force * 1.2;
-            p.y += (dy / Math.sqrt(dSq)) * force * 1.2;
+        // Pointer Gravity / Repulsion / Swirl
+        if (ptr.active) {
+          const dx = s.x - ptr.x;
+          const dy = s.y - ptr.y;
+          const distSq = dx * dx + dy * dy;
+
+          if (distSq < hoverRadiusSq && distSq > 0) {
+            const dist = Math.sqrt(distSq);
+            const normX = dx / dist;
+            const normY = dy / dist;
+            const force = (1 - dist / hoverRadius);
+
+            if (dist < 40) {
+              s.dispX += normX * force * 2.2;
+              s.dispY += normY * force * 2.2;
+            } else {
+              const swirlX = -normY * 0.8;
+              const swirlY = normX * 0.8;
+              s.dispX += (normX * -0.4 + swirlX) * force * 1.5;
+              s.dispY += (normY * -0.4 + swirlY) * force * 1.5;
+            }
+
+            s.hoverBoost = Math.min(0.45, s.hoverBoost + 0.08);
           }
         }
 
-        p.pulsePhase += p.pulseSpeed;
-        p.alpha = p.baseAlpha + Math.sin(p.pulsePhase) * 0.08;
+        // Ripple interaction
+        for (let r = 0; r < this.ripples.length; r++) {
+          const rp = this.ripples[r];
+          const rdx = s.x - rp.x;
+          const rdy = s.y - rp.y;
+          const rDist = Math.sqrt(rdx * rdx + rdy * rdy);
+          const waveDelta = Math.abs(rDist - rp.radius);
 
+          if (waveDelta < 24 && rDist > 0) {
+            const waveForce = (1 - waveDelta / 24) * rp.strength * 1.8;
+            s.dispX += (rdx / rDist) * waveForce;
+            s.dispY += (rdy / rDist) * waveForce;
+            s.hoverBoost = Math.min(0.55, s.hoverBoost + 0.15);
+          }
+        }
+
+        // Smooth spring dampening back to zero displacement
+        s.dispX *= 0.90;
+        s.dispY *= 0.90;
+        s.hoverBoost *= 0.95;
+
+        const renderX = s.x + s.dispX;
+        const renderY = s.y + s.dispY;
+
+        s.pulsePhase += s.pulseSpeed;
+        const baseAlpha = s.baseAlpha + Math.sin(s.pulsePhase) * 0.15 + s.hoverBoost;
+        const totalAlpha = Math.min(1, Math.max(0.15, baseAlpha));
+
+        // Draw star core + halo
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, ${Math.max(0.06, p.alpha)})`;
+        ctx.arc(renderX, renderY, s.radius * (1 + s.hoverBoost * 0.5), 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${s.colorRgb}, ${totalAlpha})`;
+        ctx.shadowColor = `rgba(${s.colorRgb}, 0.8)`;
+        ctx.shadowBlur = s.hoverBoost > 0.1 ? 12 : 6;
         ctx.fill();
+        ctx.shadowBlur = 0;
 
-        for (let j = i + 1; j < pLen; j++) {
-          const p2 = this.particles[j];
-          const ldx = p.x - p2.x;
-          const ldy = p.y - p2.y;
-          const ldSq = ldx * ldx + ldy * ldy;
+        // Constellation lines linking nearby stars
+        for (let j = i + 1; j < l3Len; j++) {
+          const s2 = this.starsLayer3[j];
+          const cdx = renderX - (s2.x + s2.dispX);
+          const cdy = renderY - (s2.y + s2.dispY);
+          const cdSq = cdx * cdx + cdy * cdy;
 
-          if (ldSq < maxConnectDistSq) {
-            const dist = Math.sqrt(ldSq);
-            const lineAlpha = (1 - dist / maxConnectDist) * (dark ? 0.09 : 0.07);
+          if (cdSq < maxConnectDistSq) {
+            const dist = Math.sqrt(cdSq);
+            const lineAlpha = (1 - dist / maxConnectDist) * 0.22 * (1 + (s.hoverBoost + s2.hoverBoost) * 0.5);
             ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `${connectColorBase} ${lineAlpha})`;
-            ctx.lineWidth = 0.75;
+            ctx.moveTo(renderX, renderY);
+            ctx.lineTo(s2.x + s2.dispX, s2.y + s2.dispY);
+            ctx.strokeStyle = `rgba(77, 141, 255, ${lineAlpha})`;
+            ctx.lineWidth = 0.85;
             ctx.stroke();
           }
         }
       }
+
+      // -------------------------------------------------------------
+      // 6. Occasional Shooting Star / Cosmic Streak
+      // -------------------------------------------------------------
+      const now = Date.now();
+      if (!this.cosmicStreak && now > this.nextStreakTime) {
+        const isGold = Math.random() > 0.5;
+        this.cosmicStreak = {
+          x: Math.random() * (w * 0.7),
+          y: Math.random() * (h * 0.4),
+          len: Math.random() * 80 + 100,
+          speed: Math.random() * 8 + 10,
+          angle: Math.PI / 4 + (Math.random() - 0.5) * 0.3,
+          progress: 0,
+          isGold
+        };
+      }
+
+      if (this.cosmicStreak) {
+        const cs = this.cosmicStreak;
+        cs.progress += cs.speed;
+        const curX = cs.x + Math.cos(cs.angle) * cs.progress;
+        const curY = cs.y + Math.sin(cs.angle) * cs.progress;
+        const tailX = curX - Math.cos(cs.angle) * cs.len;
+        const tailY = curY - Math.sin(cs.angle) * cs.len;
+
+        const maxDist = 450;
+        if (cs.progress > maxDist) {
+          this.cosmicStreak = null;
+          this.nextStreakTime = now + (Math.random() * 4000 + 7000);
+        } else {
+          const streakAlpha = Math.sin((cs.progress / maxDist) * Math.PI) * 0.85;
+          const streakColor = cs.isGold ? '214, 179, 106' : '77, 141, 255';
+
+          const sGrad = ctx.createLinearGradient(tailX, tailY, curX, curY);
+          sGrad.addColorStop(0, `rgba(${streakColor}, 0)`);
+          sGrad.addColorStop(0.7, `rgba(${streakColor}, ${streakAlpha * 0.45})`);
+          sGrad.addColorStop(1, `rgba(247, 243, 234, ${streakAlpha})`);
+
+          ctx.beginPath();
+          ctx.moveTo(tailX, tailY);
+          ctx.lineTo(curX, curY);
+          ctx.strokeStyle = sGrad;
+          ctx.lineWidth = 1.8;
+          ctx.stroke();
+
+          // Glowing tip
+          ctx.beginPath();
+          ctx.arc(curX, curY, 2.2, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(247, 243, 234, ${streakAlpha})`;
+          ctx.shadowColor = `rgba(${streakColor}, 0.9)`;
+          ctx.shadowBlur = 10;
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+      }
     },
 
-    drawStatic() {
+    drawStaticGalaxy() {
       const ctx = this.ctx;
-      ctx.clearRect(0, 0, this.width, this.height);
-      this.particles.forEach(p => {
+      const w = this.width;
+      const h = this.height;
+      ctx.clearRect(0, 0, w, h);
+
+      // Render static background starfield
+      this.starsLayer1.forEach(s => {
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, ${p.baseAlpha})`;
+        ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+        ctx.fillStyle = s.color;
+        ctx.globalAlpha = s.baseAlpha;
+        ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+
+      // Render static brighter stars
+      this.starsLayer3.forEach(s => {
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${s.colorRgb}, ${s.baseAlpha})`;
         ctx.fill();
       });
     }
   };
+
+  // Reusable Global Components & Aliases
+  const AmbientCanvasSystem = GalaxyBackground;
+  window.GalaxyBackground = GalaxyBackground;
 
   /* ==========================================================================
      3. MOUSE & TOUCH CURSOR GLOW CONTROLLER
@@ -996,7 +1246,23 @@
     init() {
       if (prefersReducedMotion) return;
 
-      const cards = document.querySelectorAll('.feature-card, .stat-strip-card, .event-card, .person-card, .alumni-card, .resource-card');
+      const cardSelectors = [
+        '.feature-card',
+        '.stat-strip-card',
+        '.event-card',
+        '.person-card',
+        '.alumni-card',
+        '.resource-card',
+        '.foundation-card',
+        '.why-sait-card',
+        '.featured-slide-card',
+        '.featured-ann-card',
+        '.notice-card',
+        '.career-card',
+        '.glass-card'
+      ];
+
+      const cards = document.querySelectorAll(cardSelectors.join(', '));
 
       cards.forEach(card => {
         card.addEventListener('mousemove', (e) => {
@@ -1005,6 +1271,13 @@
           const y = ((e.clientY - rect.top) / rect.height) * 100;
           card.style.setProperty('--mouse-x', `${x.toFixed(1)}%`);
           card.style.setProperty('--mouse-y', `${y.toFixed(1)}%`);
+        }, { passive: true });
+
+        // Subtle galaxy ripple on card mouseenter
+        card.addEventListener('mouseenter', (e) => {
+          if (window.GalaxyBackground && typeof window.GalaxyBackground.createRipple === 'function') {
+            window.GalaxyBackground.createRipple(e.clientX, e.clientY, 0.4);
+          }
         }, { passive: true });
       });
     }
