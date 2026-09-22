@@ -4037,14 +4037,11 @@ body.intro-active {
 }
 
 /* ==========================================================================
-   CINEMATIC PORTRAIT VIDEO INTRODUCTION OVERLAY (IVORY, NAVY & WARM GOLD)
-   ========================================================================== */
-
 /* ==========================================================================
-   CINEMATIC FULLSCREEN PORTRAIT VIDEO INTRO (100vw x 100vh)
+   24. CINEMATIC CODED SAIT INTRO SEQUENCE (HTML/CSS/JS — REAL SAIT LOGO)
    ========================================================================== */
 
-/* Intro Fullscreen Overlay */
+/* Fullscreen Intro Overlay (100vw x 100vh) */
 .sait-intro-overlay {
   position: fixed;
   top: 0;
@@ -4061,183 +4058,367 @@ body.intro-active {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #050E1A;
+  background: #020713;
   overflow: hidden;
   contain: strict;
   clip-path: inset(0);
   opacity: 1;
   visibility: visible;
-  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.75s ease;
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.5s ease;
   will-change: opacity;
 }
 
 .sait-intro-overlay.intro-exit {
-  opacity: 0;
-  pointer-events: none;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 .sait-intro-overlay.intro-hidden {
   display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
-/* Atmospheric Ambient Video Glow filling entire 100vw x 100vh screen */
-.intro-ambient-bg {
+/* 1. Interactive Dark Tech Canvas Background */
+.intro-canvas {
   position: absolute;
-  inset: -10%;
-  width: 120%;
-  height: 120%;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
-  overflow: hidden;
   z-index: 1;
 }
 
-.intro-bg-blur-video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: blur(75px) saturate(140%) brightness(0.65);
-  opacity: 0.55;
-  transform: scale(1.15);
-}
-
-.intro-bg-overlay-grid {
+/* 2. Ambient Tech Grid & Glow Accents */
+.intro-grid-backdrop {
   position: absolute;
   inset: 0;
   background-image: 
-    linear-gradient(rgba(0, 210, 255, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 210, 255, 0.045) 1px, transparent 1px);
-  background-size: 40px 40px;
-  mask-image: radial-gradient(circle at center, black 40%, transparent 85%);
-  -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 85%);
-}
-
-/* Centered Stage for Portrait Video */
-.intro-stage-wrapper {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  padding: 1.5rem;
-  box-sizing: border-box;
-}
-
-.intro-video-frame {
-  position: relative;
-  height: 94vh;
-  max-height: 94vh;
-  aspect-ratio: 9 / 16;
-  width: auto;
-  border-radius: 22px;
-  overflow: hidden;
-  background: #061324;
-  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.85), 0 0 50px rgba(0, 180, 255, 0.25), 0 0 20px rgba(181, 138, 58, 0.25);
-  border: 2px solid rgba(0, 210, 255, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#saitIntroVideo {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-}
-
-/* In-Video Overlay covering baked-in text */
-.invideo-text-overlay {
-  position: absolute;
-  inset: 0;
+    linear-gradient(rgba(0, 180, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 180, 255, 0.04) 1px, transparent 1px);
+  background-size: 50px 50px;
+  mask-image: radial-gradient(circle at center, black 35%, transparent 80%);
+  -webkit-mask-image: radial-gradient(circle at center, black 35%, transparent 80%);
   pointer-events: none;
-  z-index: 10;
-  opacity: 0;
-  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 2;
 }
 
-.invideo-text-overlay.text-revealed {
-  opacity: 1;
-}
-
-/* Mask 1: Center Diamond Chip Plate covering Cristian Escamilla */
-.chip-diamond-plate {
+.intro-ambient-glow {
   position: absolute;
-  top: 51.8%;
-  left: 50%;
-  width: 165px;
-  height: 165px;
-  transform: translate(-50%, -50%) rotate(45deg);
-  background: radial-gradient(circle at center, #0e2444 0%, #08162a 75%, #050d1a 100%);
-  border: 2px solid rgba(0, 210, 255, 0.75);
-  box-shadow: 0 0 35px rgba(0, 180, 255, 0.55), inset 0 0 20px rgba(0, 120, 220, 0.4);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(90px);
+  z-index: 2;
 }
 
-.chip-content {
-  transform: rotate(-45deg);
+.intro-glow-center {
+  top: 50%;
+  left: 50%;
+  width: 600px;
+  height: 600px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(0, 140, 255, 0.18) 0%, rgba(8, 43, 76, 0.12) 50%, transparent 75%);
+  animation: introAuraPulse 6s ease-in-out infinite alternate;
+}
+
+.intro-glow-corner {
+  top: 20%;
+  right: 15%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(181, 138, 58, 0.12) 0%, transparent 70%);
+  animation: introAuraPulse 7s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes introAuraPulse {
+  0% { transform: translate(-50%, -50%) scale(0.92); opacity: 0.7; }
+  100% { transform: translate(-50%, -50%) scale(1.08); opacity: 1; }
+}
+
+/* 3. Central Presentation Stage */
+.intro-center-stage {
+  position: relative;
+  z-index: 10;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  width: 180px;
-}
-
-.chip-sait-title {
-  font-family: var(--font-sans);
-  font-size: 40px;
-  font-weight: 900;
-  letter-spacing: 5px;
-  color: #FFFFFF;
-  text-shadow: 0 0 15px rgba(0, 210, 255, 1), 0 0 25px rgba(0, 150, 255, 0.6);
-  line-height: 1;
-  margin: 0;
-}
-
-.chip-sait-divider {
-  width: 44px;
-  height: 3px;
-  background: linear-gradient(90deg, #D0AA5B, #B58A3A);
-  border-radius: 2px;
-  margin-top: 6px;
-  box-shadow: 0 0 8px rgba(208, 170, 91, 0.9);
-}
-
-/* Mask 2: Lower Subtitle Badge completely covering promo text (y=70.7% to 84.8%) */
-.lower-subtitle-badge {
-  position: absolute;
-  top: 77.8%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  max-width: 820px;
   width: 92%;
-  max-width: 440px;
-  min-height: 80px;
-  padding: 16px 20px;
-  background: #061324;
-  border: 1.5px solid rgba(181, 138, 58, 0.6);
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.98), 0 0 30px rgba(181, 138, 58, 0.35);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+  padding: 2rem 1.5rem;
   box-sizing: border-box;
 }
 
-.lower-subtitle-text {
+/* Orbital High-Tech Frame for SAIT Logo */
+.intro-logo-orbit {
+  position: relative;
+  width: 175px;
+  height: 175px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.6rem;
+  opacity: 0;
+  transform: scale(0.78) translateY(16px);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.intro-logo-orbit.revealed {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+.intro-orbit-ring {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.intro-orbit-ring.ring-outer {
+  inset: -12px;
+  border: 1.5px dashed rgba(0, 210, 255, 0.4);
+  box-shadow: 0 0 25px rgba(0, 210, 255, 0.2);
+  animation: introOrbitRotate 26s linear infinite;
+}
+
+.intro-orbit-ring.ring-inner {
+  inset: 4px;
+  border: 1px solid rgba(208, 170, 91, 0.45);
+  animation: introOrbitReverse 18s linear infinite;
+}
+
+.intro-orbit-sweep {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, #FFFFFF, #D0AA5B, transparent);
+  box-shadow: 0 0 16px rgba(208, 170, 91, 1), 0 0 30px rgba(0, 210, 255, 0.8);
+  animation: introOrbitSweepTravel 3.6s ease-in-out infinite alternate;
+}
+
+.intro-orbit-nodes {
+  position: absolute;
+  inset: -12px;
+  pointer-events: none;
+  animation: introOrbitRotate 26s linear infinite;
+}
+
+.orbit-node {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00D2FF;
+  box-shadow: 0 0 10px #00D2FF;
+}
+
+.orbit-node.node-1 { top: -3px; left: 50%; transform: translateX(-50%); }
+.orbit-node.node-2 { bottom: -3px; left: 50%; transform: translateX(-50%); }
+.orbit-node.node-3 { left: -3px; top: 50%; transform: translateY(-50%); }
+.orbit-node.node-4 { right: -3px; top: 50%; transform: translateY(-50%); }
+
+/* Circular Logo Box */
+.intro-logo-box {
+  position: relative;
+  width: 125px;
+  height: 125px;
+  border-radius: 50%;
+  background: #000000;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2.5px solid rgba(0, 210, 255, 0.7);
+  box-shadow: 0 0 35px rgba(0, 180, 255, 0.55), 
+              0 0 70px rgba(8, 43, 76, 0.8), 
+              inset 0 0 20px rgba(0, 210, 255, 0.35);
+}
+
+.intro-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 50%;
+}
+
+.intro-logo-sheen {
+  position: absolute;
+  inset: -50%;
+  background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.75) 50%, transparent 60%);
+  transform: translateX(-150%) rotate(25deg);
+  pointer-events: none;
+}
+
+.intro-text-cluster.show-sweep ~ .intro-logo-orbit .intro-logo-sheen,
+.intro-logo-orbit.revealed .intro-logo-sheen {
+  animation: introLogoSheenSweep 2.2s cubic-bezier(0.4, 0, 0.2, 1) 3.5s forwards;
+}
+
+/* Typography Cluster */
+.intro-text-cluster {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* SAIT Large Heading */
+.intro-brand-title-wrap {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  padding: 0.2rem 1.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.intro-brand-title {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: clamp(3.4rem, 8vw, 5.8rem);
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  color: #FFFFFF;
+  text-shadow: 0 0 24px rgba(0, 210, 255, 0.85), 
+               0 0 60px rgba(0, 130, 255, 0.5);
+  line-height: 1;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.05em;
+  opacity: 0;
+  transform: translateY(22px) scale(0.95);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.intro-text-cluster.show-title .intro-brand-title {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.intro-char {
+  display: inline-block;
+  color: #FFFFFF;
+}
+
+.intro-title-sweep {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), rgba(208, 170, 91, 0.9), transparent);
+  transform: translateX(-120%);
+  pointer-events: none;
+}
+
+.intro-text-cluster.show-sweep .intro-title-sweep {
+  animation: introTitleSweepMove 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Academic Warm Gold Divider Line */
+.intro-divider-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 240px;
+  height: 14px;
+  margin: 0.6rem 0 1.1rem 0;
+  opacity: 0;
+  transform: scaleX(0);
+  transition: opacity 0.7s ease, transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.intro-text-cluster.show-title .intro-divider-line {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.divider-core {
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #D0AA5B, #FFFFFF, #D0AA5B, transparent);
+  box-shadow: 0 0 10px rgba(208, 170, 91, 0.8);
+}
+
+.divider-node {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #D0AA5B;
+  box-shadow: 0 0 8px rgba(208, 170, 91, 1);
+  margin: 0 4px;
+}
+
+/* Subtitle: Students Association of Information Technology */
+.intro-subtitle-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.intro-text-cluster.show-subtitle .intro-subtitle-wrap {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.intro-subtitle-primary {
+  font-family: var(--font-sans);
+  font-size: clamp(0.95rem, 2.4vw, 1.3rem);
   font-weight: 800;
-  letter-spacing: 2px;
+  letter-spacing: 0.24em;
   color: #F8F4EA;
   text-transform: uppercase;
-  line-height: 1.55;
+  line-height: 1.4;
   margin: 0;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
+}
+
+.intro-subtitle-secondary {
+  font-family: var(--font-sans);
+  font-size: clamp(0.9rem, 2.2vw, 1.2rem);
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  color: #D0AA5B;
+  text-transform: uppercase;
+  line-height: 1.4;
+  margin: 0.3rem 0 0.85rem 0;
+  text-shadow: 0 0 15px rgba(208, 170, 91, 0.5);
+}
+
+.intro-dept-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  white-space: nowrap;
+  text-align: center;
+  padding: 0.35rem 1.15rem;
+  background: rgba(8, 43, 76, 0.7);
+  border: 1px solid rgba(181, 138, 58, 0.45);
+  border-radius: 99px;
+  font-family: var(--font-mono);
+  font-size: clamp(0.68rem, 1.6vw, 0.76rem);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: #EAD6AA;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
+  max-width: 90%;
+  box-sizing: border-box;
+}
+
+.intro-dept-badge span {
+  text-align: center;
 }
 
 /* HUD Footer */
@@ -4268,9 +4449,9 @@ body.intro-active {
 .intro-progress-bar {
   width: 0%;
   height: 100%;
-  background: linear-gradient(90deg, #D0AA5B, #B58A3A);
+  background: linear-gradient(90deg, #00D2FF, #D0AA5B, #B58A3A);
   border-radius: 99px;
-  transition: width 0.12s linear;
+  transition: width 0.1s linear;
 }
 
 /* Skip Introduction Button */
@@ -4302,43 +4483,149 @@ body.intro-active {
   transform: translateY(-2px);
 }
 
-/* Intro Keyframe Animations */
-@keyframes introSpin {
+/* Keyframes for Intro Sequence */
+@keyframes introLogoEntrance {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(16px);
+    filter: drop-shadow(0 0 10px rgba(0, 210, 255, 0.3));
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: drop-shadow(0 0 35px rgba(0, 180, 255, 0.65));
+  }
+}
+
+@keyframes introLogoFloat {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-7px); }
+}
+
+@keyframes introOrbitRotate {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
 
-@keyframes introCounterSpin {
+@keyframes introOrbitReverse {
   from { transform: rotate(360deg); }
   to { transform: rotate(0deg); }
 }
 
-@keyframes introPulseRing {
-  0% { transform: scale(0.96); opacity: 0.5; }
-  100% { transform: scale(1.04); opacity: 0.9; }
-}
-
-@keyframes introAuraBreath {
-  0% { transform: scale(0.88); opacity: 0.3; }
-  100% { transform: scale(1.12); opacity: 0.65; }
-}
-
-@keyframes introSweepPulse {
+@keyframes introOrbitSweepTravel {
   0% { opacity: 0.4; }
   100% { opacity: 1; }
 }
 
-@keyframes introLogoEntrance {
+@keyframes introLogoSheenSweep {
+  0% { transform: translateX(-150%) rotate(25deg); }
+  100% { transform: translateX(180%) rotate(25deg); }
+}
+
+@keyframes introCharReveal {
   0% {
     opacity: 0;
-    transform: scale(0.7) rotate(-5deg);
-  }
-  70% {
-    transform: scale(1.03) rotate(1deg);
+    transform: translateY(22px) scale(0.92);
   }
   100% {
     opacity: 1;
-    transform: scale(1) rotate(0deg);
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes introTitleSweepMove {
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(140%); }
+}
+
+@keyframes introDividerExpand {
+  0% {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes introSubtitleReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile Responsiveness for Intro */
+@media (max-width: 768px) {
+  .intro-logo-orbit {
+    width: 135px;
+    height: 135px;
+    margin-bottom: 1.25rem;
+  }
+
+  .intro-logo-box {
+    width: 95px;
+    height: 95px;
+  }
+
+  .intro-brand-title {
+    font-size: clamp(2.4rem, 11vw, 3.4rem);
+    letter-spacing: 0.12em;
+  }
+
+  .intro-divider-line {
+    width: 140px;
+    margin: 0.4rem 0 0.85rem 0;
+  }
+
+  .intro-subtitle-primary {
+    font-size: clamp(0.78rem, 3.6vw, 1rem);
+    letter-spacing: 0.12em;
+  }
+
+  .intro-subtitle-secondary {
+    font-size: clamp(0.72rem, 3.3vw, 0.92rem);
+    letter-spacing: 0.14em;
+    margin: 0.2rem 0 0.65rem 0;
+  }
+
+  .intro-dept-badge {
+    flex-direction: column;
+    gap: 0.2rem;
+    font-size: clamp(0.56rem, 2.4vw, 0.68rem);
+    padding: 0.4rem 1rem;
+    letter-spacing: 0.05em;
+    max-width: 88vw;
+    border-radius: 12px;
+    text-align: center;
+    white-space: normal;
+    box-sizing: border-box;
+  }
+
+  .intro-dept-badge .dept-text-sep {
+    display: none;
+  }
+
+  .intro-hud-footer {
+    padding: 0 1.25rem;
+    bottom: 1.25rem;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .intro-progress-block {
+    width: 90px;
+  }
+
+  .intro-skip-btn {
+    padding: 0.42rem 0.95rem;
+    font-size: 0.74rem;
+    flex-shrink: 0;
   }
 }
 
@@ -4420,13 +4707,11 @@ body.intro-active {
 @keyframes titleCharReveal {
   0% {
     opacity: 0;
-    transform: translateY(24px) scale(0.94);
-    filter: blur(8px);
+    transform: translateY(16px) scale(0.96);
   }
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
-    filter: blur(0);
   }
 }
 

@@ -13,31 +13,38 @@
   const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ==========================================================================
-     1. CINEMATIC SAIT INTRO SEQUENCE CONTROLLER (PORTRAIT VIDEO)
+     1. CINEMATIC CODED SAIT INTRO CONTROLLER (HTML / CSS / JS — REAL SAIT LOGO)
      ========================================================================== */
   const IntroSequenceController = {
     overlay: null,
+    canvas: null,
+    ctx: null,
     skipBtn: null,
-    video: null,
-    bgBlurVideo: null,
-    invideoOverlay: null,
     progressBar: null,
-    timer: null,
+    logoOrbit: null,
+    textCluster: null,
+    animId: null,
+    startTime: null,
+    duration: 4800, // 4.8 seconds sequence
     isDismissed: false,
+    particles: [],
+    circuits: [],
+    width: 0,
+    height: 0,
 
     init() {
       this.overlay = document.getElementById('saitIntroOverlay');
       if (!this.overlay) return;
 
       this.skipBtn = document.getElementById('introSkipBtn');
-      this.video = document.getElementById('saitIntroVideo');
-      this.bgBlurVideo = document.getElementById('introBgBlurVideo');
-      this.invideoOverlay = document.getElementById('invideoTextOverlay');
       this.progressBar = document.getElementById('introProgressBar');
+      this.canvas = document.getElementById('introCanvas');
+      this.logoOrbit = document.getElementById('introLogoOrbit');
+      this.textCluster = document.getElementById('introTextCluster');
 
       // Accessibility: Respect prefers-reduced-motion
       if (prefersReducedMotion) {
-        setTimeout(() => this.dismiss(true), 600);
+        setTimeout(() => this.dismiss(true), 400);
         return;
       }
 
@@ -62,83 +69,205 @@
       };
       window.addEventListener('keydown', keyHandler);
 
-      this.playSequence();
+      // Initialize Intro Canvas
+      this.initCanvas();
+
+      // Start Sequence Timer & Animation Loop
+      this.startTime = performance.now();
+      this.tick();
     },
 
-    playSequence() {
-      // Start ambient blurred background video if present
-      if (this.bgBlurVideo) {
-        this.bgBlurVideo.muted = true;
-        this.bgBlurVideo.defaultMuted = true;
-        this.bgBlurVideo.playsInline = true;
-        this.bgBlurVideo.play().catch(() => {});
+    initCanvas() {
+      if (!this.canvas) return;
+      this.ctx = this.canvas.getContext('2d');
+      if (!this.ctx) return;
+
+      this.resize();
+      window.addEventListener('resize', () => this.resize(), { passive: true });
+
+      // Generate subtle tech particles
+      const count = window.innerWidth < 768 ? 24 : 45;
+      this.particles = [];
+      for (let i = 0; i < count; i++) {
+        this.particles.push({
+          x: Math.random() * this.width,
+          y: Math.random() * this.height,
+          vx: (Math.random() - 0.5) * 0.45,
+          vy: (Math.random() - 0.5) * 0.45,
+          radius: Math.random() * 1.8 + 0.8,
+          alpha: Math.random() * 0.5 + 0.25,
+          pulseSpeed: Math.random() * 0.02 + 0.01,
+          pulsePhase: Math.random() * Math.PI * 2,
+          isGold: Math.random() > 0.82
+        });
       }
 
-      if (this.video) {
-        // Strictly set mute and inline parameters before playback
-        this.video.muted = true;
-        this.video.defaultMuted = true;
-        this.video.playsInline = true;
-        this.video.currentTime = 0;
-
-        // Fallback safety timer: Video is ~8s; auto-dismiss if playback stalls or hangs
-        this.timer = setTimeout(() => {
-          this.dismiss(false);
-        }, 11000);
-
-        // When video reaches natural end, smoothly transition to homepage
-        this.video.addEventListener('ended', () => {
-          if (this.progressBar) this.progressBar.style.width = '100%';
-          this.dismiss(false);
-        }, { once: true });
-
-        // Graceful error handling: If video cannot load, transition immediately
-        this.video.addEventListener('error', () => {
-          this.dismiss(false);
-        }, { once: true });
-
-        // Update progress bar & reveal SAIT branding overlay at 4.25s
-        this.video.addEventListener('timeupdate', () => {
-          if (this.progressBar && this.video.duration) {
-            const pct = (this.video.currentTime / this.video.duration) * 100;
-            this.progressBar.style.width = Math.min(pct, 100) + '%';
-          }
-
-          // Reveal the SAIT branding overlay when the chip locks into center
-          if (this.video.currentTime >= 4.25 && this.invideoOverlay) {
-            this.invideoOverlay.classList.add('text-revealed');
-          }
+      // Generate circuit lines
+      const circuitCount = window.innerWidth < 768 ? 6 : 14;
+      this.circuits = [];
+      for (let i = 0; i < circuitCount; i++) {
+        const startY = Math.random() * this.height;
+        const segmentLen = Math.random() * 180 + 120;
+        const startX = Math.random() * this.width;
+        this.circuits.push({
+          startX,
+          startY,
+          midX: startX + segmentLen * (Math.random() > 0.5 ? 1 : -1),
+          midY: startY + (Math.random() - 0.5) * 100,
+          endX: startX + segmentLen * 1.8 * (Math.random() > 0.5 ? 1 : -1),
+          pulseProgress: Math.random(),
+          speed: Math.random() * 0.005 + 0.003,
+          isGold: Math.random() > 0.75
         });
+      }
+    },
 
-        // Trigger autoplay
-        const playPromise = this.video.play();
-        if (playPromise !== undefined) {
-          playPromise.catch((err) => {
-            console.warn('SAIT Intro Video Autoplay delayed or restricted:', err);
-            // In case autoplay is restricted, reveal text overlay and dismiss after short delay
-            if (this.invideoOverlay) {
-              this.invideoOverlay.classList.add('text-revealed');
-            }
-            // Allow tap/click on screen or auto-proceed after 3.5s so user is never stuck
-            const playOnInteraction = () => {
-              this.video.play().catch(() => {});
-              if (this.bgBlurVideo) this.bgBlurVideo.play().catch(() => {});
-              window.removeEventListener('click', playOnInteraction);
-              window.removeEventListener('touchstart', playOnInteraction);
-            };
-            window.addEventListener('click', playOnInteraction, { once: true });
-            window.addEventListener('touchstart', playOnInteraction, { once: true });
+    resize() {
+      if (!this.canvas) return;
+      this.width = window.innerWidth;
+      this.height = window.innerHeight;
+      this.canvas.width = this.width;
+      this.canvas.height = this.height;
+    },
 
-            setTimeout(() => {
-              this.dismiss(false);
-            }, 3500);
-          });
+    tick() {
+      if (this.isDismissed) return;
+
+      if (!this.startTime) {
+        this.startTime = performance.now();
+      }
+
+      const now = performance.now();
+      const elapsed = Math.max(now - this.startTime, 0);
+      const progress = Math.min(elapsed / this.duration, 1);
+
+      // Update progress bar
+      if (this.progressBar) {
+        this.progressBar.style.width = (progress * 100) + '%';
+      }
+
+      // Stage 1: Reveal SAIT Logo Orbit with scale, fade & glow
+      if (elapsed >= 300 && this.logoOrbit && !this.logoOrbit.classList.contains('revealed')) {
+        this.logoOrbit.classList.add('revealed');
+      }
+
+      // Stage 2: Reveal Large SAIT Title & Academic Gold Divider
+      if (elapsed >= 1200 && this.textCluster && !this.textCluster.classList.contains('show-title')) {
+        this.textCluster.classList.add('show-title');
+      }
+
+      // Stage 3: Reveal Subtitle (Students Association of Information Technology)
+      if (elapsed >= 2200 && this.textCluster && !this.textCluster.classList.contains('show-subtitle')) {
+        this.textCluster.classList.add('show-subtitle');
+      }
+
+      // Stage 4: Light sweep sheen through SAIT text & logo
+      if (elapsed >= 3300 && this.textCluster && !this.textCluster.classList.contains('show-sweep')) {
+        this.textCluster.classList.add('show-sweep');
+      }
+
+      // Draw Intro Canvas Frame
+      this.drawCanvas(elapsed);
+
+      // Sequence completed -> transition to homepage
+      if (progress >= 1) {
+        this.dismiss(false);
+        return;
+      }
+
+      this.animId = requestAnimationFrame(() => this.tick());
+    },
+
+    drawCanvas(time) {
+      if (!this.ctx || !this.width || !this.height) return;
+      const ctx = this.ctx;
+      const t = time * 0.001;
+
+      ctx.clearRect(0, 0, this.width, this.height);
+
+      // 1. Slow Moving Ambient Blue & Gold Light Nodes
+      const glow1X = this.width * (0.5 + 0.18 * Math.cos(t * 0.7));
+      const glow1Y = this.height * (0.45 + 0.14 * Math.sin(t * 0.5));
+      const g1 = ctx.createRadialGradient(glow1X, glow1Y, 10, glow1X, glow1Y, this.width * 0.45);
+      g1.addColorStop(0, 'rgba(0, 140, 255, 0.14)');
+      g1.addColorStop(0.5, 'rgba(8, 43, 76, 0.08)');
+      g1.addColorStop(1, 'transparent');
+      ctx.fillStyle = g1;
+      ctx.fillRect(0, 0, this.width, this.height);
+
+      const glow2X = this.width * (0.5 + 0.15 * Math.sin(t * 0.8));
+      const glow2Y = this.height * (0.52 + 0.12 * Math.cos(t * 0.6));
+      const g2 = ctx.createRadialGradient(glow2X, glow2Y, 5, glow2X, glow2Y, this.width * 0.35);
+      g2.addColorStop(0, 'rgba(208, 170, 91, 0.09)');
+      g2.addColorStop(0.6, 'rgba(8, 43, 76, 0.04)');
+      g2.addColorStop(1, 'transparent');
+      ctx.fillStyle = g2;
+      ctx.fillRect(0, 0, this.width, this.height);
+
+      // 2. Circuit Traces & Traveling Energy Pulses
+      for (let c of this.circuits) {
+        c.pulseProgress = (c.pulseProgress + c.speed) % 1;
+
+        // Trace line
+        ctx.beginPath();
+        ctx.moveTo(c.startX, c.startY);
+        ctx.lineTo(c.midX, c.startY);
+        ctx.lineTo(c.endX, c.midY);
+        ctx.strokeStyle = c.isGold ? 'rgba(208, 170, 91, 0.08)' : 'rgba(0, 210, 255, 0.07)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Traveling pulse point
+        const px = c.startX + (c.endX - c.startX) * c.pulseProgress;
+        const py = c.startY + (c.midY - c.startY) * c.pulseProgress;
+        ctx.beginPath();
+        ctx.arc(px, py, c.isGold ? 2.2 : 1.8, 0, Math.PI * 2);
+        ctx.fillStyle = c.isGold ? 'rgba(208, 170, 91, 0.7)' : 'rgba(0, 210, 255, 0.75)';
+        ctx.shadowColor = c.isGold ? '#D0AA5B' : '#00D2FF';
+        ctx.shadowBlur = 8;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+
+      // 3. Subtle Floating Particles & Interconnecting Gossamer Threads
+      const maxConnDist = window.innerWidth < 768 ? 75 : 110;
+      for (let i = 0; i < this.particles.length; i++) {
+        const p = this.particles[i];
+
+        // Move particle
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0) p.x = this.width;
+        if (p.x > this.width) p.x = 0;
+        if (p.y < 0) p.y = this.height;
+        if (p.y > this.height) p.y = 0;
+
+        p.pulsePhase += p.pulseSpeed;
+        const currentAlpha = p.alpha * (0.7 + 0.3 * Math.sin(p.pulsePhase));
+
+        // Draw particle
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = p.isGold ? `rgba(208, 170, 91, ${currentAlpha})` : `rgba(0, 210, 255, ${currentAlpha})`;
+        ctx.fill();
+
+        // Connection lines
+        for (let j = i + 1; j < this.particles.length; j++) {
+          const p2 = this.particles[j];
+          const dx = p.x - p2.x;
+          const dy = p.y - p2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < maxConnDist) {
+            const lineAlpha = (1 - dist / maxConnDist) * 0.12;
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = `rgba(0, 210, 255, ${lineAlpha})`;
+            ctx.lineWidth = 0.7;
+            ctx.stroke();
+          }
         }
-      } else {
-        // Fallback if video tag missing
-        this.timer = setTimeout(() => {
-          this.dismiss(false);
-        }, 2000);
       }
     },
 
@@ -146,22 +275,10 @@
       if (this.isDismissed) return;
       this.isDismissed = true;
 
-      if (this.timer) clearTimeout(this.timer);
-
       if (!this.overlay) return;
 
-      if (this.video) {
-        try {
-          this.video.pause();
-        } catch (e) {}
-      }
-      if (this.bgBlurVideo) {
-        try {
-          this.bgBlurVideo.pause();
-        } catch (e) {}
-      }
-
       if (immediate) {
+        if (this.animId) cancelAnimationFrame(this.animId);
         this.overlay.classList.add('intro-hidden');
         this.overlay.setAttribute('aria-hidden', 'true');
         document.body.classList.remove('intro-active');
@@ -169,16 +286,36 @@
         return;
       }
 
-      // Smooth cinematic exit transition
+      // Smooth cinematic exit transition (0.5s)
       this.overlay.classList.add('intro-exit');
+      let exitFrames = 0;
+      const totalExitFrames = 30; // ~500ms
+
+      const exitStep = () => {
+        exitFrames++;
+        if (exitFrames >= totalExitFrames) {
+          if (this.animId) cancelAnimationFrame(this.animId);
+          if (this.overlay) {
+            this.overlay.classList.add('intro-hidden');
+            this.overlay.setAttribute('aria-hidden', 'true');
+          }
+          document.body.classList.remove('intro-active');
+          this.triggerHeroEntrance();
+          return;
+        }
+        this.animId = requestAnimationFrame(exitStep);
+      };
+      this.animId = requestAnimationFrame(exitStep);
+
+      // Safe fallback timeout
       setTimeout(() => {
-        if (this.overlay) {
+        if (this.overlay && !this.overlay.classList.contains('intro-hidden')) {
           this.overlay.classList.add('intro-hidden');
           this.overlay.setAttribute('aria-hidden', 'true');
+          document.body.classList.remove('intro-active');
+          this.triggerHeroEntrance();
         }
-        document.body.classList.remove('intro-active');
-        this.triggerHeroEntrance();
-      }, 700);
+      }, 550);
     },
 
     triggerHeroEntrance() {
