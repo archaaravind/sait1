@@ -232,11 +232,6 @@
           <path d="M-40 360C220 270 380 470 640 366S1050 220 1480 346" />
           <path d="M-40 392C220 302 380 502 640 398S1050 252 1480 378" />
         </g>
-        <g class="tech-geometric-accents">
-          <rect x="1110" y="230" width="92" height="92" rx="18" />
-          <rect x="1118" y="238" width="76" height="76" rx="14" />
-          <path d="M280 320L330 270L380 320L330 370Z" />
-        </g>
         <g class="tech-network-nodes">
           <circle cx="170" cy="158" r="3" />
           <circle cx="218" cy="206" r="4" />
@@ -255,6 +250,12 @@
         </g>
       </svg>
 
+      <!-- Subtle Architectural SOE CUSAT Campus Backdrop (Real Building Photo) -->
+      <div class="hero-soe-backdrop" aria-hidden="true">
+        <img src="soe-cusat%20.%20jpg.jpeg" alt="School of Engineering, CUSAT" class="hero-soe-backdrop-img">
+        <div class="hero-soe-backdrop-overlay"></div>
+      </div>
+
       <div class="container hero-container">
         <!-- Hero Left Column: Brand Typography & Action Hierarchy -->
         <div class="hero-content">
@@ -263,7 +264,7 @@
             <span>LEARN &nbsp;&bull;&nbsp; BUILD &nbsp;&bull;&nbsp; GROW</span>
           </div>
 
-          <h1 class="hero-brand-title animate-fade-in delay-1" id="heroBrandTitle" aria-label="SAIT">
+          <h1 class="hero-brand-title" id="heroBrandTitle" aria-label="SAIT">
             <span class="title-char" data-char="S" style="--char-idx: 0">S</span>
             <span class="title-char" data-char="A" style="--char-idx: 1">A</span>
             <span class="title-char" data-char="I" style="--char-idx: 2">I</span>
@@ -271,20 +272,20 @@
             <span class="hero-brand-dash"></span>
           </h1>
 
-          <h2 class="hero-full-name animate-fade-in delay-2">
+          <h2 class="hero-full-name" id="heroFullName">
             Students Association of<br>Information Technology
           </h2>
 
-          <div class="hero-dept-subtitle animate-fade-in delay-2">
+          <div class="hero-dept-subtitle" id="heroDeptSubtitle">
             <strong>Division of Information Technology</strong><br>
             <span>School of Engineering, CUSAT</span>
           </div>
 
-          <p class="hero-desc animate-fade-in delay-3">
+          <p class="hero-desc">
             A community of innovators, learners and creators, building a stronger tech culture together at Cochin University of Science and Technology.
           </p>
 
-          <div class="hero-actions animate-fade-in delay-4">
+          <div class="hero-actions">
             <a href="#about" class="btn-pill-primary">
               <span>Explore SAIT</span>
               <i class="fa-solid fa-arrow-right"></i>
@@ -313,6 +314,7 @@
               </div>
               <div class="orbit-star star-1"></div><div class="orbit-star star-2"></div><div class="orbit-star star-3"></div>
               <div class="hero-official-logo-box" id="heroOfficialLogoBox">
+                <div class="logo-sweep-sheen" aria-hidden="true"></div>
                 <img src="sait-logo.jpg" alt="Official SAIT Logo &mdash; SOE CUSAT" class="hero-logo-img">
               </div>
             </div>
@@ -927,65 +929,284 @@
 
     <!-- 6. FEATURED EVENTS -->
     <section class="section-block events-section" id="events">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-tag"><i class="fa-solid fa-calendar-star"></i> Discover &amp; Participate</span>
-          <h2 class="section-title">Upcoming Events</h2>
-          <p class="section-desc">
+      <!-- Subtle Ambient Circuit & Glow Backdrop for Events -->
+      <div class="events-ambient-backdrop" aria-hidden="true">
+        <div class="events-ambient-glow events-glow-top"></div>
+        <div class="events-ambient-glow events-glow-bottom"></div>
+        <svg class="events-tech-circuits" viewBox="0 0 1440 600" fill="none" preserveAspectRatio="none">
+          <g class="events-circuit-paths" opacity="0.18">
+            <path d="M0 100 H320 L380 160 H720 L760 120 H1140 L1200 180 H1440" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 6" />
+            <path d="M0 340 H240 L290 390 H560 L610 340 H1000 L1050 390 H1440" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 6" />
+            <path d="M180 0 V120 L220 160 V360" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 5" />
+            <path d="M1260 220 V420 L1210 470 V600" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 5" />
+          </g>
+          <g class="events-circuit-nodes" opacity="0.25">
+            <circle cx="320" cy="100" r="3.5" fill="#B58A3A" />
+            <circle cx="380" cy="160" r="4" fill="#082B4C" />
+            <circle cx="760" cy="120" r="3.5" fill="#B58A3A" />
+            <circle cx="1140" cy="120" r="4" fill="#082B4C" />
+            <circle cx="290" cy="390" r="3.5" fill="#B58A3A" />
+            <circle cx="610" cy="340" r="4" fill="#082B4C" />
+            <circle cx="1050" cy="390" r="3.5" fill="#B58A3A" />
+          </g>
+        </svg>
+      </div>
+
+      <div class="container events-container">
+        <!-- 1. HERO ANIMATION HEADER -->
+        <div class="section-header events-hero-header" id="eventsHeroHeader">
+          <span class="section-tag events-hero-badge"><i class="fa-solid fa-calendar-star"></i> Discover &amp; Participate</span>
+          <h2 class="section-title events-hero-title">Upcoming Events</h2>
+          <p class="section-desc events-hero-desc">
             Discover what's happening at SAIT. Level up your engineering skills through hackathons, technical bootcamps, and masterclasses.
           </p>
         </div>
 
-        <!-- Flagship Event Showcase with Dynamic Live Countdown -->
-        <div class="flagship-card" id="flagshipEventCard">
-          <div class="flagship-glow"></div>
-          <div class="flagship-content">
-            <div class="flagship-badges">
-              <span class="badge-pill badge-accent"><i class="fa-solid fa-star"></i> Flagship Summit</span>
-              <span class="badge-pill badge-primary">Registration Open</span>
-              <span class="badge-pill badge-outline">Prize Pool: ₹1,00,000+</span>
-            </div>
-            <h3 class="flagship-title">INFINITUS '26: National Tech Conclave &amp; 24h Hackathon</h3>
-            <p class="flagship-desc">
-              The biggest technical symposium of School of Engineering CUSAT. Featuring a national 24-hour hackathon, AI innovation track, CTF cybersecurity challenges, and keynotes by senior software architects from top global tech firms.
-            </p>
-            <div class="flagship-meta">
-              <div class="meta-item"><i class="fa-solid fa-calendar-day"></i> November 14&ndash;15, 2026</div>
-              <div class="meta-item"><i class="fa-solid fa-location-dot"></i> SOE Seminar Complex &amp; IT Labs</div>
-              <div class="meta-item"><i class="fa-solid fa-users"></i> Teams of 2&ndash;4 Students</div>
-            </div>
-
-            <!-- Dynamic Live Countdown Timer -->
-            <div class="countdown-wrapper">
-              <span class="countdown-caption">Countdown to Hackathon Kickoff:</span>
-              <div class="countdown-boxes">
-                <div class="countdown-box">
-                  <span class="cd-val" id="cdDays">00</span>
-                  <span class="cd-unit">Days</span>
-                </div>
-                <div class="countdown-box">
-                  <span class="cd-val" id="cdHours">00</span>
-                  <span class="cd-unit">Hours</span>
-                </div>
-                <div class="countdown-box">
-                  <span class="cd-val" id="cdMinutes">00</span>
-                  <span class="cd-unit">Minutes</span>
-                </div>
-                <div class="countdown-box">
-                  <span class="cd-val" id="cdSeconds">00</span>
-                  <span class="cd-unit">Seconds</span>
-                </div>
+        <!-- 2. MAIN FEATURED EVENT — INTERACTIVE MOVING SLIDER -->
+        <div class="events-slider-section" id="featuredEventsSlider" aria-label="Featured Events Showcase" role="region">
+          <!-- Top Slider Bar: Title pill, Progress indicator & Elegant Controls -->
+          <div class="events-slider-topbar">
+            <div class="slider-topbar-left">
+              <span class="slider-stage-tag"><i class="fa-solid fa-sparkles"></i> FEATURED SHOWCASE</span>
+              <div class="slider-progress-wrap" aria-hidden="true" title="Auto-slide countdown">
+                <div class="slider-progress-bar" id="sliderProgressBar"></div>
               </div>
             </div>
 
-            <div class="flagship-actions">
-              <button type="button" class="btn btn-primary btn-lg" onclick="window.saitEvents.openRegistrationModal('infinitus-26')">
-                <i class="fa-solid fa-bolt"></i> Register for Infinitus '26
+            <div class="slider-controls-group">
+              <button type="button" class="slider-arrow-btn slider-prev-btn" id="sliderPrevBtn" aria-label="Previous Featured Event">
+                <i class="fa-solid fa-arrow-left"></i>
               </button>
-              <a href="#events-archive" class="btn btn-secondary" onclick="document.getElementById('eventCategoryAll').click()">
-                <i class="fa-solid fa-list-check"></i> Explore All Events
-              </a>
+              <div class="slider-counter" id="sliderCounter" aria-live="polite">
+                <span class="curr-slide" id="sliderCurrNum">01</span>
+                <span class="counter-slash">/</span>
+                <span class="total-slides" id="sliderTotalNum">04</span>
+              </div>
+              <button type="button" class="slider-arrow-btn slider-next-btn" id="sliderNextBtn" aria-label="Next Featured Event">
+                <i class="fa-solid fa-arrow-right"></i>
+              </button>
             </div>
+          </div>
+
+          <!-- Carousel Viewport & Track with Peeking Cards -->
+          <div class="events-carousel-viewport" id="eventsCarouselViewport" tabindex="0" aria-label="Featured events carousel, use left and right arrow keys to navigate">
+            <div class="events-carousel-track" id="eventsCarouselTrack">
+              
+              <!-- SLIDE 1: INFINITUS '26 (Flagship Summit) -->
+              <div class="featured-slide-card active-slide" data-index="0" data-event-id="infinitus-26">
+                <div class="slide-card-bg">
+                  <img src="soe-cusat%20.%20jpg.jpeg" alt="INFINITUS '26 National Tech Conclave & 24h Hackathon" class="slide-bg-img" loading="lazy">
+                  <div class="slide-bg-overlay"></div>
+                  <div class="slide-card-glow"></div>
+                  <div class="slide-cursor-sheen" aria-hidden="true"></div>
+                </div>
+
+                <div class="slide-card-content">
+                  <div class="slide-badges">
+                    <span class="badge-pill badge-accent"><i class="fa-solid fa-star"></i> Flagship Summit</span>
+                    <span class="badge-pill badge-primary">Registration Open</span>
+                    <span class="badge-pill badge-outline">Prize Pool: ₹1,00,000+</span>
+                  </div>
+
+                  <h3 class="slide-title">INFINITUS '26: National Tech Conclave &amp; 24h Hackathon</h3>
+                  
+                  <p class="slide-desc">
+                    The biggest technical symposium of School of Engineering CUSAT. Featuring a national 24-hour hackathon, AI innovation track, CTF cybersecurity challenges, and keynotes by senior software architects from top global tech firms.
+                  </p>
+
+                  <div class="slide-meta">
+                    <div class="meta-item"><i class="fa-solid fa-calendar-day"></i> November 14&ndash;15, 2026</div>
+                    <div class="meta-item"><i class="fa-solid fa-location-dot"></i> SOE Seminar Complex &amp; IT Labs</div>
+                    <div class="meta-item"><i class="fa-solid fa-users"></i> Teams of 2&ndash;4 Students</div>
+                  </div>
+
+                  <!-- Dynamic Live Countdown Timer for Flagship -->
+                  <div class="countdown-wrapper">
+                    <span class="countdown-caption">Countdown to Hackathon Kickoff:</span>
+                    <div class="countdown-boxes">
+                      <div class="countdown-box">
+                        <span class="cd-val" id="cdDays">00</span>
+                        <span class="cd-unit">Days</span>
+                      </div>
+                      <div class="countdown-box">
+                        <span class="cd-val" id="cdHours">00</span>
+                        <span class="cd-unit">Hours</span>
+                      </div>
+                      <div class="countdown-box">
+                        <span class="cd-val" id="cdMinutes">00</span>
+                        <span class="cd-unit">Minutes</span>
+                      </div>
+                      <div class="countdown-box">
+                        <span class="cd-val" id="cdSeconds">00</span>
+                        <span class="cd-unit">Seconds</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="slide-actions">
+                    <button type="button" class="btn btn-primary btn-lg" onclick="window.saitEvents.openRegistrationModal('infinitus-26')">
+                      <i class="fa-solid fa-bolt"></i> Register for Infinitus '26
+                    </button>
+                    <a href="#events-archive" class="btn btn-secondary" onclick="document.getElementById('eventCategoryAll').click()">
+                      <i class="fa-solid fa-list-check"></i> Explore All Events
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- SLIDE 2: AI & PyTorch Bootcamp -->
+              <div class="featured-slide-card" data-index="1" data-event-id="ai-bootcamp">
+                <div class="slide-card-bg">
+                  <img src="cusat-soe-building.jpg" alt="Deep Learning & PyTorch Hands-On Bootcamp" class="slide-bg-img" loading="lazy">
+                  <div class="slide-bg-overlay"></div>
+                  <div class="slide-card-glow"></div>
+                  <div class="slide-cursor-sheen" aria-hidden="true"></div>
+                </div>
+
+                <div class="slide-card-content">
+                  <div class="slide-badges">
+                    <span class="badge-pill badge-accent"><i class="fa-solid fa-microchip"></i> Hands-On Workshop</span>
+                    <span class="badge-pill badge-primary">Registration Open</span>
+                    <span class="badge-pill badge-outline">GPU Lab Access</span>
+                  </div>
+
+                  <h3 class="slide-title">Deep Learning &amp; PyTorch Hands-On Bootcamp</h3>
+                  
+                  <p class="slide-desc">
+                    Learn tensor operations, neural network architectures, and build an end-to-end computer vision model using PyTorch with guidance from AI researchers and faculty mentors.
+                  </p>
+
+                  <div class="slide-meta">
+                    <div class="meta-item"><i class="fa-solid fa-calendar-day"></i> October 8, 2026</div>
+                    <div class="meta-item"><i class="fa-solid fa-clock"></i> 02:00 PM &ndash; 05:30 PM</div>
+                    <div class="meta-item"><i class="fa-solid fa-location-dot"></i> Advanced IT Computing Lab (Lab 2)</div>
+                    <div class="meta-item"><i class="fa-solid fa-user-check"></i> Limited to 60 Seats</div>
+                  </div>
+
+                  <div class="slide-highlight-card">
+                    <div class="shc-icon"><i class="fa-solid fa-brain"></i></div>
+                    <div class="shc-text">
+                      <strong>Prerequisites Provided</strong>
+                      <span>Python environment setups &amp; cloud GPU notebooks included for all participants.</span>
+                    </div>
+                  </div>
+
+                  <div class="slide-actions">
+                    <button type="button" class="btn btn-primary btn-lg" onclick="window.saitEvents.openRegistrationModal('ai-bootcamp')">
+                      <i class="fa-solid fa-ticket"></i> Register for AI Bootcamp
+                    </button>
+                    <a href="#events-archive" class="btn btn-secondary" onclick="document.getElementById('eventCategoryAll').click()">
+                      <i class="fa-solid fa-list-check"></i> Explore All Events
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- SLIDE 3: DevSprint Open-Source Code Jam -->
+              <div class="featured-slide-card" data-index="2" data-event-id="devsprint-jam">
+                <div class="slide-card-bg">
+                  <img src="soe-cusat%20.%20jpg.jpeg" alt="DevSprint 12-Hour Open-Source Code Jam" class="slide-bg-img" loading="lazy">
+                  <div class="slide-bg-overlay"></div>
+                  <div class="slide-card-glow"></div>
+                  <div class="slide-cursor-sheen" aria-hidden="true"></div>
+                </div>
+
+                <div class="slide-card-content">
+                  <div class="slide-badges">
+                    <span class="badge-pill badge-accent"><i class="fa-solid fa-code-commit"></i> Code Jam</span>
+                    <span class="badge-pill badge-primary">Registration Open</span>
+                    <span class="badge-pill badge-outline">Swag &amp; Prizes</span>
+                  </div>
+
+                  <h3 class="slide-title">DevSprint: 12-Hour Open-Source Code Jam</h3>
+                  
+                  <p class="slide-desc">
+                    Contribute to designated open-source GitHub repositories, solve real-world bugs, and compete for top contributor honors, exclusive swag packs, and mentorship opportunities with industry alumni.
+                  </p>
+
+                  <div class="slide-meta">
+                    <div class="meta-item"><i class="fa-solid fa-calendar-day"></i> October 22, 2026</div>
+                    <div class="meta-item"><i class="fa-solid fa-clock"></i> 08:30 AM &ndash; 08:30 PM</div>
+                    <div class="meta-item"><i class="fa-solid fa-location-dot"></i> IT Software Systems Lab</div>
+                    <div class="meta-item"><i class="fa-solid fa-users"></i> Individual or Pairs</div>
+                  </div>
+
+                  <div class="slide-highlight-card">
+                    <div class="shc-icon"><i class="fa-solid fa-code-pull-request"></i></div>
+                    <div class="shc-text">
+                      <strong>Direct PR Mentorship</strong>
+                      <span>Senior maintainers review code live &amp; guide high-impact contributions.</span>
+                    </div>
+                  </div>
+
+                  <div class="slide-actions">
+                    <button type="button" class="btn btn-primary btn-lg" onclick="window.saitEvents.openRegistrationModal('devsprint-jam')">
+                      <i class="fa-solid fa-ticket"></i> Register for DevSprint
+                    </button>
+                    <a href="#events-archive" class="btn btn-secondary" onclick="document.getElementById('eventCategoryAll').click()">
+                      <i class="fa-solid fa-list-check"></i> Explore All Events
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- SLIDE 4: Cloud Architecture & Kubernetes Deployment -->
+              <div class="featured-slide-card" data-index="3" data-event-id="cloud-devops-masterclass">
+                <div class="slide-card-bg">
+                  <img src="cusat-soe-building.jpg" alt="Cloud Architecture & Kubernetes Deployment" class="slide-bg-img" loading="lazy">
+                  <div class="slide-bg-overlay"></div>
+                  <div class="slide-card-glow"></div>
+                  <div class="slide-cursor-sheen" aria-hidden="true"></div>
+                </div>
+
+                <div class="slide-card-content">
+                  <div class="slide-badges">
+                    <span class="badge-pill badge-accent"><i class="fa-solid fa-cloud"></i> Masterclass</span>
+                    <span class="badge-pill badge-primary">Registration Open</span>
+                    <span class="badge-pill badge-outline">Hybrid Session</span>
+                  </div>
+
+                  <h3 class="slide-title">Cloud Architecture &amp; Kubernetes Deployment</h3>
+                  
+                  <p class="slide-desc">
+                    Step-by-step masterclass covering microservices containerization with Docker, Kubernetes orchestration clusters, and resilient production deployments on AWS and GCP.
+                  </p>
+
+                  <div class="slide-meta">
+                    <div class="meta-item"><i class="fa-solid fa-calendar-day"></i> November 02, 2026</div>
+                    <div class="meta-item"><i class="fa-solid fa-clock"></i> 10:00 AM &ndash; 01:00 PM</div>
+                    <div class="meta-item"><i class="fa-solid fa-location-dot"></i> SOE Virtual Seminar Hall (Hybrid)</div>
+                    <div class="meta-item"><i class="fa-solid fa-award"></i> Verified Certificate</div>
+                  </div>
+
+                  <div class="slide-highlight-card">
+                    <div class="shc-icon"><i class="fa-brands fa-docker"></i></div>
+                    <div class="shc-text">
+                      <strong>Interactive Cloud Sandboxes</strong>
+                      <span>Free cloud sandboxes provided for hands-on cluster deployments during the session.</span>
+                    </div>
+                  </div>
+
+                  <div class="slide-actions">
+                    <button type="button" class="btn btn-primary btn-lg" onclick="window.saitEvents.openRegistrationModal('cloud-devops-masterclass')">
+                      <i class="fa-solid fa-ticket"></i> Register for Cloud Masterclass
+                    </button>
+                    <a href="#events-archive" class="btn btn-secondary" onclick="document.getElementById('eventCategoryAll').click()">
+                      <i class="fa-solid fa-list-check"></i> Explore All Events
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Slider Pagination Indicators (Dots) -->
+          <div class="events-slider-pagination" id="eventsSliderPagination" role="tablist" aria-label="Featured Event Slides">
+            <button type="button" class="slider-dot active" data-index="0" role="tab" aria-selected="true" aria-label="Go to Slide 1: Infinitus 26"></button>
+            <button type="button" class="slider-dot" data-index="1" role="tab" aria-selected="false" aria-label="Go to Slide 2: AI Bootcamp"></button>
+            <button type="button" class="slider-dot" data-index="2" role="tab" aria-selected="false" aria-label="Go to Slide 3: DevSprint"></button>
+            <button type="button" class="slider-dot" data-index="3" role="tab" aria-selected="false" aria-label="Go to Slide 4: Cloud Masterclass"></button>
           </div>
         </div>
 

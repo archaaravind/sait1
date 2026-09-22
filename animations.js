@@ -323,6 +323,10 @@
       if (heroBrand) {
         heroBrand.classList.add('hero-brand-animate');
       }
+      const heroContent = document.querySelector('.hero-content');
+      if (heroContent) {
+        heroContent.classList.add('hero-content-animate');
+      }
     }
   };
 
@@ -1316,6 +1320,373 @@
   };
 
   /* ==========================================================================
+     8. EVENTS MOTION CONTROLLER (FEATURED SLIDER, DRAG, AUTO-SLIDE & REVEALS)
+     ========================================================================== */
+  const EventsMotionController = {
+    sliderSection: null,
+    viewport: null,
+    track: null,
+    slides: [],
+    prevBtn: null,
+    nextBtn: null,
+    dots: [],
+    progressBar: null,
+    currNumEl: null,
+    totalNumEl: null,
+    heroHeader: null,
+    eventsGrid: null,
+
+    currentIndex: 0,
+    totalSlides: 0,
+    autoSlideDuration: 6000,
+    progressAnimId: null,
+    progressStartTime: null,
+    isPaused: false,
+    isDragging: false,
+    dragStartX: 0,
+    dragDeltaX: 0,
+    currentTranslate: 0,
+
+    init() {
+      this.sliderSection = document.getElementById('featuredEventsSlider');
+      if (!this.sliderSection) return;
+
+      this.viewport = document.getElementById('eventsCarouselViewport');
+      this.track = document.getElementById('eventsCarouselTrack');
+      this.slides = Array.from(this.sliderSection.querySelectorAll('.featured-slide-card'));
+      this.prevBtn = document.getElementById('sliderPrevBtn');
+      this.nextBtn = document.getElementById('sliderNextBtn');
+      this.dots = Array.from(this.sliderSection.querySelectorAll('.slider-dot'));
+      this.progressBar = document.getElementById('sliderProgressBar');
+      this.currNumEl = document.getElementById('sliderCurrNum');
+      this.totalNumEl = document.getElementById('sliderTotalNum');
+      this.heroHeader = document.getElementById('eventsHeroHeader');
+      this.eventsGrid = document.getElementById('eventsGridContainer');
+
+      if (!this.viewport || !this.track || this.slides.length === 0) return;
+
+      this.totalSlides = this.slides.length;
+      if (this.totalNumEl) {
+        this.totalNumEl.textContent = String(this.totalSlides).padStart(2, '0');
+      }
+
+      this.setupControls();
+      this.setupGestures();
+      this.setupCardSheen();
+      this.setupScrollReveal();
+
+      // Initial layout positioning
+      window.requestAnimationFrame(() => {
+        this.updatePosition(false);
+        if (!prefersReducedMotion) {
+          this.startProgressBar();
+        }
+      });
+
+      // Window resize handling (debounced)
+      let resizeTimer;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          this.updatePosition(false);
+        }, 120);
+      }, { passive: true });
+
+      // Page visibility handling
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          this.pauseAutoSlide();
+        } else if (!this.isPaused && !prefersReducedMotion) {
+          this.startProgressBar();
+        }
+      });
+    },
+
+    setupControls() {
+      if (this.prevBtn) {
+        this.prevBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.prev();
+        });
+      }
+
+      if (this.nextBtn) {
+        this.nextBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.next();
+        });
+      }
+
+      this.dots.forEach((dot) => {
+        dot.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetIdx = parseInt(dot.getAttribute('data-index'), 10);
+          if (!isNaN(targetIdx) && targetIdx !== this.currentIndex) {
+            this.goToSlide(targetIdx);
+          }
+        });
+      });
+
+      // Keyboard navigation on viewport
+      if (this.viewport) {
+        this.viewport.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            this.prev();
+          } else if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            this.next();
+          }
+        });
+      }
+
+      // Hover pause on slider area
+      this.sliderSection.addEventListener('mouseenter', () => {
+        this.pauseAutoSlide();
+      });
+
+      this.sliderSection.addEventListener('mouseleave', () => {
+        if (!this.isDragging) {
+          this.resumeAutoSlide();
+        }
+      });
+    },
+
+    setupGestures() {
+      if (!this.viewport) return;
+
+      const onStart = (clientX) => {
+        this.isDragging = true;
+        this.dragStartX = clientX;
+        this.dragDeltaX = 0;
+        this.pauseAutoSlide();
+        this.track.style.transition = 'none';
+      };
+
+      const onMove = (clientX) => {
+        if (!this.isDragging) return;
+        this.dragDeltaX = clientX - this.dragStartX;
+        // Rubber-band / resistance effect
+        const liveOffset = this.currentTranslate + (this.dragDeltaX * 0.75);
+        this.track.style.transform = `translateX(${liveOffset.toFixed(1)}px)`;
+      };
+
+      const onEnd = () => {
+        if (!this.isDragging) return;
+        this.isDragging = false;
+        const threshold = 55;
+        if (this.dragDeltaX < -threshold) {
+          this.next();
+        } else if (this.dragDeltaX > threshold) {
+          this.prev();
+        } else {
+          this.updatePosition(true);
+        }
+        this.resumeAutoSlide();
+      };
+
+      // Pointer Events
+      this.viewport.addEventListener('pointerdown', (e) => {
+        // Only primary click / touch
+        if (e.button !== 0 && e.pointerType === 'mouse') return;
+        onStart(e.clientX);
+      });
+
+      window.addEventListener('pointermove', (e) => {
+        if (this.isDragging) {
+          onMove(e.clientX);
+        }
+      });
+
+      window.addEventListener('pointerup', () => {
+        if (this.isDragging) {
+          onEnd();
+        }
+      });
+
+      window.addEventListener('pointercancel', () => {
+        if (this.isDragging) {
+          onEnd();
+        }
+      });
+
+      // Touch events fallback for mobile gestures
+      this.viewport.addEventListener('touchstart', (e) => {
+        if (e.touches && e.touches.length === 1) {
+          onStart(e.touches[0].clientX);
+        }
+      }, { passive: true });
+
+      this.viewport.addEventListener('touchmove', (e) => {
+        if (this.isDragging && e.touches && e.touches.length === 1) {
+          onMove(e.touches[0].clientX);
+        }
+      }, { passive: true });
+
+      this.viewport.addEventListener('touchend', () => {
+        if (this.isDragging) {
+          onEnd();
+        }
+      }, { passive: true });
+    },
+
+    setupCardSheen() {
+      this.slides.forEach((slide) => {
+        slide.addEventListener('mousemove', (e) => {
+          const rect = slide.getBoundingClientRect();
+          const x = ((e.clientX - rect.left) / rect.width) * 100;
+          const y = ((e.clientY - rect.top) / rect.height) * 100;
+          slide.style.setProperty('--mouse-x', `${x.toFixed(1)}%`);
+          slide.style.setProperty('--mouse-y', `${y.toFixed(1)}%`);
+        }, { passive: true });
+      });
+    },
+
+    setupScrollReveal() {
+      const targets = [this.heroHeader, this.sliderSection, this.eventsGrid].filter(Boolean);
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('revealed');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, {
+          threshold: 0.12,
+          rootMargin: '0px 0px -40px 0px'
+        });
+
+        targets.forEach((el) => observer.observe(el));
+      } else {
+        // Fallback for environments without IntersectionObserver
+        targets.forEach((el) => el.classList.add('revealed'));
+      }
+    },
+
+    updatePosition(animate = true) {
+      if (!this.viewport || !this.track || this.slides.length === 0) return;
+
+      const viewportWidth = this.viewport.offsetWidth;
+      const currentSlide = this.slides[this.currentIndex];
+      if (!currentSlide) return;
+
+      const slideWidth = currentSlide.offsetWidth;
+      const slideLeft = currentSlide.offsetLeft;
+
+      // Perfectly center the active slide
+      const targetOffset = (viewportWidth - slideWidth) / 2 - slideLeft;
+      this.currentTranslate = targetOffset;
+
+      if (animate) {
+        this.track.style.transition = 'transform 0.65s cubic-bezier(0.16, 1, 0.3, 1)';
+      } else {
+        this.track.style.transition = 'none';
+      }
+
+      this.track.style.transform = `translateX(${targetOffset.toFixed(1)}px)`;
+
+      // Update slide states & micro-animation triggers
+      this.slides.forEach((slide, idx) => {
+        const isActive = idx === this.currentIndex;
+        if (isActive) {
+          slide.classList.add('active-slide');
+          slide.setAttribute('aria-hidden', 'false');
+          // Restart content animations on the newly active slide
+          const content = slide.querySelector('.slide-card-content');
+          if (content) {
+            content.classList.remove('slide-content-active');
+            void content.offsetWidth; // force DOM reflow
+            content.classList.add('slide-content-active');
+          }
+        } else {
+          slide.classList.remove('active-slide');
+          slide.setAttribute('aria-hidden', 'true');
+        }
+      });
+
+      // Update pagination dots
+      this.dots.forEach((dot, idx) => {
+        const isActive = idx === this.currentIndex;
+        dot.classList.toggle('active', isActive);
+        dot.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      });
+
+      // Update counter
+      if (this.currNumEl) {
+        this.currNumEl.textContent = String(this.currentIndex + 1).padStart(2, '0');
+      }
+
+      // Reset auto-slide progress bar
+      if (!prefersReducedMotion) {
+        this.startProgressBar();
+      }
+    },
+
+    goToSlide(index) {
+      this.currentIndex = (index + this.totalSlides) % this.totalSlides;
+      this.updatePosition(true);
+    },
+
+    next() {
+      this.goToSlide(this.currentIndex + 1);
+    },
+
+    prev() {
+      this.goToSlide(this.currentIndex - 1);
+    },
+
+    startProgressBar() {
+      if (prefersReducedMotion || this.isPaused) return;
+
+      if (this.progressAnimId) {
+        cancelAnimationFrame(this.progressAnimId);
+        this.progressAnimId = null;
+      }
+
+      if (this.progressBar) {
+        this.progressBar.style.width = '0%';
+      }
+
+      this.progressStartTime = performance.now();
+
+      const step = (now) => {
+        if (this.isPaused) return;
+
+        const elapsed = now - this.progressStartTime;
+        const progress = Math.min(1, elapsed / this.autoSlideDuration);
+
+        if (this.progressBar) {
+          this.progressBar.style.width = `${(progress * 100).toFixed(1)}%`;
+        }
+
+        if (progress < 1) {
+          this.progressAnimId = requestAnimationFrame(step);
+        } else {
+          this.next();
+        }
+      };
+
+      this.progressAnimId = requestAnimationFrame(step);
+    },
+
+    pauseAutoSlide() {
+      this.isPaused = true;
+      if (this.progressAnimId) {
+        cancelAnimationFrame(this.progressAnimId);
+        this.progressAnimId = null;
+      }
+    },
+
+    resumeAutoSlide() {
+      this.isPaused = false;
+      if (!prefersReducedMotion) {
+        this.startProgressBar();
+      }
+    }
+  };
+
+  /* ==========================================================================
      INITIALIZATION ON DOM READY
      ========================================================================== */
   function initAnimations() {
@@ -1326,6 +1697,7 @@
     ScrollRevealController.init();
     CardInteractionsController.init();
     AboutPageMotionController.init();
+    EventsMotionController.init();
 
     // Trigger hero entrance if intro is not active or reduced motion
     if (!document.body.classList.contains('intro-active')) {
