@@ -211,6 +211,49 @@
       <div class="hero-bg-grid" aria-hidden="true"></div>
       <div class="hero-glow hero-glow-1" aria-hidden="true"></div>
       <div class="hero-glow hero-glow-2" aria-hidden="true"></div>
+      <svg class="hero-tech-network" viewBox="0 0 1440 760" preserveAspectRatio="none" aria-hidden="true">
+        <g class="tech-circuit-lines">
+          <path d="M-30 158H170L218 206H410L456 160H636" />
+          <path d="M820 84H1010L1060 134H1288L1340 82H1470" />
+          <path d="M-24 582H150L204 528H352L402 578H558" />
+          <path d="M900 672H1052L1102 622H1240L1290 672H1460" />
+          <path d="M118 0V88L164 134V278" />
+          <path d="M1322 0V94L1278 138V282" />
+          <path d="M72 760V696L118 650V526" />
+          <path d="M1370 760V682L1320 632V506" />
+        </g>
+        <g class="tech-data-trails">
+          <path d="M-30 158H170L218 206H410L456 160H636" />
+          <path d="M820 84H1010L1060 134H1288L1340 82H1470" />
+          <path d="M-24 582H150L204 528H352L402 578H558" />
+          <path d="M900 672H1052L1102 622H1240L1290 672H1460" />
+        </g>
+        <g class="tech-light-waves">
+          <path d="M-40 360C220 270 380 470 640 366S1050 220 1480 346" />
+          <path d="M-40 392C220 302 380 502 640 398S1050 252 1480 378" />
+        </g>
+        <g class="tech-geometric-accents">
+          <rect x="1110" y="230" width="92" height="92" rx="18" />
+          <rect x="1118" y="238" width="76" height="76" rx="14" />
+          <path d="M280 320L330 270L380 320L330 370Z" />
+        </g>
+        <g class="tech-network-nodes">
+          <circle cx="170" cy="158" r="3" />
+          <circle cx="218" cy="206" r="4" />
+          <circle cx="410" cy="206" r="3" />
+          <circle cx="1010" cy="84" r="3" />
+          <circle cx="1060" cy="134" r="4" />
+          <circle cx="1288" cy="134" r="3" />
+          <circle cx="150" cy="582" r="3" />
+          <circle cx="204" cy="528" r="4" />
+          <circle cx="1102" cy="622" r="4" />
+          <circle cx="1240" cy="622" r="3" />
+          <circle cx="164" cy="134" r="3" />
+          <circle cx="1278" cy="138" r="3" />
+          <circle cx="118" cy="650" r="3" />
+          <circle cx="1320" cy="632" r="3" />
+        </g>
+      </svg>
 
       <div class="container hero-container">
         <!-- Hero Left Column: Brand Typography & Action Hierarchy -->
@@ -221,10 +264,10 @@
           </div>
 
           <h1 class="hero-brand-title animate-fade-in delay-1" id="heroBrandTitle" aria-label="SAIT">
-            <span class="title-char" style="--char-idx: 0">S</span>
-            <span class="title-char" style="--char-idx: 1">A</span>
-            <span class="title-char" style="--char-idx: 2">I</span>
-            <span class="title-char" style="--char-idx: 3">T</span>
+            <span class="title-char" data-char="S" style="--char-idx: 0">S</span>
+            <span class="title-char" data-char="A" style="--char-idx: 1">A</span>
+            <span class="title-char" data-char="I" style="--char-idx: 2">I</span>
+            <span class="title-char" data-char="T" style="--char-idx: 3">T</span>
             <span class="hero-brand-dash"></span>
           </h1>
 
@@ -702,31 +745,46 @@
       <div class="container">
         <div class="section-header">
           <span class="section-tag"><i class="fa-solid fa-bullhorn"></i> Department Notice Board</span>
-          <h2 class="section-title">Latest Announcements</h2>
+          <h2 class="section-title">ANNOUNCEMENTS</h2>
           <p class="section-desc">
-            Stay informed with official circulars, exam schedules, workshop notices, and deadlines from the IT Division and SAIT.
+            Stay updated with the latest news, events and important information from SAIT.
           </p>
         </div>
 
         <!-- Notice Board Controls -->
         <div class="notice-controls-row">
-          <div class="notice-filters-left">
+          <div class="notice-filters-left" role="group" aria-label="Filter announcements">
             <div class="filter-pills" id="announcementFilterPills" role="tablist" aria-label="Announcement Categories">
-              <button type="button" class="filter-pill active" data-category="all">All Notices</button>
+              <button type="button" class="filter-pill active" data-category="all">All</button>
               <button type="button" class="filter-pill" data-category="Important">Important</button>
               <button type="button" class="filter-pill" data-category="Event">Events</button>
               <button type="button" class="filter-pill" data-category="Academic">Academic</button>
-              <button type="button" class="filter-pill" data-category="Deadline">Deadlines</button>
+              <button type="button" class="filter-pill" data-category="Deadline">Deadline</button>
+              <button type="button" class="filter-pill" data-category="General">General</button>
             </div>
           </div>
 
-          <div class="notice-actions-right">
-            <span class="unread-pill" id="unreadAnnouncementsCount">
-              <i class="fa-solid fa-bell"></i> <span>3 Unread</span>
-            </span>
-            <button type="button" class="btn btn-outline btn-sm" id="markAllReadBtn">
-              <i class="fa-solid fa-check-double"></i> Mark All as Read
-            </button>
+          <div class="notice-tools">
+            <label class="announcement-search" for="announcementSearchInput">
+              <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+              <input type="search" id="announcementSearchInput" placeholder="Search announcements..." autocomplete="off">
+            </label>
+            <label class="announcement-sort" for="announcementSortSelect">
+              <span>Sort</span>
+              <select id="announcementSortSelect" aria-label="Sort announcements">
+                <option value="latest">Latest</option>
+                <option value="oldest">Oldest</option>
+                <option value="priority">Priority</option>
+              </select>
+            </label>
+            <div class="notice-actions-right">
+              <span class="unread-pill" id="unreadAnnouncementsCount">
+                <i class="fa-solid fa-bell"></i> <span>3 Unread</span>
+              </span>
+              <button type="button" class="btn btn-outline btn-sm" id="markAllReadBtn">
+                <i class="fa-solid fa-check-double"></i> Mark All as Read
+              </button>
+            </div>
           </div>
         </div>
 

@@ -1558,9 +1558,15 @@
      ========================================================================== */
 
   const AnnouncementsController = {
+    currentCategory: 'all',
+    searchTerm: '',
+    sortOrder: 'latest',
+
     init() {
       this.render();
       this.bindCategoryFilters();
+      this.bindSearch();
+      this.bindSort();
       this.bindMarkAllRead();
     },
 
@@ -1573,8 +1579,29 @@
         pill.addEventListener('click', () => {
           pills.forEach(p => p.classList.remove('active'));
           pill.classList.add('active');
-          this.render(pill.getAttribute('data-category'));
+          this.currentCategory = pill.getAttribute('data-category') || 'all';
+          this.render();
         });
+      });
+    },
+
+    bindSearch() {
+      const searchInput = document.getElementById('announcementSearchInput');
+      if (!searchInput) return;
+
+      searchInput.addEventListener('input', () => {
+        this.searchTerm = searchInput.value.trim().toLowerCase();
+        this.render();
+      });
+    },
+
+    bindSort() {
+      const sortSelect = document.getElementById('announcementSortSelect');
+      if (!sortSelect) return;
+
+      sortSelect.addEventListener('change', () => {
+        this.sortOrder = sortSelect.value;
+        this.render();
       });
     },
 
@@ -1599,7 +1626,7 @@
       this.render();
     },
 
-    render(category = 'all') {
+    render() {
       const grid = document.getElementById('announcementsGridContainer');
       const unreadBadge = document.getElementById('unreadAnnouncementsCount');
 
@@ -1610,34 +1637,55 @@
         unreadBadge.innerHTML = `<i class="fa-solid fa-bell"></i> <span>${unreadCount} Unread</span>`;
       }
 
-      const filtered = category === 'all'
-        ? STATE.announcements
-        : STATE.announcements.filter(a => a.category.toLowerCase() === category.toLowerCase());
+      let filtered = this.currentCategory === 'all'
+        ? [...STATE.announcements]
+        : STATE.announcements.filter(a => a.category.toLowerCase() === this.currentCategory.toLowerCase());
+
+      if (this.searchTerm) {
+        filtered = filtered.filter(ann => [ann.title, ann.body, ann.category]
+          .some(value => value.toLowerCase().includes(this.searchTerm)));
+      }
+
+      const priorityRank = { High: 0, Medium: 1, Low: 2 };
+      filtered.sort((first, second) => {
+        if (this.sortOrder === 'priority') {
+          return priorityRank[first.priority] - priorityRank[second.priority];
+        }
+
+        const firstDate = Date.parse(first.date);
+        const secondDate = Date.parse(second.date);
+        return this.sortOrder === 'oldest' ? firstDate - secondDate : secondDate - firstDate;
+      });
 
       if (!filtered.length) {
-        grid.innerHTML = `<div class="search-empty-state"><p>No announcements found in this category.</p></div>`;
+        grid.innerHTML = `
+          <div class="announcement-empty-state">
+            <i class="fa-regular fa-folder-open" aria-hidden="true"></i>
+            <strong>No announcements found</strong>
+            <p>Try another category or search term.</p>
+          </div>`;
         return;
       }
 
       grid.innerHTML = filtered.map(ann => `
-        <div class="glass-card notice-card ${ann.read ? 'read' : 'unread'}">
+        <article class="glass-card notice-card ${ann.read ? 'read' : 'unread'} ${ann.priority === 'High' ? 'is-important' : ''}">
           <div class="notice-top">
-            <div style="display: flex; gap: 0.5rem; align-items: center;">
-              <span class="badge-pill ${ann.priority === 'High' ? 'badge-live' : 'badge-primary'}">${ann.category}</span>
-              ${!ann.read ? '<span class="status-indicator" style="background-color: var(--color-rose);"></span>' : ''}
+            <div class="notice-labels">
+              <span class="notice-category">${ann.category}</span>
+              ${ann.priority === 'High' ? '<span class="notice-important"><span aria-hidden="true">&#9679;</span> Important</span>' : ''}
             </div>
             <span class="notice-date">${ann.date}</span>
           </div>
           <h4 class="notice-title">${ann.title}</h4>
           <p class="notice-body">${ann.body}</p>
           <div class="notice-footer">
-            <span style="font-size: 0.78rem; font-family: var(--font-mono); color: var(--text-muted);">Priority: ${ann.priority}</span>
-            <button type="button" class="btn btn-outline btn-sm" onclick="window.saitAnnouncements.toggleRead('${ann.id}')">
+            <span class="notice-priority">Priority: <strong>${ann.priority}</strong></span>
+            <button type="button" class="notice-read-toggle" onclick="window.saitAnnouncements.toggleRead('${ann.id}')">
               <i class="fa-solid ${ann.read ? 'fa-envelope' : 'fa-envelope-open'}"></i>
               <span>${ann.read ? 'Mark as Unread' : 'Mark as Read'}</span>
             </button>
           </div>
-        </div>
+        </article>
       `).join('');
     }
   };
