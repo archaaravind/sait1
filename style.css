@@ -4036,6 +4036,10 @@ body.intro-active {
    CINEMATIC PORTRAIT VIDEO INTRODUCTION OVERLAY (IVORY, NAVY & WARM GOLD)
    ========================================================================== */
 
+/* ==========================================================================
+   CINEMATIC FULLSCREEN PORTRAIT VIDEO INTRO (100vw x 100vh)
+   ========================================================================== */
+
 /* Intro Fullscreen Overlay */
 .sait-intro-overlay {
   position: fixed;
@@ -4047,11 +4051,13 @@ body.intro-active {
   max-width: 100vw;
   height: 100vh;
   height: 100dvh;
+  max-height: 100vh;
+  max-height: 100dvh;
   z-index: 9999999;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #F8F4EA;
+  background: #050E1A;
   overflow: hidden;
   contain: strict;
   clip-path: inset(0);
@@ -4070,175 +4076,64 @@ body.intro-active {
   display: none !important;
 }
 
-/* Atmospheric Academic Backdrop (Ivory + Subtle Gold/Navy ambient) */
-.intro-backdrop {
+/* Atmospheric Ambient Video Glow filling entire 100vw x 100vh screen */
+.intro-ambient-bg {
   position: absolute;
-  inset: 0;
+  inset: -10%;
+  width: 120%;
+  height: 120%;
   pointer-events: none;
   overflow: hidden;
-  contain: strict;
-  clip-path: inset(0);
-  background: radial-gradient(ellipse at 50% 50%, rgba(255, 253, 248, 0.95) 0%, rgba(248, 244, 234, 0.98) 55%, #F1EBDD 100%);
+  z-index: 1;
 }
 
-.intro-grid-pattern {
+.intro-bg-blur-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(75px) saturate(140%) brightness(0.65);
+  opacity: 0.55;
+  transform: scale(1.15);
+}
+
+.intro-bg-overlay-grid {
   position: absolute;
   inset: 0;
   background-image: 
-    linear-gradient(rgba(8, 43, 76, 0.032) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(8, 43, 76, 0.032) 1px, transparent 1px);
-  background-size: 36px 36px;
-  mask-image: radial-gradient(circle at center, black 35%, transparent 75%);
-  -webkit-mask-image: radial-gradient(circle at center, black 35%, transparent 75%);
+    linear-gradient(rgba(0, 210, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 210, 255, 0.045) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(circle at center, black 40%, transparent 85%);
+  -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 85%);
 }
 
-.intro-ambient-ring {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-.intro-ambient-ring-1 {
-  width: 680px;
-  height: 680px;
-  border: 1px dashed rgba(181, 138, 58, 0.2);
-  animation: introSpin 55s linear infinite;
-}
-
-.intro-ambient-ring-2 {
-  width: 960px;
-  height: 960px;
-  border: 1px solid rgba(8, 43, 76, 0.06);
-  animation: introCounterSpin 80s linear infinite;
-}
-
-.intro-ambient-glow {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 520px;
-  height: 520px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(181, 138, 58, 0.12) 0%, rgba(8, 43, 76, 0.05) 50%, transparent 75%);
-  filter: blur(55px);
-  pointer-events: none;
-}
-
-/* Fullscreen Stage Wrapper (100vw x 100vh) */
+/* Centered Stage for Portrait Video */
 .intro-stage-wrapper {
   position: relative;
   z-index: 2;
-  display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
+  display: flex;
   align-items: center;
   justify-content: center;
-  width: 100vw;
-  max-width: 1400px;
-  height: 100vh;
-  height: 100dvh;
-  max-height: 100vh;
-  max-height: 100dvh;
-  gap: 3.5rem;
-  padding: 2.5rem 4rem;
+  width: 100%;
+  height: 100%;
+  padding: 1.5rem;
   box-sizing: border-box;
-}
-
-/* Left Branding Column */
-.intro-brand-column {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 1.25rem;
-  z-index: 3;
-}
-
-.intro-title-main {
-  font-family: var(--font-sans);
-  font-size: clamp(3.8rem, 6.5vw, 6rem);
-  font-weight: 900;
-  line-height: 0.95;
-  letter-spacing: -0.02em;
-  color: #082B4C;
-  margin: 0;
-  text-shadow: 0 4px 25px rgba(181, 138, 58, 0.2);
-  position: relative;
-}
-
-.intro-title-main::after {
-  content: '';
-  display: block;
-  width: 76px;
-  height: 4px;
-  border-radius: 2px;
-  background: linear-gradient(90deg, #B58A3A, #D0AA5B);
-  margin-top: 1rem;
-}
-
-.intro-title-sub {
-  font-family: var(--font-sans);
-  font-size: clamp(1.05rem, 1.6vw, 1.45rem);
-  font-weight: 700;
-  line-height: 1.4;
-  letter-spacing: 0.16em;
-  color: #0B355C;
-  text-transform: uppercase;
-  margin: 0.25rem 0 0 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-.intro-progress-block {
-  width: 100%;
-  max-width: 380px;
-  margin-top: 1.25rem;
-}
-
-.intro-progress-track {
-  width: 100%;
-  height: 4px;
-  background: rgba(8, 43, 76, 0.12);
-  border-radius: 99px;
-  overflow: hidden;
-}
-
-.intro-progress-bar {
-  width: 0%;
-  height: 100%;
-  background: linear-gradient(90deg, #B58A3A, #D0AA5B);
-  border-radius: 99px;
-  transition: width 0.12s linear;
-}
-
-/* Right Video Column */
-.intro-video-column {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  width: 100%;
 }
 
 .intro-video-frame {
   position: relative;
-  width: auto;
-  height: 86vh;
-  max-height: 86vh;
+  height: 94vh;
+  max-height: 94vh;
   aspect-ratio: 9 / 16;
-  border-radius: 24px;
+  width: auto;
+  border-radius: 22px;
   overflow: hidden;
-  background: #061F38;
-  border: 2.5px solid rgba(181, 138, 58, 0.48);
-  box-shadow: 0 25px 70px rgba(8, 43, 76, 0.24), 0 0 45px rgba(181, 138, 58, 0.18);
+  background: #061324;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.85), 0 0 50px rgba(0, 180, 255, 0.25), 0 0 20px rgba(181, 138, 58, 0.25);
+  border: 2px solid rgba(0, 210, 255, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 #saitIntroVideo {
@@ -4246,19 +4141,141 @@ body.intro-active {
   height: 100%;
   object-fit: contain;
   display: block;
-  background: #061F38;
+}
+
+/* In-Video Overlay covering baked-in text */
+.invideo-text-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.invideo-text-overlay.text-revealed {
+  opacity: 1;
+}
+
+/* Mask 1: Center Diamond Chip Plate covering Cristian Escamilla */
+.chip-diamond-plate {
+  position: absolute;
+  top: 51.8%;
+  left: 50%;
+  width: 165px;
+  height: 165px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  background: radial-gradient(circle at center, #0e2444 0%, #08162a 75%, #050d1a 100%);
+  border: 2px solid rgba(0, 210, 255, 0.75);
+  box-shadow: 0 0 35px rgba(0, 180, 255, 0.55), inset 0 0 20px rgba(0, 120, 220, 0.4);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chip-content {
+  transform: rotate(-45deg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 180px;
+}
+
+.chip-sait-title {
+  font-family: var(--font-sans);
+  font-size: 40px;
+  font-weight: 900;
+  letter-spacing: 5px;
+  color: #FFFFFF;
+  text-shadow: 0 0 15px rgba(0, 210, 255, 1), 0 0 25px rgba(0, 150, 255, 0.6);
+  line-height: 1;
+  margin: 0;
+}
+
+.chip-sait-divider {
+  width: 44px;
+  height: 3px;
+  background: linear-gradient(90deg, #D0AA5B, #B58A3A);
+  border-radius: 2px;
+  margin-top: 6px;
+  box-shadow: 0 0 8px rgba(208, 170, 91, 0.9);
+}
+
+/* Mask 2: Lower Subtitle Badge completely covering promo text (y=70.7% to 84.8%) */
+.lower-subtitle-badge {
+  position: absolute;
+  top: 77.8%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 92%;
+  max-width: 440px;
+  min-height: 80px;
+  padding: 16px 20px;
+  background: #061324;
+  border: 1.5px solid rgba(181, 138, 58, 0.6);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.98), 0 0 30px rgba(181, 138, 58, 0.35);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.lower-subtitle-text {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #F8F4EA;
+  text-transform: uppercase;
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* HUD Footer */
+.intro-hud-footer {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2.5rem;
+  z-index: 20;
+}
+
+.intro-progress-block {
+  width: 220px;
+}
+
+.intro-progress-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.intro-progress-bar {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #D0AA5B, #B58A3A);
+  border-radius: 99px;
+  transition: width 0.12s linear;
 }
 
 /* Skip Introduction Button */
 .intro-skip-btn {
-  position: absolute;
-  bottom: 2rem;
-  right: 2rem;
-  background: #FFFDF8;
-  color: #082B4C;
-  border: 1.5px solid rgba(181, 138, 58, 0.4);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(11, 25, 46, 0.85);
+  color: #F8F4EA;
+  border: 1.5px solid rgba(181, 138, 58, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-radius: var(--radius-full);
   padding: 0.55rem 1.35rem;
   font-family: var(--font-mono);
@@ -4269,16 +4286,15 @@ body.intro-active {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  box-shadow: 0 4px 16px rgba(8, 43, 76, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   transition: all var(--transition-fast);
-  z-index: 10;
 }
 
 .intro-skip-btn:hover {
   background: #082B4C;
   color: #FFFDF8;
-  border-color: #B58A3A;
-  box-shadow: 0 8px 24px rgba(8, 43, 76, 0.22);
+  border-color: #D0AA5B;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
   transform: translateY(-2px);
 }
 
@@ -4535,80 +4551,6 @@ body.intro-active {
    30. RESPONSIVE MOBILE OPTIMIZATIONS & REDUCED MOTION
    -------------------------------------------------------------------------- */
 @media (max-width: 991px) {
-  .intro-ambient-ring,
-  .intro-ambient-glow {
-    display: none !important;
-  }
-
-  .intro-stage-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    width: 100vw;
-    max-width: 100vw;
-    height: 100vh;
-    height: 100dvh;
-    padding: 1.5rem 1rem 3.8rem 1rem;
-    gap: 0.85rem;
-    box-sizing: border-box;
-  }
-
-  .intro-brand-column {
-    align-items: center;
-    text-align: center;
-    gap: 0.35rem;
-    width: 100%;
-  }
-
-  .intro-title-main {
-    font-size: clamp(2.4rem, 8vw, 3.8rem);
-  }
-
-  .intro-title-main::after {
-    width: 48px;
-    height: 3px;
-    margin: 0.4rem auto 0 auto;
-  }
-
-  .intro-title-sub {
-    font-size: clamp(0.72rem, 2.5vw, 0.95rem);
-    letter-spacing: 0.12em;
-    gap: 0.15rem;
-  }
-
-  .intro-progress-block {
-    max-width: 260px;
-    margin-top: 0.35rem;
-  }
-
-  .intro-video-column {
-    flex: 1 1 auto;
-    min-height: 0;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.25rem 0;
-  }
-
-  .intro-video-frame {
-    width: auto;
-    max-width: min(85vw, calc((100vh - 190px) * 9 / 16));
-    max-height: calc(100vh - 190px);
-    max-height: calc(100dvh - 190px);
-    aspect-ratio: 9 / 16;
-    border-radius: 18px;
-    border-width: 2px;
-  }
-
-  .intro-skip-btn {
-    bottom: 0.85rem;
-    right: 0.85rem;
-    padding: 0.4rem 1rem;
-    font-size: 0.72rem;
-  }
-
   .cursor-ambient-glow {
     width: 280px;
     height: 280px;
@@ -4617,25 +4559,109 @@ body.intro-active {
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .intro-stage-wrapper {
-    padding: 1rem 0.6rem 3.4rem 0.6rem;
-    gap: 0.45rem;
-  }
-
-  .intro-title-main {
-    font-size: 2.35rem;
-  }
-
-  .intro-title-sub {
-    font-size: 0.68rem;
-    letter-spacing: 0.1em;
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    max-height: 100dvh;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
   }
 
   .intro-video-frame {
-    max-height: calc(100vh - 155px);
-    max-height: calc(100dvh - 155px);
-    border-radius: 14px;
+    height: 100vh;
+    height: 100dvh;
+    max-height: 100dvh;
+    aspect-ratio: 9 / 16;
+    width: auto;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  #saitIntroVideo {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+  }
+
+  .chip-diamond-plate {
+    width: 165px;
+    height: 165px;
+  }
+
+  .chip-content {
+    width: 170px;
+  }
+
+  .chip-sait-title {
+    font-size: 38px;
+    letter-spacing: 4px;
+  }
+
+  .chip-sait-divider {
+    width: 40px;
+    height: 3px;
+  }
+
+  .lower-subtitle-badge {
+    width: 82%;
+    max-width: 390px;
+    min-height: 80px;
+    padding: 14px 18px;
+    top: 77.8%;
+  }
+
+  .lower-subtitle-text {
+    font-size: 11.5px;
+    letter-spacing: 1.5px;
+    line-height: 1.5;
+  }
+
+  .intro-hud-footer {
+    padding: 0 1.25rem;
+    bottom: 1.25rem;
+  }
+
+  .intro-progress-block {
+    width: 120px;
+  }
+
+  .intro-skip-btn {
+    padding: 0.45rem 1rem;
+    font-size: 0.76rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .chip-diamond-plate {
+    width: 160px;
+    height: 160px;
+  }
+
+  .chip-sait-title {
+    font-size: 36px;
+    letter-spacing: 3px;
+  }
+
+  .lower-subtitle-badge {
+    width: 80%;
+    max-width: 375px;
+    min-height: 78px;
+    padding: 12px 14px;
+  }
+
+  .lower-subtitle-text {
+    font-size: 10.5px;
+    letter-spacing: 1.2px;
   }
 }
 

@@ -19,6 +19,8 @@
     overlay: null,
     skipBtn: null,
     video: null,
+    bgBlurVideo: null,
+    invideoOverlay: null,
     progressBar: null,
     timer: null,
     isDismissed: false,
@@ -29,6 +31,8 @@
 
       this.skipBtn = document.getElementById('introSkipBtn');
       this.video = document.getElementById('saitIntroVideo');
+      this.bgBlurVideo = document.getElementById('introBgBlurVideo');
+      this.invideoOverlay = document.getElementById('invideoTextOverlay');
       this.progressBar = document.getElementById('introProgressBar');
 
       // Accessibility: Respect prefers-reduced-motion
@@ -62,6 +66,14 @@
     },
 
     playSequence() {
+      // Start ambient blurred background video if present
+      if (this.bgBlurVideo) {
+        this.bgBlurVideo.muted = true;
+        this.bgBlurVideo.defaultMuted = true;
+        this.bgBlurVideo.playsInline = true;
+        this.bgBlurVideo.play().catch(() => {});
+      }
+
       if (this.video) {
         // Strictly set mute and inline parameters before playback
         this.video.muted = true;
@@ -85,11 +97,16 @@
           this.dismiss(false);
         }, { once: true });
 
-        // Update progress bar
+        // Update progress bar & reveal SAIT branding overlay at 4.25s
         this.video.addEventListener('timeupdate', () => {
           if (this.progressBar && this.video.duration) {
             const pct = (this.video.currentTime / this.video.duration) * 100;
             this.progressBar.style.width = Math.min(pct, 100) + '%';
+          }
+
+          // Reveal the SAIT branding overlay when the chip locks into center
+          if (this.video.currentTime >= 4.25 && this.invideoOverlay) {
+            this.invideoOverlay.classList.add('text-revealed');
           }
         });
 
@@ -98,9 +115,14 @@
         if (playPromise !== undefined) {
           playPromise.catch((err) => {
             console.warn('SAIT Intro Video Autoplay delayed or restricted:', err);
+            // In case autoplay is restricted, reveal text overlay and dismiss after short delay
+            if (this.invideoOverlay) {
+              this.invideoOverlay.classList.add('text-revealed');
+            }
             // Allow tap/click on screen or auto-proceed after 3.5s so user is never stuck
             const playOnInteraction = () => {
               this.video.play().catch(() => {});
+              if (this.bgBlurVideo) this.bgBlurVideo.play().catch(() => {});
               window.removeEventListener('click', playOnInteraction);
               window.removeEventListener('touchstart', playOnInteraction);
             };
@@ -131,6 +153,11 @@
       if (this.video) {
         try {
           this.video.pause();
+        } catch (e) {}
+      }
+      if (this.bgBlurVideo) {
+        try {
+          this.bgBlurVideo.pause();
         } catch (e) {}
       }
 
