@@ -1687,6 +1687,394 @@
   };
 
   /* ==========================================================================
+     9. ANNOUNCEMENTS MOTION CONTROLLER (FEATURED SLIDER, DRAG, AUTOPLAY & REVEALS)
+     ========================================================================== */
+  const AnnouncementsMotionController = {
+    sliderSection: null,
+    viewport: null,
+    track: null,
+    slides: [],
+    prevBtn: null,
+    nextBtn: null,
+    dots: [],
+    progressBar: null,
+    currNumEl: null,
+    totalNumEl: null,
+    heroHeader: null,
+    controlsRow: null,
+    announcementsGrid: null,
+
+    currentIndex: 0,
+    totalSlides: 0,
+    autoSlideDuration: 5500,
+    progressAnimId: null,
+    progressStartTime: null,
+    isPaused: false,
+    isDragging: false,
+    dragStartX: 0,
+    dragDeltaX: 0,
+    currentTranslate: 0,
+
+    init() {
+      this.sliderSection = document.getElementById('featuredAnnouncementsSlider');
+      if (!this.sliderSection) return;
+
+      this.viewport = document.getElementById('announcementSliderViewport');
+      this.track = document.getElementById('announcementSliderTrack');
+      this.slides = Array.from(this.sliderSection.querySelectorAll('.featured-ann-card'));
+      this.prevBtn = document.getElementById('announcementPrevBtn');
+      this.nextBtn = document.getElementById('announcementNextBtn');
+      this.dots = Array.from(this.sliderSection.querySelectorAll('.ann-dot'));
+      this.progressBar = document.getElementById('announcementProgressBar');
+      this.currNumEl = document.getElementById('announcementCurrNum');
+      this.totalNumEl = document.getElementById('announcementTotalNum');
+      this.heroHeader = document.getElementById('announcementsHeroHeader');
+      this.controlsRow = document.getElementById('noticeControlsRow');
+      this.announcementsGrid = document.getElementById('announcementsGridContainer');
+
+      if (!this.viewport || !this.track || this.slides.length === 0) return;
+
+      this.totalSlides = this.slides.length;
+      if (this.totalNumEl) {
+        this.totalNumEl.textContent = String(this.totalSlides).padStart(2, '0');
+      }
+
+      this.setupControls();
+      this.setupGestures();
+      this.setupCardSheen();
+      this.setupScrollReveal();
+      this.setupSyncListener();
+
+      // Initial layout positioning
+      window.requestAnimationFrame(() => {
+        this.updatePosition(false);
+        if (!prefersReducedMotion) {
+          this.startProgressBar();
+        }
+      });
+
+      // Window resize handling (debounced)
+      let resizeTimer;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          this.updatePosition(false);
+        }, 120);
+      }, { passive: true });
+
+      // Page visibility handling
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          this.pauseAutoSlide();
+        } else if (!this.isPaused && !prefersReducedMotion) {
+          this.startProgressBar();
+        }
+      });
+    },
+
+    setupControls() {
+      if (this.prevBtn) {
+        this.prevBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.prev();
+        });
+      }
+
+      if (this.nextBtn) {
+        this.nextBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.next();
+        });
+      }
+
+      this.dots.forEach((dot) => {
+        dot.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetIdx = parseInt(dot.getAttribute('data-index'), 10);
+          if (!isNaN(targetIdx) && targetIdx !== this.currentIndex) {
+            this.goToSlide(targetIdx);
+          }
+        });
+      });
+
+      // Keyboard navigation on viewport
+      if (this.viewport) {
+        this.viewport.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            this.prev();
+          } else if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            this.next();
+          }
+        });
+      }
+
+      // Hover pause on slider area
+      this.sliderSection.addEventListener('mouseenter', () => {
+        this.pauseAutoSlide();
+      });
+
+      this.sliderSection.addEventListener('mouseleave', () => {
+        if (!this.isDragging) {
+          this.resumeAutoSlide();
+        }
+      });
+    },
+
+    setupGestures() {
+      if (!this.viewport) return;
+
+      const onStart = (clientX) => {
+        this.isDragging = true;
+        this.dragStartX = clientX;
+        this.dragDeltaX = 0;
+        this.pauseAutoSlide();
+        this.track.style.transition = 'none';
+      };
+
+      const onMove = (clientX) => {
+        if (!this.isDragging) return;
+        this.dragDeltaX = clientX - this.dragStartX;
+        const liveOffset = this.currentTranslate + (this.dragDeltaX * 0.75);
+        this.track.style.transform = `translateX(${liveOffset.toFixed(1)}px)`;
+      };
+
+      const onEnd = () => {
+        if (!this.isDragging) return;
+        this.isDragging = false;
+        const threshold = 50;
+        if (this.dragDeltaX < -threshold) {
+          this.next();
+        } else if (this.dragDeltaX > threshold) {
+          this.prev();
+        } else {
+          this.updatePosition(true);
+        }
+        this.resumeAutoSlide();
+      };
+
+      // Pointer Events
+      this.viewport.addEventListener('pointerdown', (e) => {
+        if (e.button !== 0 && e.pointerType === 'mouse') return;
+        onStart(e.clientX);
+      });
+
+      window.addEventListener('pointermove', (e) => {
+        if (this.isDragging) {
+          onMove(e.clientX);
+        }
+      });
+
+      window.addEventListener('pointerup', () => {
+        if (this.isDragging) {
+          onEnd();
+        }
+      });
+
+      window.addEventListener('pointercancel', () => {
+        if (this.isDragging) {
+          onEnd();
+        }
+      });
+
+      // Touch events fallback
+      this.viewport.addEventListener('touchstart', (e) => {
+        if (e.touches && e.touches.length === 1) {
+          onStart(e.touches[0].clientX);
+        }
+      }, { passive: true });
+
+      this.viewport.addEventListener('touchmove', (e) => {
+        if (this.isDragging && e.touches && e.touches.length === 1) {
+          onMove(e.touches[0].clientX);
+        }
+      }, { passive: true });
+
+      this.viewport.addEventListener('touchend', () => {
+        if (this.isDragging) {
+          onEnd();
+        }
+      }, { passive: true });
+    },
+
+    setupCardSheen() {
+      this.slides.forEach((slide) => {
+        slide.addEventListener('mousemove', (e) => {
+          const rect = slide.getBoundingClientRect();
+          const x = ((e.clientX - rect.left) / rect.width) * 100;
+          const y = ((e.clientY - rect.top) / rect.height) * 100;
+          slide.style.setProperty('--mouse-x', `${x.toFixed(1)}%`);
+          slide.style.setProperty('--mouse-y', `${y.toFixed(1)}%`);
+        }, { passive: true });
+      });
+    },
+
+    setupScrollReveal() {
+      const targets = [this.heroHeader, this.sliderSection, this.controlsRow, this.announcementsGrid].filter(Boolean);
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('revealed');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, {
+          threshold: 0.1,
+          rootMargin: '0px 0px -40px 0px'
+        });
+
+        targets.forEach((el) => observer.observe(el));
+      } else {
+        targets.forEach((el) => el.classList.add('revealed'));
+      }
+    },
+
+    setupSyncListener() {
+      window.addEventListener('sait:announcements-updated', () => {
+        if (window.STATE && window.STATE.announcements) {
+          this.slides.forEach((slide) => {
+            const annId = slide.getAttribute('data-id');
+            const dataItem = window.STATE.announcements.find((a) => a.id === annId);
+            if (dataItem) {
+              const readBtn = slide.querySelector('.ann-read-btn span');
+              const readIcon = slide.querySelector('.ann-read-btn i');
+              if (readBtn && readIcon) {
+                if (dataItem.read) {
+                  readBtn.textContent = 'Mark as Unread';
+                  readIcon.className = 'fa-solid fa-envelope';
+                  slide.classList.add('read');
+                  slide.classList.remove('unread');
+                } else {
+                  readBtn.textContent = 'Mark as Read';
+                  readIcon.className = 'fa-solid fa-envelope-open';
+                  slide.classList.add('unread');
+                  slide.classList.remove('read');
+                }
+              }
+            }
+          });
+        }
+      });
+    },
+
+    updatePosition(animate = true) {
+      if (!this.viewport || !this.track || this.slides.length === 0) return;
+
+      const viewportWidth = this.viewport.offsetWidth;
+      const currentSlide = this.slides[this.currentIndex];
+      if (!currentSlide) return;
+
+      const slideWidth = currentSlide.offsetWidth;
+      const slideLeft = currentSlide.offsetLeft;
+
+      // Perfectly center active slide
+      const targetOffset = (viewportWidth - slideWidth) / 2 - slideLeft;
+      this.currentTranslate = targetOffset;
+
+      if (animate) {
+        this.track.style.transition = 'transform 0.62s cubic-bezier(0.16, 1, 0.3, 1)';
+      } else {
+        this.track.style.transition = 'none';
+      }
+
+      this.track.style.transform = `translateX(${targetOffset.toFixed(1)}px)`;
+
+      // Update slide states
+      this.slides.forEach((slide, idx) => {
+        const isActive = idx === this.currentIndex;
+        if (isActive) {
+          slide.classList.add('active-ann-slide');
+          slide.setAttribute('aria-hidden', 'false');
+        } else {
+          slide.classList.remove('active-ann-slide');
+          slide.setAttribute('aria-hidden', 'true');
+        }
+      });
+
+      // Update dots
+      this.dots.forEach((dot, idx) => {
+        const isActive = idx === this.currentIndex;
+        dot.classList.toggle('active', isActive);
+        dot.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      });
+
+      // Update counter
+      if (this.currNumEl) {
+        this.currNumEl.textContent = String(this.currentIndex + 1).padStart(2, '0');
+      }
+
+      // Reset auto-slide progress bar
+      if (!prefersReducedMotion) {
+        this.startProgressBar();
+      }
+    },
+
+    goToSlide(index) {
+      this.currentIndex = (index + this.totalSlides) % this.totalSlides;
+      this.updatePosition(true);
+    },
+
+    next() {
+      this.goToSlide(this.currentIndex + 1);
+    },
+
+    prev() {
+      this.goToSlide(this.currentIndex - 1);
+    },
+
+    startProgressBar() {
+      if (prefersReducedMotion || this.isPaused) return;
+
+      if (this.progressAnimId) {
+        cancelAnimationFrame(this.progressAnimId);
+        this.progressAnimId = null;
+      }
+
+      if (this.progressBar) {
+        this.progressBar.style.width = '0%';
+      }
+
+      this.progressStartTime = performance.now();
+
+      const step = (now) => {
+        if (this.isPaused) return;
+
+        const elapsed = now - this.progressStartTime;
+        const progress = Math.min(1, elapsed / this.autoSlideDuration);
+
+        if (this.progressBar) {
+          this.progressBar.style.width = `${(progress * 100).toFixed(1)}%`;
+        }
+
+        if (progress < 1) {
+          this.progressAnimId = requestAnimationFrame(step);
+        } else {
+          this.next();
+        }
+      };
+
+      this.progressAnimId = requestAnimationFrame(step);
+    },
+
+    pauseAutoSlide() {
+      this.isPaused = true;
+      if (this.progressAnimId) {
+        cancelAnimationFrame(this.progressAnimId);
+        this.progressAnimId = null;
+      }
+    },
+
+    resumeAutoSlide() {
+      this.isPaused = false;
+      if (!prefersReducedMotion) {
+        this.startProgressBar();
+      }
+    }
+  };
+
+  /* ==========================================================================
      INITIALIZATION ON DOM READY
      ========================================================================== */
   function initAnimations() {
@@ -1698,6 +2086,7 @@
     CardInteractionsController.init();
     AboutPageMotionController.init();
     EventsMotionController.init();
+    AnnouncementsMotionController.init();
 
     // Trigger hero entrance if intro is not active or reduced motion
     if (!document.body.classList.contains('intro-active')) {

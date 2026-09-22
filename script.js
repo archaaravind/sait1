@@ -1613,6 +1613,7 @@
         STATE.announcements.forEach(a => a.read = true);
         saveReadAnnouncements();
         this.render();
+        window.dispatchEvent(new CustomEvent('sait:announcements-updated'));
         ToastManager.show('All announcements marked as read.', 'info');
       });
     },
@@ -1624,6 +1625,7 @@
       ann.read = !ann.read;
       saveReadAnnouncements();
       this.render();
+      window.dispatchEvent(new CustomEvent('sait:announcements-updated', { detail: { id: annId, read: ann.read } }));
     },
 
     render() {
@@ -1668,20 +1670,23 @@
       }
 
       grid.innerHTML = filtered.map(ann => `
-        <article class="glass-card notice-card ${ann.read ? 'read' : 'unread'} ${ann.priority === 'High' ? 'is-important' : ''}">
+        <article class="notice-card ${ann.read ? 'read' : 'unread'} ${ann.priority === 'High' ? 'is-important' : ''}">
           <div class="notice-top">
             <div class="notice-labels">
               <span class="notice-category">${ann.category}</span>
-              ${ann.priority === 'High' ? '<span class="notice-important"><span aria-hidden="true">&#9679;</span> Important</span>' : ''}
+              ${ann.priority === 'High' ? '<span class="notice-important"><i class="fa-solid fa-star"></i> Important</span>' : ''}
             </div>
-            <span class="notice-date">${ann.date}</span>
+            <span class="notice-date"><i class="fa-regular fa-calendar"></i> ${ann.date}</span>
           </div>
-          <h4 class="notice-title">${ann.title}</h4>
+          <h4 class="notice-title">
+            ${!ann.read ? '<span class="unread-dot" title="Unread notice"></span>' : ''}
+            ${ann.title}
+          </h4>
           <p class="notice-body">${ann.body}</p>
           <div class="notice-footer">
             <span class="notice-priority">Priority: <strong>${ann.priority}</strong></span>
-            <button type="button" class="notice-read-toggle" onclick="window.saitAnnouncements.toggleRead('${ann.id}')">
-              <i class="fa-solid ${ann.read ? 'fa-envelope' : 'fa-envelope-open'}"></i>
+            <button type="button" class="notice-read-toggle" onclick="window.saitAnnouncements.toggleRead('${ann.id}')" aria-label="${ann.read ? 'Mark as Unread' : 'Mark as Read'}">
+              <i class="fa-solid ${ann.read ? 'fa-envelope-open' : 'fa-envelope'}"></i>
               <span>${ann.read ? 'Mark as Unread' : 'Mark as Read'}</span>
             </button>
           </div>

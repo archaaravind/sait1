@@ -1249,17 +1249,259 @@
 
     <!-- 7. ANNOUNCEMENTS -->
     <section class="section-block announcements-section" id="announcements">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-tag"><i class="fa-solid fa-bullhorn"></i> Department Notice Board</span>
-          <h2 class="section-title">ANNOUNCEMENTS</h2>
-          <p class="section-desc">
+      <!-- Ambient Backdrop: Deep Navy & Warm Gold Glow Orbs with Floating Tech Circuits -->
+      <div class="announcements-ambient-backdrop" aria-hidden="true">
+        <div class="ann-ambient-glow ann-glow-top"></div>
+        <div class="ann-ambient-glow ann-glow-bottom"></div>
+        <svg class="ann-tech-circuits" viewBox="0 0 1440 600" fill="none" preserveAspectRatio="none">
+          <g class="ann-circuit-paths" opacity="0.16">
+            <path d="M0 120 H280 L340 180 H680 L720 140 H1120 L1180 200 H1440" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 6" />
+            <path d="M0 380 H220 L270 430 H540 L590 380 H980 L1030 430 H1440" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 6" />
+            <path d="M160 0 V140 L200 180 V420" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 5" />
+            <path d="M1280 200 V400 L1230 450 V600" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 5" />
+          </g>
+          <g class="ann-circuit-nodes" opacity="0.22">
+            <circle cx="280" cy="120" r="3.5" fill="#C9A45C" />
+            <circle cx="340" cy="180" r="4" fill="#173B67" />
+            <circle cx="720" cy="140" r="3.5" fill="#C9A45C" />
+            <circle cx="1120" cy="140" r="4" fill="#173B67" />
+            <circle cx="270" cy="430" r="3.5" fill="#C9A45C" />
+            <circle cx="590" cy="380" r="4" fill="#173B67" />
+            <circle cx="1030" cy="430" r="3.5" fill="#C9A45C" />
+          </g>
+        </svg>
+      </div>
+
+      <div class="container announcements-container">
+        <!-- Hero Header -->
+        <div class="section-header announcements-hero-header" id="announcementsHeroHeader">
+          <span class="section-tag announcements-hero-badge"><i class="fa-solid fa-bullhorn"></i> Department Notice Board</span>
+          <h2 class="section-title announcements-hero-title">ANNOUNCEMENTS</h2>
+          <p class="section-desc announcements-hero-desc">
             Stay updated with the latest news, events and important information from SAIT.
           </p>
         </div>
 
+        <!-- FEATURED ANNOUNCEMENTS SLIDER (MAIN FEATURE) -->
+        <div class="announcements-slider-section" id="featuredAnnouncementsSlider" aria-label="Featured Announcements Showcase" role="region">
+          <!-- Slider Top Bar: Stage badge, Progress Countdown, and Elegant Controls -->
+          <div class="ann-slider-topbar">
+            <div class="ann-topbar-left">
+              <span class="ann-stage-tag"><i class="fa-solid fa-bolt"></i> FEATURED NOTICE</span>
+              <div class="ann-progress-wrap" aria-hidden="true" title="Auto-slide countdown">
+                <div class="ann-progress-bar" id="announcementProgressBar"></div>
+              </div>
+            </div>
+
+            <div class="ann-controls-group">
+              <button type="button" class="ann-arrow-btn ann-prev-btn" id="announcementPrevBtn" aria-label="Previous Featured Announcement">
+                <i class="fa-solid fa-arrow-left"></i>
+              </button>
+              <div class="ann-slider-counter" id="announcementSlideCounter" aria-live="polite">
+                <span class="ann-curr-num" id="announcementCurrNum">01</span>
+                <span class="ann-counter-slash">/</span>
+                <span class="ann-total-num" id="announcementTotalNum">05</span>
+              </div>
+              <button type="button" class="ann-arrow-btn ann-next-btn" id="announcementNextBtn" aria-label="Next Featured Announcement">
+                <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Slider Viewport & Track -->
+          <div class="ann-carousel-viewport" id="announcementSliderViewport" tabindex="0" aria-label="Featured announcements carousel, use left and right arrow keys to navigate">
+            <div class="ann-carousel-track" id="announcementSliderTrack">
+              
+              <!-- SLIDE 1: ann-1 (Infinitus) -->
+              <article class="featured-ann-card active-ann-slide" data-index="0" data-id="ann-1">
+                <div class="featured-ann-sheen" aria-hidden="true"></div>
+                <div class="featured-ann-glow" aria-hidden="true"></div>
+                <div class="featured-ann-content">
+                  <div class="featured-ann-header">
+                    <div class="featured-ann-badges">
+                      <span class="badge-pill badge-accent"><i class="fa-solid fa-star"></i> Important</span>
+                      <span class="badge-pill badge-urgent"><i class="fa-solid fa-fire"></i> High Priority</span>
+                    </div>
+                    <span class="featured-ann-date"><i class="fa-solid fa-calendar-day"></i> March 18, 2026</span>
+                  </div>
+
+                  <h3 class="featured-ann-title">INFINITUS 2026: Team Registration Portal Officially Open</h3>
+
+                  <p class="featured-ann-body">
+                    Registrations are now open for Infinitus 2026 24-hour National Hackathon and technical paper symposium. Teams can register up to 4 members. Early bird registrations receive free symposium kits.
+                  </p>
+
+                  <div class="featured-ann-footer">
+                    <div class="featured-ann-meta">
+                      <span class="status-indicator-badge">
+                        <span class="status-indicator online"></span>
+                        <span class="status-label">Active Notice</span>
+                      </span>
+                    </div>
+                    <div class="featured-ann-actions">
+                      <button type="button" class="btn btn-outline btn-sm ann-read-btn" onclick="window.saitAnnouncements.toggleRead('ann-1')">
+                        <i class="fa-solid fa-envelope-open"></i> <span>Toggle Read State</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              <!-- SLIDE 2: ann-2 (Semester 6 & 8 Labs) -->
+              <article class="featured-ann-card" data-index="1" data-id="ann-2">
+                <div class="featured-ann-sheen" aria-hidden="true"></div>
+                <div class="featured-ann-glow" aria-hidden="true"></div>
+                <div class="featured-ann-content">
+                  <div class="featured-ann-header">
+                    <div class="featured-ann-badges">
+                      <span class="badge-pill badge-primary"><i class="fa-solid fa-graduation-cap"></i> Academic</span>
+                      <span class="badge-pill badge-urgent"><i class="fa-solid fa-circle-exclamation"></i> High Priority</span>
+                    </div>
+                    <span class="featured-ann-date"><i class="fa-solid fa-calendar-day"></i> March 15, 2026</span>
+                  </div>
+
+                  <h3 class="featured-ann-title">B.Tech IT Semester 6 &amp; 8 End-Semester Lab Exam Schedule</h3>
+
+                  <p class="featured-ann-body">
+                    The Division of Information Technology has published the final timetable for Cloud Computing Lab, Network Security Lab, and Project Phase-1 evaluations. Please verify your lab batches.
+                  </p>
+
+                  <div class="featured-ann-footer">
+                    <div class="featured-ann-meta">
+                      <span class="status-indicator-badge">
+                        <span class="status-indicator online"></span>
+                        <span class="status-label">Exam Notification</span>
+                      </span>
+                    </div>
+                    <div class="featured-ann-actions">
+                      <button type="button" class="btn btn-outline btn-sm ann-read-btn" onclick="window.saitAnnouncements.toggleRead('ann-2')">
+                        <i class="fa-solid fa-envelope-open"></i> <span>Toggle Read State</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              <!-- SLIDE 3: ann-3 (Recruitment Drive) -->
+              <article class="featured-ann-card" data-index="2" data-id="ann-3">
+                <div class="featured-ann-sheen" aria-hidden="true"></div>
+                <div class="featured-ann-glow" aria-hidden="true"></div>
+                <div class="featured-ann-content">
+                  <div class="featured-ann-header">
+                    <div class="featured-ann-badges">
+                      <span class="badge-pill badge-secondary"><i class="fa-solid fa-briefcase"></i> Event</span>
+                      <span class="badge-pill badge-outline"><i class="fa-solid fa-clock"></i> Medium Priority</span>
+                    </div>
+                    <span class="featured-ann-date"><i class="fa-solid fa-calendar-day"></i> March 12, 2026</span>
+                  </div>
+
+                  <h3 class="featured-ann-title">TCS Digital &amp; Cisco Systems Campus Recruitment Drive Briefing</h3>
+
+                  <p class="featured-ann-body">
+                    Mandatory pre-placement orientation session will be held at SOE Seminar Complex on Friday at 3:30 PM for all registered Semester 6 IT students.
+                  </p>
+
+                  <div class="featured-ann-footer">
+                    <div class="featured-ann-meta">
+                      <span class="status-indicator-badge">
+                        <span class="status-indicator online"></span>
+                        <span class="status-label">Career Briefing</span>
+                      </span>
+                    </div>
+                    <div class="featured-ann-actions">
+                      <button type="button" class="btn btn-outline btn-sm ann-read-btn" onclick="window.saitAnnouncements.toggleRead('ann-3')">
+                        <i class="fa-solid fa-envelope-open"></i> <span>Toggle Read State</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              <!-- SLIDE 4: ann-4 (Activity Logger Deadline) -->
+              <article class="featured-ann-card" data-index="3" data-id="ann-4">
+                <div class="featured-ann-sheen" aria-hidden="true"></div>
+                <div class="featured-ann-glow" aria-hidden="true"></div>
+                <div class="featured-ann-content">
+                  <div class="featured-ann-header">
+                    <div class="featured-ann-badges">
+                      <span class="badge-pill badge-accent"><i class="fa-solid fa-hourglass-end"></i> Deadline</span>
+                      <span class="badge-pill badge-urgent"><i class="fa-solid fa-triangle-exclamation"></i> High Priority</span>
+                    </div>
+                    <span class="featured-ann-date"><i class="fa-solid fa-calendar-day"></i> March 10, 2026</span>
+                  </div>
+
+                  <h3 class="featured-ann-title">Deadline: Submit Student Activity Logger Verification for Semester Credits</h3>
+
+                  <p class="featured-ann-body">
+                    All technical club participations, hackathons, and certifications must be submitted via the SAIT Activity Logger portal by March 31, 2026, for faculty accreditation.
+                  </p>
+
+                  <div class="featured-ann-footer">
+                    <div class="featured-ann-meta">
+                      <span class="status-indicator-badge">
+                        <span class="status-indicator online"></span>
+                        <span class="status-label">Portal Active</span>
+                      </span>
+                    </div>
+                    <div class="featured-ann-actions">
+                      <button type="button" class="btn btn-outline btn-sm ann-read-btn" onclick="window.saitAnnouncements.toggleRead('ann-4')">
+                        <i class="fa-solid fa-envelope-open"></i> <span>Toggle Read State</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              <!-- SLIDE 5: ann-5 (Open-Source Incubator) -->
+              <article class="featured-ann-card" data-index="4" data-id="ann-5">
+                <div class="featured-ann-sheen" aria-hidden="true"></div>
+                <div class="featured-ann-glow" aria-hidden="true"></div>
+                <div class="featured-ann-content">
+                  <div class="featured-ann-header">
+                    <div class="featured-ann-badges">
+                      <span class="badge-pill badge-primary"><i class="fa-solid fa-code"></i> General</span>
+                      <span class="badge-pill badge-outline"><i class="fa-solid fa-seedling"></i> Low Priority</span>
+                    </div>
+                    <span class="featured-ann-date"><i class="fa-solid fa-calendar-day"></i> March 05, 2026</span>
+                  </div>
+
+                  <h3 class="featured-ann-title">SAIT Open-Source Incubator: Call for Summer Project Proposals</h3>
+
+                  <p class="featured-ann-body">
+                    Got an innovative engineering idea? Apply for SAIT lab server compute access, faculty mentoring, and cloud credits under the 2026 Student Incubation Fund.
+                  </p>
+
+                  <div class="featured-ann-footer">
+                    <div class="featured-ann-meta">
+                      <span class="status-indicator-badge">
+                        <span class="status-indicator online"></span>
+                        <span class="status-label">Incubation Fund</span>
+                      </span>
+                    </div>
+                    <div class="featured-ann-actions">
+                      <button type="button" class="btn btn-outline btn-sm ann-read-btn" onclick="window.saitAnnouncements.toggleRead('ann-5')">
+                        <i class="fa-solid fa-envelope-open"></i> <span>Toggle Read State</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+            </div>
+          </div>
+
+          <!-- Interactive Pagination Dots -->
+          <div class="ann-slider-pagination" id="announcementPagination" role="tablist" aria-label="Featured Announcements Navigation">
+            <button type="button" class="ann-dot active" data-index="0" role="tab" aria-selected="true" aria-label="Notice 1: Infinitus 2026"></button>
+            <button type="button" class="ann-dot" data-index="1" role="tab" aria-selected="false" aria-label="Notice 2: Lab Exam Schedule"></button>
+            <button type="button" class="ann-dot" data-index="2" role="tab" aria-selected="false" aria-label="Notice 3: Campus Recruitment"></button>
+            <button type="button" class="ann-dot" data-index="3" role="tab" aria-selected="false" aria-label="Notice 4: Activity Logger Deadline"></button>
+            <button type="button" class="ann-dot" data-index="4" role="tab" aria-selected="false" aria-label="Notice 5: Open-Source Incubator"></button>
+          </div>
+        </div>
+
         <!-- Notice Board Controls -->
-        <div class="notice-controls-row">
+        <div class="notice-controls-row" id="noticeControlsRow">
           <div class="notice-filters-left" role="group" aria-label="Filter announcements">
             <div class="filter-pills" id="announcementFilterPills" role="tablist" aria-label="Announcement Categories">
               <button type="button" class="filter-pill active" data-category="all">All</button>
@@ -1274,7 +1516,7 @@
           <div class="notice-tools">
             <label class="announcement-search" for="announcementSearchInput">
               <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-              <input type="search" id="announcementSearchInput" placeholder="Search announcements..." autocomplete="off">
+              <input type="search" id="announcementSearchInput" placeholder="Search announcements by title or topic..." autocomplete="off">
             </label>
             <label class="announcement-sort" for="announcementSortSelect">
               <span>Sort</span>
