@@ -34,7 +34,10 @@
 
     init() {
       this.overlay = document.getElementById('saitIntroOverlay');
-      if (!this.overlay) return;
+      if (!this.overlay) {
+        this.triggerHeroEntrance();
+        return;
+      }
 
       this.skipBtn = document.getElementById('introSkipBtn');
       this.progressBar = document.getElementById('introProgressBar');

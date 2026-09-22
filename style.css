@@ -480,8 +480,8 @@ ul, ol {
   background: var(--color-primary-bright);
   color: #FFFFFF !important;
   border-color: var(--color-gold);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(8, 43, 76, 0.25), 0 0 20px rgba(181, 138, 58, 0.25);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(8, 43, 76, 0.32), 0 0 22px rgba(181, 138, 58, 0.3);
 }
 
 .btn-pill-secondary {
@@ -501,8 +501,9 @@ ul, ol {
 .btn-pill-secondary:hover {
   background: var(--bg-section-alt);
   color: var(--color-primary);
-  border-color: var(--color-primary);
-  transform: translateY(-2px);
+  border-color: var(--color-gold);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(8, 43, 76, 0.16), 0 0 16px rgba(181, 138, 58, 0.2);
 }
 
 .btn-outline {
@@ -1082,55 +1083,111 @@ ul, ol {
   animation: heroWaveDrift 24s ease-in-out infinite alternate;
 }
 
-/* Subtle Architectural SOE CUSAT Campus Backdrop */
+/* Real School of Engineering CUSAT Campus Cinematic Backdrop */
 .hero-soe-backdrop {
   position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: clamp(340px, 56vw, 860px);
+  inset: 0;
+  width: 100%;
   height: 100%;
   pointer-events: none;
   z-index: 0;
   overflow: hidden;
-  opacity: 0.14; /* Elegant subtle opacity between 0.10 and 0.18 */
-  mask-image: radial-gradient(ellipse 85% 80% at 72% 46%, black 25%, rgba(0, 0, 0, 0.55) 60%, transparent 95%),
-              linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.35) 25%, black 85%);
-  -webkit-mask-image: radial-gradient(ellipse 85% 80% at 72% 46%, black 25%, rgba(0, 0, 0, 0.55) 60%, transparent 95%),
-                      linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.35) 25%, black 85%);
-  mask-composite: intersect;
-  -webkit-mask-composite: source-in;
-  transition: opacity 0.5s ease;
-}
-
-[data-theme="dark"] .hero-soe-backdrop {
-  opacity: 0.12;
-  filter: brightness(0.85) contrast(1.12);
 }
 
 .hero-soe-backdrop-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 36%; /* Perfectly positions the SCHOOL OF ENGINEERING CUSAT monument proportionally */
-  filter: saturate(0.88) contrast(1.06);
+  object-position: center center;
+  filter: contrast(1.04) brightness(0.98);
+  opacity: 0.38; /* Crisp visibility of authentic SOE CUSAT entrance and building */
   transform: scale(1.02);
-  transition: transform 1.2s ease-out;
+  transition: transform 1.2s ease-out, opacity 0.5s ease;
 }
 
+[data-theme="dark"] .hero-soe-backdrop-img {
+  opacity: 0.26;
+  filter: contrast(1.1) brightness(0.78);
+}
+
+/* Layer 1: Left-to-right soft ivory/navy haze for optimal text legibility */
 .hero-soe-backdrop-overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 75% 45%, transparent 30%, var(--bg-primary, #F8F4EA) 90%);
+  background: linear-gradient(
+    90deg,
+    rgba(248, 244, 234, 0.96) 0%,
+    rgba(248, 244, 234, 0.88) 35%,
+    rgba(248, 244, 234, 0.62) 62%,
+    rgba(248, 244, 234, 0.38) 100%
+  );
+  pointer-events: none;
+}
+
+[data-theme="dark"] .hero-soe-backdrop-overlay {
+  background: linear-gradient(
+    90deg,
+    rgba(10, 25, 47, 0.96) 0%,
+    rgba(10, 25, 47, 0.88) 35%,
+    rgba(10, 25, 47, 0.62) 62%,
+    rgba(10, 25, 47, 0.38) 100%
+  );
+}
+
+/* Layer 2: Subtle cinematic dark edge vignette */
+.hero-soe-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 55% 45%,
+    transparent 50%,
+    rgba(8, 43, 76, 0.12) 85%,
+    rgba(8, 43, 76, 0.24) 100%
+  );
+  pointer-events: none;
+}
+
+[data-theme="dark"] .hero-soe-vignette {
+  background: radial-gradient(
+    ellipse at 55% 45%,
+    transparent 45%,
+    rgba(2, 10, 20, 0.35) 85%,
+    rgba(2, 10, 20, 0.65) 100%
+  );
+}
+
+/* Layer 3: Warm-gold ambient atmospheric light */
+.hero-soe-gold-light {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 75% 30%,
+    rgba(181, 138, 58, 0.12) 0%,
+    rgba(181, 138, 58, 0.04) 45%,
+    transparent 70%
+  );
   pointer-events: none;
 }
 
 @media (max-width: 991px) {
-  .hero-soe-backdrop {
-    width: 100%;
-    opacity: 0.10; /* Extra subtle on mobile to ensure zero interference with text */
-    mask-image: radial-gradient(ellipse 95% 85% at 50% 50%, black 20%, transparent 90%);
-    -webkit-mask-image: radial-gradient(ellipse 95% 85% at 50% 50%, black 20%, transparent 90%);
+  .hero-soe-backdrop-overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(248, 244, 234, 0.94) 0%,
+      rgba(248, 244, 234, 0.86) 45%,
+      rgba(248, 244, 234, 0.72) 100%
+    );
+  }
+  [data-theme="dark"] .hero-soe-backdrop-overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(10, 25, 47, 0.95) 0%,
+      rgba(10, 25, 47, 0.88) 45%,
+      rgba(10, 25, 47, 0.78) 100%
+    );
+  }
+  .hero-soe-backdrop-img {
+    opacity: 0.32;
   }
 }
 
@@ -1297,11 +1354,28 @@ ul, ol {
   line-height: 1.25;
   letter-spacing: -0.015em;
   margin-bottom: 1.25rem;
+}
+
+.hero-full-name .subtitle-line {
+  display: block;
   opacity: 0;
-  transform: translateY(16px);
+  transform: translateY(14px);
   will-change: opacity, transform;
-  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.52s,
-              transform 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.52s;
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-full-name .subtitle-line.line-1 {
+  transition-delay: 0.52s;
+}
+
+.hero-full-name .subtitle-line.line-2 {
+  transition-delay: 0.72s;
+}
+
+.hero-content-animate .hero-full-name .subtitle-line {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .hero-dept-subtitle {
@@ -1312,11 +1386,10 @@ ul, ol {
   opacity: 0;
   transform: translateY(14px);
   will-change: opacity, transform;
-  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.72s,
-              transform 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.72s;
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.88s,
+              transform 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.88s;
 }
 
-.hero-content-animate .hero-full-name,
 .hero-content-animate .hero-dept-subtitle {
   opacity: 1;
   transform: translateY(0);
@@ -1426,31 +1499,21 @@ ul, ol {
   width: 100%;
   height: 100%;
   border: 1.5px dashed rgba(181, 138, 58, 0.42);
-  animation: spinSlow 36s linear infinite;
+  opacity: 0.85;
 }
 
 .ring-mid {
   width: 82%;
   height: 82%;
   border: 1.5px solid rgba(8, 43, 76, 0.28);
-  animation: spinCounterSlow 24s linear infinite;
+  opacity: 0.75;
 }
 
 .ring-inner {
   width: 66%;
   height: 66%;
   border: 1px dotted rgba(181, 138, 58, 0.45);
-  animation: spinSlow 16s linear infinite;
-}
-
-@keyframes spinSlow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-@keyframes spinCounterSlow {
-  from { transform: rotate(360deg); }
-  to { transform: rotate(0deg); }
+  opacity: 0.85;
 }
 
 .ring-sweep {
@@ -1560,24 +1623,9 @@ ul, ol {
   pointer-events: none;
   z-index: 4;
   transform: translate3d(-120%, -120%, 0) rotate(35deg);
-  animation: logoSheenSweep 10s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation: logoSheenSweep 9s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
-/* Hero Wave Stream Base */
-.hero-wave-stream {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 100px;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.hero-wave-stream svg {
-  width: 100%;
-  height: 100%;
-}
 
 /* --------------------------------------------------------------------------
    8. QUICK STATISTICS STRIP
@@ -7724,17 +7772,22 @@ body.intro-active {
   }
 }
 
-/* Periodic Attention / Accent Animation for SAIT Logo Box (every 10s) */
+/* Periodic 360° Rotation for SAIT Logo:
+   Stays completely still for ~6.8s (0% to 76%),
+   Performs ONE smooth, noticeable 360° rotation over ~1.6s (76% to 94%)
+   with navy glow, warm gold highlight and light sweep,
+   then smoothly settles back to rest (94% to 100%).
+   No continuous spinning. */
 .hero-official-logo-box {
-  animation: logoPeriodicAccent 10s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation: logoPeriodicRotate 9s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 [data-theme="dark"] .hero-official-logo-box {
-  animation: logoPeriodicAccentDark 10s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation: logoPeriodicRotateDark 9s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
-@keyframes logoPeriodicAccent {
-  0%, 75% {
+@keyframes logoPeriodicRotate {
+  0%, 76% {
     transform: scale(1) rotate(0deg);
     box-shadow: 
       0 0 0 2px rgba(181, 138, 58, 0.42),
@@ -7742,26 +7795,38 @@ body.intro-active {
       0 0 32px rgba(39, 128, 178, 0.16);
   }
   80% {
-    transform: scale(1.035) rotate(2.8deg);
+    transform: scale(1.04) rotate(70deg);
     box-shadow: 
-      0 0 0 2.5px rgba(208, 170, 91, 0.85),
-      0 22px 46px -6px rgba(8, 43, 76, 0.32),
-      0 0 46px rgba(39, 128, 178, 0.34),
+      0 0 0 2.5px rgba(208, 170, 91, 0.8),
+      0 20px 42px -6px rgba(8, 43, 76, 0.32),
+      0 0 46px rgba(39, 128, 178, 0.35),
       0 0 24px rgba(181, 138, 58, 0.45);
   }
-  86% {
-    transform: scale(1.03) rotate(-1.5deg);
+  85% {
+    transform: scale(1.06) rotate(180deg);
     box-shadow: 
-      0 0 0 2px rgba(208, 170, 91, 0.75),
-      0 18px 40px -6px rgba(8, 43, 76, 0.26),
-      0 0 38px rgba(39, 128, 178, 0.25),
-      0 0 18px rgba(181, 138, 58, 0.35);
+      0 0 0 3px rgba(208, 170, 91, 0.95),
+      0 26px 52px -6px rgba(8, 43, 76, 0.42),
+      0 0 56px rgba(39, 128, 178, 0.48),
+      0 0 32px rgba(181, 138, 58, 0.6);
   }
-  92% {
-    transform: scale(1.01) rotate(0.4deg);
+  90% {
+    transform: scale(1.04) rotate(290deg);
+    box-shadow: 
+      0 0 0 2.5px rgba(208, 170, 91, 0.8),
+      0 20px 42px -6px rgba(8, 43, 76, 0.32),
+      0 0 44px rgba(39, 128, 178, 0.32),
+      0 0 22px rgba(181, 138, 58, 0.4);
+  }
+  94% {
+    transform: scale(1.01) rotate(360deg);
+    box-shadow: 
+      0 0 0 2px rgba(181, 138, 58, 0.55),
+      0 18px 38px -6px rgba(8, 43, 76, 0.26),
+      0 0 36px rgba(39, 128, 178, 0.22);
   }
   98%, 100% {
-    transform: scale(1) rotate(0deg);
+    transform: scale(1) rotate(360deg);
     box-shadow: 
       0 0 0 2px rgba(181, 138, 58, 0.42),
       0 16px 36px -6px rgba(8, 43, 76, 0.22),
@@ -7769,8 +7834,8 @@ body.intro-active {
   }
 }
 
-@keyframes logoPeriodicAccentDark {
-  0%, 75% {
+@keyframes logoPeriodicRotateDark {
+  0%, 76% {
     transform: scale(1) rotate(0deg);
     box-shadow: 
       0 0 0 2px rgba(208, 170, 91, 0.5),
@@ -7778,26 +7843,38 @@ body.intro-active {
       0 0 36px rgba(0, 180, 255, 0.24);
   }
   80% {
-    transform: scale(1.035) rotate(2.8deg);
+    transform: scale(1.04) rotate(70deg);
     box-shadow: 
-      0 0 0 2.5px rgba(234, 214, 170, 0.95),
-      0 24px 50px rgba(2, 10, 20, 0.9),
-      0 0 52px rgba(0, 180, 255, 0.45),
-      0 0 30px rgba(208, 170, 91, 0.55);
+      0 0 0 2.5px rgba(234, 214, 170, 0.85),
+      0 22px 46px rgba(2, 10, 20, 0.88),
+      0 0 48px rgba(0, 180, 255, 0.4),
+      0 0 28px rgba(208, 170, 91, 0.5);
   }
-  86% {
-    transform: scale(1.03) rotate(-1.5deg);
+  85% {
+    transform: scale(1.06) rotate(180deg);
     box-shadow: 
-      0 0 0 2px rgba(208, 170, 91, 0.8),
-      0 20px 44px rgba(2, 10, 20, 0.85),
-      0 0 42px rgba(0, 180, 255, 0.35),
-      0 0 22px rgba(208, 170, 91, 0.4);
+      0 0 0 3px rgba(234, 214, 170, 0.98),
+      0 28px 56px rgba(2, 10, 20, 0.95),
+      0 0 60px rgba(0, 180, 255, 0.55),
+      0 0 36px rgba(208, 170, 91, 0.65);
   }
-  92% {
-    transform: scale(1.01) rotate(0.4deg);
+  90% {
+    transform: scale(1.04) rotate(290deg);
+    box-shadow: 
+      0 0 0 2.5px rgba(234, 214, 170, 0.85),
+      0 22px 46px rgba(2, 10, 20, 0.88),
+      0 0 46px rgba(0, 180, 255, 0.38),
+      0 0 26px rgba(208, 170, 91, 0.45);
+  }
+  94% {
+    transform: scale(1.01) rotate(360deg);
+    box-shadow: 
+      0 0 0 2px rgba(208, 170, 91, 0.65),
+      0 20px 44px rgba(2, 10, 20, 0.82),
+      0 0 38px rgba(0, 180, 255, 0.28);
   }
   98%, 100% {
-    transform: scale(1) rotate(0deg);
+    transform: scale(1) rotate(360deg);
     box-shadow: 
       0 0 0 2px rgba(208, 170, 91, 0.5),
       0 18px 42px rgba(2, 10, 20, 0.8),
@@ -7806,18 +7883,18 @@ body.intro-active {
 }
 
 @keyframes logoSheenSweep {
-  0%, 77% {
+  0%, 75% {
     transform: translate3d(-120%, -120%, 0) rotate(35deg);
     opacity: 0;
   }
-  81% {
-    opacity: 0.88;
+  78% {
+    opacity: 0.92;
   }
-  87% {
+  88% {
     transform: translate3d(120%, 120%, 0) rotate(35deg);
-    opacity: 0;
+    opacity: 0.92;
   }
-  100% {
+  92%, 100% {
     transform: translate3d(120%, 120%, 0) rotate(35deg);
     opacity: 0;
   }
@@ -8048,6 +8125,7 @@ body.intro-active {
   .hero-brand-dash,
   .hero-eyebrow,
   .hero-full-name,
+  .hero-full-name .subtitle-line,
   .hero-dept-subtitle,
   .hero-desc,
   .hero-actions {
