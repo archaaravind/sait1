@@ -1004,6 +1004,318 @@
   };
 
   /* ==========================================================================
+     7. ABOUT PAGE MOTION & SCROLL REVEAL CONTROLLER
+     ========================================================================== */
+  const AboutPageMotionController = {
+    aboutSection: null,
+    imageFrame: null,
+    isListeningScroll: false,
+    rafId: null,
+
+    init() {
+      this.aboutSection = document.getElementById('about');
+      if (!this.aboutSection) return;
+
+      this.imageFrame = document.getElementById('aboutImageFrame');
+
+      if (prefersReducedMotion) {
+        this.revealAllInstantly();
+        return;
+      }
+
+      this.initScrollObservers();
+      this.initParallax();
+      this.initCardInteractions();
+      this.initSmoothScrollButtons();
+    },
+
+    revealAllInstantly() {
+      const selectors = [
+        '.about-reveal-block',
+        '.about-reveal-up',
+        '.about-reveal-left',
+        '.about-reveal-right',
+        '.stagger-card',
+        '.stagger-why',
+        '.journey-stage-node'
+      ];
+      document.querySelectorAll(selectors.join(', ')).forEach(el => {
+        el.classList.add('revealed', 'illuminated');
+      });
+
+      const drawLine = document.getElementById('whoWeAreDrawLine');
+      if (drawLine) drawLine.classList.add('drawn');
+
+      const vmConnector = document.getElementById('vmConnector');
+      if (vmConnector) vmConnector.classList.add('connected');
+
+      const trackFill = document.getElementById('journeyTrackFill');
+      if (trackFill) {
+        trackFill.style.width = '100%';
+        trackFill.style.height = '100%';
+      }
+    },
+
+    initScrollObservers() {
+      // 1. Hero Header Staggered Reveal
+      const heroHeader = document.getElementById('aboutHeroHeader');
+      if (heroHeader) {
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              heroHeader.classList.add('revealed');
+              obs.unobserve(heroHeader);
+            }
+          });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+        obs.observe(heroHeader);
+      }
+
+      // 2. Together Towards Technology (Split Left & Right with Stagger)
+      const showcaseGrid = document.getElementById('aboutShowcase');
+      if (showcaseGrid) {
+        const leftCol = showcaseGrid.querySelector('.about-reveal-left');
+        const rightCol = showcaseGrid.querySelector('.about-reveal-right');
+
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              if (leftCol) leftCol.classList.add('revealed');
+              setTimeout(() => {
+                if (rightCol) rightCol.classList.add('revealed');
+              }, 140);
+              obs.unobserve(showcaseGrid);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+        obs.observe(showcaseGrid);
+      }
+
+      // 3. Who We Are Section & Self-Drawing Line
+      const whoWeAre = document.getElementById('who-we-are');
+      if (whoWeAre) {
+        const drawLine = document.getElementById('whoWeAreDrawLine');
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              whoWeAre.querySelectorAll('.about-reveal-up').forEach((el, i) => {
+                setTimeout(() => el.classList.add('revealed'), i * 120);
+              });
+              setTimeout(() => {
+                if (drawLine) drawLine.classList.add('drawn');
+              }, 300);
+              obs.unobserve(whoWeAre);
+            }
+          });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+        obs.observe(whoWeAre);
+      }
+
+      // 4. What We Do (Sequential 6-Card Stagger Reveal)
+      const whatWeDo = document.getElementById('what-we-do');
+      if (whatWeDo) {
+        const header = whatWeDo.querySelector('.about-reveal-up');
+        const cards = whatWeDo.querySelectorAll('.stagger-card');
+
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              if (header) header.classList.add('revealed');
+              cards.forEach((card, idx) => {
+                setTimeout(() => {
+                  card.classList.add('revealed');
+                }, 160 + idx * 110);
+              });
+              obs.unobserve(whatWeDo);
+            }
+          });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+        obs.observe(whatWeDo);
+      }
+
+      // 5. Vision & Mission Section with Dynamic Connector
+      const visionMission = document.getElementById('about-vision-mission');
+      if (visionMission) {
+        const header = visionMission.querySelector('.about-reveal-up');
+        const visionCard = visionMission.querySelector('.vision-card');
+        const missionCard = visionMission.querySelector('.mission-card');
+        const vmConnector = document.getElementById('vmConnector');
+
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              if (header) header.classList.add('revealed');
+              setTimeout(() => {
+                if (visionCard) visionCard.classList.add('revealed');
+              }, 120);
+              setTimeout(() => {
+                if (missionCard) missionCard.classList.add('revealed');
+              }, 220);
+              setTimeout(() => {
+                if (vmConnector) vmConnector.classList.add('connected');
+              }, 600);
+              obs.unobserve(visionMission);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+        obs.observe(visionMission);
+      }
+
+      // 6. Why SAIT Section (4-Card Sequential Stagger Reveal)
+      const whySait = document.getElementById('why-sait');
+      if (whySait) {
+        const header = whySait.querySelector('.about-reveal-up');
+        const cards = whySait.querySelectorAll('.stagger-why');
+
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              if (header) header.classList.add('revealed');
+              cards.forEach((card, idx) => {
+                setTimeout(() => {
+                  card.classList.add('revealed');
+                }, 150 + idx * 110);
+              });
+              obs.unobserve(whySait);
+            }
+          });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+        obs.observe(whySait);
+      }
+
+      // 7. SAIT Journey Section (Progressive Line & Node Illumination)
+      const journey = document.getElementById('about-journey');
+      if (journey) {
+        const header = journey.querySelector('.about-reveal-up');
+        const trackFill = document.getElementById('journeyTrackFill');
+        const nodes = journey.querySelectorAll('.journey-stage-node');
+
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              if (header) header.classList.add('revealed');
+
+              const isMobile = window.innerWidth < 900;
+              if (trackFill) {
+                if (isMobile) {
+                  trackFill.style.height = '100%';
+                } else {
+                  trackFill.style.width = '100%';
+                }
+              }
+
+              nodes.forEach((node, idx) => {
+                setTimeout(() => {
+                  node.classList.add('illuminated');
+                }, 200 + idx * 240);
+              });
+
+              obs.unobserve(journey);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+        obs.observe(journey);
+      }
+
+      // 8. Faculty Leadership (Preserved cards)
+      const faculty = document.getElementById('about-faculty');
+      if (faculty) {
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const items = faculty.querySelectorAll('.about-reveal-up');
+              items.forEach((item, idx) => {
+                setTimeout(() => item.classList.add('revealed'), idx * 120);
+              });
+              obs.unobserve(faculty);
+            }
+          });
+        }, { threshold: 0.05, rootMargin: '0px 0px 80px 0px' });
+        obs.observe(faculty);
+      }
+    },
+
+    initParallax() {
+      if (!this.imageFrame || window.innerWidth < 768) return;
+
+      const showcase = document.getElementById('aboutShowcase');
+      if (!showcase) return;
+
+      let ticking = false;
+
+      const updateParallax = () => {
+        const rect = showcase.getBoundingClientRect();
+        // Check if showcase is in or near the viewport
+        if (rect.bottom > -100 && rect.top < window.innerHeight + 100) {
+          const centerY = window.innerHeight / 2;
+          const showcaseCenter = rect.top + rect.height / 2;
+          const diff = (showcaseCenter - centerY) * -0.035;
+          // Clamp to range -12px to 12px
+          const clamped = Math.max(-12, Math.min(12, diff));
+          this.imageFrame.style.transform = `translate3d(0, ${clamped.toFixed(1)}px, 0)`;
+        }
+        ticking = false;
+      };
+
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          window.requestAnimationFrame(updateParallax);
+          ticking = true;
+        }
+      }, { passive: true });
+    },
+
+    initCardInteractions() {
+      const cards = document.querySelectorAll('.what-card, .why-card, .vm-card');
+      cards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = ((e.clientX - rect.left) / rect.width) * 100;
+          const y = ((e.clientY - rect.top) / rect.height) * 100;
+          card.style.setProperty('--mouse-x', `${x.toFixed(1)}%`);
+          card.style.setProperty('--mouse-y', `${y.toFixed(1)}%`);
+        }, { passive: true });
+      });
+    },
+
+    initSmoothScrollButtons() {
+      const knowMoreBtn = document.getElementById('aboutKnowMoreBtn');
+      if (knowMoreBtn) {
+        knowMoreBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const target = document.getElementById('who-we-are');
+          if (target) {
+            const headerOffset = 80;
+            const elementPosition = target.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth'
+            });
+          }
+        });
+      }
+
+      const exploreBtn = document.querySelector('.about-explore-btn');
+      if (exploreBtn) {
+        exploreBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const target = document.getElementById('about-journey');
+          if (target) {
+            const headerOffset = 80;
+            const elementPosition = target.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth'
+            });
+          }
+        });
+      }
+    }
+  };
+
+  /* ==========================================================================
      INITIALIZATION ON DOM READY
      ========================================================================== */
   function initAnimations() {
@@ -1013,6 +1325,7 @@
     HeroVisualController.init();
     ScrollRevealController.init();
     CardInteractionsController.init();
+    AboutPageMotionController.init();
 
     // Trigger hero entrance if intro is not active or reduced motion
     if (!document.body.classList.contains('intro-active')) {
@@ -1029,3 +1342,4 @@
   }
 
 })();
+

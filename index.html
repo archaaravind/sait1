@@ -422,113 +422,455 @@
 
     <!-- 5. ABOUT SAIT & ACADEMIC HERITAGE -->
     <section class="section-block about-section" id="about">
-      <div class="container">
-        <!-- Section Header -->
-        <div class="section-header">
-          <span class="section-tag"><i class="fa-solid fa-landmark"></i> Academic Heritage &amp; Vision</span>
-          <h2 class="section-title">About Division of IT &amp; SAIT</h2>
-          <p class="section-desc">
-            Discover the legacy of engineering at School of Engineering, CUSAT, and how SAIT serves as the catalyst uniting students, faculty, and industry pioneers.
+      <!-- Subtle Ambient Circuit & Light Backdrop for About -->
+      <div class="about-ambient-backdrop" aria-hidden="true">
+        <div class="about-ambient-glow about-glow-top"></div>
+        <div class="about-ambient-glow about-glow-bottom"></div>
+        <svg class="about-tech-circuits" viewBox="0 0 1440 600" fill="none" preserveAspectRatio="none">
+          <g class="about-circuit-paths" opacity="0.22">
+            <path d="M0 80 H280 L340 140 H680 L720 100 H1120 L1180 160 H1440" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 6" />
+            <path d="M0 320 H220 L270 370 H540 L590 320 H980 L1030 370 H1440" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 6" />
+            <path d="M160 0 V110 L200 150 V340" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 5" />
+            <path d="M1280 200 V400 L1230 450 V600" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 5" />
+          </g>
+          <g class="about-circuit-nodes" opacity="0.3">
+            <circle cx="280" cy="80" r="3.5" fill="#B58A3A" />
+            <circle cx="340" cy="140" r="4" fill="#082B4C" />
+            <circle cx="720" cy="100" r="3.5" fill="#B58A3A" />
+            <circle cx="1120" cy="100" r="4" fill="#082B4C" />
+            <circle cx="270" cy="370" r="3.5" fill="#B58A3A" />
+            <circle cx="590" cy="320" r="4" fill="#082B4C" />
+            <circle cx="1030" cy="370" r="3.5" fill="#B58A3A" />
+          </g>
+        </svg>
+      </div>
+
+      <div class="container about-container">
+        <!-- 1. ABOUT HERO -->
+        <div class="about-hero-header about-reveal-block" id="aboutHeroHeader">
+          <div class="about-badge-wrap about-reveal-item" data-delay="100">
+            <span class="section-tag about-heritage-badge"><i class="fa-solid fa-landmark"></i> Academic Heritage &amp; Vision</span>
+            <span class="about-sub-tag"><i class="fa-solid fa-microchip"></i> ABOUT SAIT / DIVISION OF IT</span>
+          </div>
+
+          <h2 class="section-title about-hero-title about-reveal-item" data-delay="200">
+            About Division of IT &amp; SAIT
+          </h2>
+
+          <p class="section-desc about-hero-desc about-reveal-item" data-delay="300">
+            A concise professional introduction explaining the Division of Information Technology and the Students Association of Information Technology (SAIT) at School of Engineering, CUSAT &mdash; uniting academic legacy, hands-on engineering, and student innovation.
           </p>
         </div>
 
-        <!-- Two-Column Highlight Showcase -->
-        <div class="about-showcase-grid">
-          <div class="aoc-content">
+        <!-- 2. TOGETHER TOWARDS TECHNOLOGY (SHOWCASE GRID) -->
+        <div class="about-showcase-grid about-reveal-container" id="aboutShowcase">
+          <div class="aoc-content about-reveal-left">
             <span class="aoc-tag">ABOUT SAIT</span>
             <h3 class="aoc-heading">Together Towards<br><span class="gradient-text">Technology</span></h3>
             <p class="aoc-desc">
               SAIT is the Students Association of Information Technology, representing and supporting the IT student community at CUSAT. We foster technical excellence, organize national symposiums, and bridge the gap between classroom theory and industry innovation.
             </p>
-            <a href="#about-foundation" class="btn btn-pill-primary btn-sm">
-              <span>Know More</span>
-              <i class="fa-solid fa-arrow-right"></i>
-            </a>
+            <div class="about-actions-row">
+              <a href="#who-we-are" class="btn btn-pill-primary btn-sm about-know-more-btn" id="aboutKnowMoreBtn">
+                <span>Know More</span>
+                <i class="fa-solid fa-arrow-right about-btn-arrow"></i>
+              </a>
+              <a href="#about-journey" class="btn btn-outline btn-sm about-explore-btn">
+                <i class="fa-solid fa-compass"></i>
+                <span>Our Journey</span>
+              </a>
+            </div>
           </div>
 
-          <!-- Architectural Photography Showcase -->
-          <div class="aoc-visual">
-            <div class="dept-image-frame">
-              <div class="dept-image-canvas">
-                <img src="soe-cusat%20.%20jpg.jpeg" alt="School of Engineering, CUSAT &mdash; Division of Information Technology" class="dept-real-photo">
-                <div class="dept-photo-overlay"></div>
-                <div class="dept-script-caption">
-                  <span>IT Dept</span>
-                  <small>SOE CUSAT &sim;</small>
+          <!-- Architectural Real Photography Showcase -->
+          <div class="aoc-visual about-reveal-right">
+            <div class="dept-image-frame" id="aboutImageFrame">
+              <div class="dept-photo-card">
+                <div class="dept-image-canvas">
+                  <img src="soe-cusat%20.%20jpg.jpeg" alt="School of Engineering, CUSAT &mdash; Division of Information Technology" class="dept-real-photo" id="aboutCusatPhoto" loading="lazy">
+                  <div class="dept-photo-overlay"></div>
+                  <div class="dept-stat-badge">
+                    <span class="stat-badge-num">SOE</span>
+                    <span class="stat-badge-lbl">Division of IT &bull; CUSAT</span>
+                  </div>
+                </div>
+              </div>
+              <div class="dept-script-caption">
+                <span class="caption-dept-name"><i class="fa-solid fa-location-dot"></i> School of Engineering, CUSAT</span>
+                <small class="caption-dept-sub">Division of Information Technology</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ANIMATED SECTION DIVIDER 1 -->
+        <div class="about-section-divider" aria-hidden="true">
+          <div class="divider-line">
+            <span class="divider-glow-node"></span>
+          </div>
+        </div>
+
+        <!-- 3. WHO WE ARE -->
+        <div class="about-sub-section who-we-are-section" id="who-we-are">
+          <div class="who-we-are-header about-reveal-up">
+            <span class="about-section-eyebrow"><i class="fa-solid fa-users-rays"></i> WHO WE ARE</span>
+            <h3 class="about-sub-title">The IT Student Community of CUSAT</h3>
+            <p class="about-lead-paragraph">
+              SAIT is the Students Association of Information Technology, representing and supporting the IT student community at Cochin University of Science and Technology (CUSAT). Governed by students in close collaboration with faculty mentors, SAIT operates as the central nexus for student connection, technical curiosity, and collaborative learning.
+            </p>
+            <div class="who-we-are-draw-line" id="whoWeAreDrawLine" aria-hidden="true">
+              <span class="draw-line-inner"></span>
+            </div>
+          </div>
+
+          <div class="who-we-are-pillars-strip about-reveal-up" data-delay="150">
+            <div class="pillar-chip"><i class="fa-solid fa-people-group"></i> Student Community</div>
+            <div class="pillar-chip"><i class="fa-solid fa-laptop-code"></i> Technical Learning</div>
+            <div class="pillar-chip"><i class="fa-solid fa-handshake-angle"></i> Collaboration</div>
+            <div class="pillar-chip"><i class="fa-solid fa-calendar-check"></i> Events &amp; Activities</div>
+            <div class="pillar-chip"><i class="fa-solid fa-lightbulb"></i> Innovation</div>
+            <div class="pillar-chip"><i class="fa-solid fa-briefcase"></i> Professional Development</div>
+          </div>
+        </div>
+
+        <!-- ANIMATED SECTION DIVIDER 2 -->
+        <div class="about-section-divider" aria-hidden="true">
+          <div class="divider-line">
+            <span class="divider-glow-node"></span>
+          </div>
+        </div>
+
+        <!-- 4. WHAT WE DO (6 Interactive Cards) -->
+        <div class="about-sub-section what-we-do-section" id="what-we-do">
+          <div class="sub-header text-center about-reveal-up">
+            <span class="about-section-eyebrow"><i class="fa-solid fa-layer-group"></i> WHAT WE DO</span>
+            <h3 class="about-sub-title">WHAT WE DO</h3>
+            <p class="sub-desc">
+              Supporting technical and professional development through an interconnected student ecosystem.
+            </p>
+          </div>
+
+          <div class="what-we-do-grid" id="whatWeDoGrid">
+            <!-- Card 1: LEARNING -->
+            <div class="what-card stagger-card" data-index="0">
+              <div class="what-card-accent-border" aria-hidden="true"></div>
+              <div class="what-card-icon-wrap">
+                <i class="fa-solid fa-graduation-cap"></i>
+              </div>
+              <div class="what-card-num">01</div>
+              <h4 class="what-card-title">LEARNING</h4>
+              <p class="what-card-text">
+                Technical learning, knowledge sharing and skill development through student-led initiatives.
+              </p>
+            </div>
+
+            <!-- Card 2: COMMUNITY -->
+            <div class="what-card stagger-card" data-index="1">
+              <div class="what-card-accent-border" aria-hidden="true"></div>
+              <div class="what-card-icon-wrap">
+                <i class="fa-solid fa-users"></i>
+              </div>
+              <div class="what-card-num">02</div>
+              <h4 class="what-card-title">COMMUNITY</h4>
+              <p class="what-card-text">
+                Connecting IT students and building an active student community across all semesters.
+              </p>
+            </div>
+
+            <!-- Card 3: EVENTS -->
+            <div class="what-card stagger-card" data-index="2">
+              <div class="what-card-accent-border" aria-hidden="true"></div>
+              <div class="what-card-icon-wrap">
+                <i class="fa-solid fa-calendar-check"></i>
+              </div>
+              <div class="what-card-num">03</div>
+              <h4 class="what-card-title">EVENTS</h4>
+              <p class="what-card-text">
+                Workshops, technical events, activities and student experiences that inspire practical skills.
+              </p>
+            </div>
+
+            <!-- Card 4: INNOVATION -->
+            <div class="what-card stagger-card" data-index="3">
+              <div class="what-card-accent-border" aria-hidden="true"></div>
+              <div class="what-card-icon-wrap">
+                <i class="fa-solid fa-lightbulb"></i>
+              </div>
+              <div class="what-card-num">04</div>
+              <h4 class="what-card-title">INNOVATION</h4>
+              <p class="what-card-text">
+                Encouraging ideas, experimentation and technology projects from conception to implementation.
+              </p>
+            </div>
+
+            <!-- Card 5: COLLABORATION -->
+            <div class="what-card stagger-card" data-index="4">
+              <div class="what-card-accent-border" aria-hidden="true"></div>
+              <div class="what-card-icon-wrap">
+                <i class="fa-solid fa-handshake"></i>
+              </div>
+              <div class="what-card-num">05</div>
+              <h4 class="what-card-title">COLLABORATION</h4>
+              <p class="what-card-text">
+                Creating opportunities for students to learn and work together in teams and cross-domain initiatives.
+              </p>
+            </div>
+
+            <!-- Card 6: CAREER GROWTH -->
+            <div class="what-card stagger-card" data-index="5">
+              <div class="what-card-accent-border" aria-hidden="true"></div>
+              <div class="what-card-icon-wrap">
+                <i class="fa-solid fa-chart-line"></i>
+              </div>
+              <div class="what-card-num">06</div>
+              <h4 class="what-card-title">CAREER GROWTH</h4>
+              <p class="what-card-text">
+                Supporting technical and professional development to guide students toward successful careers.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ANIMATED SECTION DIVIDER 3 -->
+        <div class="about-section-divider" aria-hidden="true">
+          <div class="divider-line">
+            <span class="divider-glow-node"></span>
+          </div>
+        </div>
+
+        <!-- 5. VISION & MISSION -->
+        <div class="about-sub-section vision-mission-section" id="about-vision-mission">
+          <div class="sub-header text-center about-reveal-up">
+            <span class="about-section-eyebrow"><i class="fa-solid fa-compass-drafting"></i> CORE PURPOSE</span>
+            <h3 class="about-sub-title">VISION &amp; MISSION</h3>
+            <p class="sub-desc">Guiding principles shaping our student community and technical endeavors.</p>
+          </div>
+
+          <div class="vision-mission-grid" id="visionMissionGrid">
+            <!-- Vision Card (Left) -->
+            <div class="vm-card vision-card about-reveal-left">
+              <div class="vm-card-header">
+                <div class="vm-icon-bubble vm-icon-vision">
+                  <i class="fa-solid fa-eye"></i>
+                </div>
+                <div class="vm-badge">VISION</div>
+              </div>
+              <h4 class="vm-card-title">VISION</h4>
+              <p class="vm-card-text">
+                Build an active, skilled and innovative IT student community where students can learn, collaborate and grow together.
+              </p>
+              <div class="vm-card-footer">
+                <span class="vm-tag-pill"><i class="fa-solid fa-check"></i> Learn</span>
+                <span class="vm-tag-pill"><i class="fa-solid fa-check"></i> Collaborate</span>
+                <span class="vm-tag-pill"><i class="fa-solid fa-check"></i> Grow Together</span>
+              </div>
+            </div>
+
+            <!-- Center Animated Connecting Line -->
+            <div class="vm-connector" id="vmConnector" aria-hidden="true">
+              <div class="vm-connector-line"></div>
+              <div class="vm-connector-pulse"></div>
+            </div>
+
+            <!-- Mission Card (Right) -->
+            <div class="vm-card mission-card about-reveal-right">
+              <div class="vm-card-header">
+                <div class="vm-icon-bubble vm-icon-mission">
+                  <i class="fa-solid fa-bullseye"></i>
+                </div>
+                <div class="vm-badge">MISSION</div>
+              </div>
+              <h4 class="vm-card-title">MISSION</h4>
+              <p class="vm-card-text">
+                Support students through technical learning, collaboration, events, activities and opportunities that encourage practical growth and innovation.
+              </p>
+              <div class="vm-card-footer">
+                <span class="vm-tag-pill"><i class="fa-solid fa-check"></i> Practical Growth</span>
+                <span class="vm-tag-pill"><i class="fa-solid fa-check"></i> Innovation</span>
+                <span class="vm-tag-pill"><i class="fa-solid fa-check"></i> Student Events</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ANIMATED SECTION DIVIDER 4 -->
+        <div class="about-section-divider" aria-hidden="true">
+          <div class="divider-line">
+            <span class="divider-glow-node"></span>
+          </div>
+        </div>
+
+        <!-- 6. WHY SAIT -->
+        <div class="about-sub-section why-sait-section" id="why-sait">
+          <div class="sub-header text-center about-reveal-up">
+            <span class="about-section-eyebrow"><i class="fa-solid fa-circle-question"></i> VALUE PILLARS</span>
+            <h3 class="about-sub-title">WHY SAIT?</h3>
+            <p class="sub-desc">Four interactive avenues where IT students connect, discover, and excel.</p>
+          </div>
+
+          <div class="why-sait-grid" id="whySaitGrid">
+            <!-- 1. CONNECT -->
+            <div class="why-card stagger-why" data-index="0">
+              <div class="why-card-top">
+                <div class="why-icon-box">
+                  <i class="fa-solid fa-network-wired"></i>
+                </div>
+                <span class="why-step-num">01</span>
+              </div>
+              <h4 class="why-card-title">CONNECT</h4>
+              <p class="why-card-text">Connect with fellow IT students.</p>
+              <div class="why-card-border-glow" aria-hidden="true"></div>
+            </div>
+
+            <!-- 2. EXPLORE -->
+            <div class="why-card stagger-why" data-index="1">
+              <div class="why-card-top">
+                <div class="why-icon-box">
+                  <i class="fa-solid fa-compass-drafting"></i>
+                </div>
+                <span class="why-step-num">02</span>
+              </div>
+              <h4 class="why-card-title">EXPLORE</h4>
+              <p class="why-card-text">Explore technologies, ideas and opportunities.</p>
+              <div class="why-card-border-glow" aria-hidden="true"></div>
+            </div>
+
+            <!-- 3. BUILD -->
+            <div class="why-card stagger-why" data-index="2">
+              <div class="why-card-top">
+                <div class="why-icon-box">
+                  <i class="fa-solid fa-code"></i>
+                </div>
+                <span class="why-step-num">03</span>
+              </div>
+              <h4 class="why-card-title">BUILD</h4>
+              <p class="why-card-text">Build practical skills through projects and activities.</p>
+              <div class="why-card-border-glow" aria-hidden="true"></div>
+            </div>
+
+            <!-- 4. GROW -->
+            <div class="why-card stagger-why" data-index="3">
+              <div class="why-card-top">
+                <div class="why-icon-box">
+                  <i class="fa-solid fa-arrow-trend-up"></i>
+                </div>
+                <span class="why-step-num">04</span>
+              </div>
+              <h4 class="why-card-title">GROW</h4>
+              <p class="why-card-text">Grow technically and professionally.</p>
+              <div class="why-card-border-glow" aria-hidden="true"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ANIMATED SECTION DIVIDER 5 -->
+        <div class="about-section-divider" aria-hidden="true">
+          <div class="divider-line">
+            <span class="divider-glow-node"></span>
+          </div>
+        </div>
+
+        <!-- 7. SAIT JOURNEY (Horizontal on Desktop, Vertical on Mobile) -->
+        <div class="about-sub-section sait-journey-section" id="about-journey">
+          <div class="sub-header text-center about-reveal-up">
+            <span class="about-section-eyebrow"><i class="fa-solid fa-route"></i> STUDENT TRAJECTORY</span>
+            <h3 class="about-sub-title">SAIT Journey</h3>
+            <p class="sub-desc">Progressive growth stages shaping student journeys from induction to technological leadership.</p>
+          </div>
+
+          <div class="journey-flow-wrapper" id="journeyFlowWrapper">
+            <!-- Progressive Connecting Line -->
+            <div class="journey-track-line" id="journeyTrackLine" aria-hidden="true">
+              <div class="journey-track-fill" id="journeyTrackFill"></div>
+            </div>
+
+            <div class="journey-stages-grid">
+              <!-- Stage 1: STUDENTS -->
+              <div class="journey-stage-node" data-stage="0">
+                <div class="journey-node-bubble">
+                  <i class="fa-solid fa-user-graduate"></i>
+                  <span class="journey-node-halo"></span>
+                </div>
+                <div class="journey-stage-content">
+                  <span class="journey-step-tag">STAGE 01</span>
+                  <h4 class="journey-stage-title">STUDENTS</h4>
+                  <p class="journey-stage-desc">Welcoming students into the IT family.</p>
+                </div>
+              </div>
+
+              <!-- Stage 2: LEARNING -->
+              <div class="journey-stage-node" data-stage="1">
+                <div class="journey-node-bubble">
+                  <i class="fa-solid fa-book-open-reader"></i>
+                  <span class="journey-node-halo"></span>
+                </div>
+                <div class="journey-stage-content">
+                  <span class="journey-step-tag">STAGE 02</span>
+                  <h4 class="journey-stage-title">LEARNING</h4>
+                  <p class="journey-stage-desc">Building strong technological foundations.</p>
+                </div>
+              </div>
+
+              <!-- Stage 3: COMMUNITY -->
+              <div class="journey-stage-node" data-stage="2">
+                <div class="journey-node-bubble">
+                  <i class="fa-solid fa-people-roof"></i>
+                  <span class="journey-node-halo"></span>
+                </div>
+                <div class="journey-stage-content">
+                  <span class="journey-step-tag">STAGE 03</span>
+                  <h4 class="journey-stage-title">COMMUNITY</h4>
+                  <p class="journey-stage-desc">Fostering peer collaboration and camaraderie.</p>
+                </div>
+              </div>
+
+              <!-- Stage 4: TECHNOLOGY -->
+              <div class="journey-stage-node" data-stage="3">
+                <div class="journey-node-bubble">
+                  <i class="fa-solid fa-microchip"></i>
+                  <span class="journey-node-halo"></span>
+                </div>
+                <div class="journey-stage-content">
+                  <span class="journey-step-tag">STAGE 04</span>
+                  <h4 class="journey-stage-title">TECHNOLOGY</h4>
+                  <p class="journey-stage-desc">Mastering advanced tools and frameworks.</p>
+                </div>
+              </div>
+
+              <!-- Stage 5: INNOVATION -->
+              <div class="journey-stage-node" data-stage="4">
+                <div class="journey-node-bubble">
+                  <i class="fa-solid fa-rocket"></i>
+                  <span class="journey-node-halo"></span>
+                </div>
+                <div class="journey-stage-content">
+                  <span class="journey-step-tag">STAGE 05</span>
+                  <h4 class="journey-stage-title">INNOVATION</h4>
+                  <p class="journey-stage-desc">Creating impactful solutions and ideas.</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Vision & Mission Dual Cards -->
-        <div class="dual-cards-grid" id="about-foundation">
-          <!-- IT Department Card -->
-          <div class="glass-card about-card highlight-card">
-            <div class="card-header-icon">
-              <i class="fa-solid fa-building-columns"></i>
-            </div>
-            <span class="badge-pill badge-primary">Department Foundation</span>
-            <h3>Division of Information Technology</h3>
-            <p class="lead-text">
-              Established under the School of Engineering (SOE) at Cochin University of Science and Technology, the Division of IT offers undergraduate (B.Tech) and research programs engineered to solve complex global technological challenges.
-            </p>
-            <div class="mission-box">
-              <h4><i class="fa-solid fa-eye text-primary"></i> Department Vision</h4>
-              <p>To be an epicenter of excellence in Information Technology education and interdisciplinary research, producing ethical engineers and technological leaders capable of driving global innovation.</p>
-            </div>
-            <div class="mission-box">
-              <h4><i class="fa-solid fa-bullseye text-cyan"></i> Department Mission</h4>
-              <p>Provide an outcome-based academic curriculum, foster state-of-the-art computational infrastructure, promote research in AI, Cloud Computing, and Cyber Defense, and facilitate strong industry-academia collaboration.</p>
-            </div>
-            <div class="highlights-list">
-              <div class="hl-item"><i class="fa-solid fa-check-circle"></i> AICTE Approved &amp; NBA Accredited Curricula</div>
-              <div class="hl-item"><i class="fa-solid fa-check-circle"></i> Specialized High-Performance Compute &amp; IoT Labs</div>
-              <div class="hl-item"><i class="fa-solid fa-check-circle"></i> Global Research Collaborations &amp; Publications</div>
-            </div>
-          </div>
-
-          <!-- SAIT Association Card -->
-          <div class="glass-card about-card">
-            <div class="card-header-icon icon-secondary">
-              <i class="fa-solid fa-code-branch"></i>
-            </div>
-            <span class="badge-pill badge-secondary">Student Association</span>
-            <h3>SAIT &mdash; Students Association of IT</h3>
-            <p class="lead-text">
-              SAIT is the autonomous student body governing co-curricular technical initiatives, hackathons, skill-building workshops, and student welfare across all semesters in the IT Division.
-            </p>
-            <div class="mission-box">
-              <h4><i class="fa-solid fa-compass text-primary"></i> SAIT Purpose &amp; Vision</h4>
-              <p>To cultivate an inclusive, high-energy environment where every IT student transforms theoretical knowledge into deployable engineering artifacts, leadership capability, and community contribution.</p>
-            </div>
-            <div class="mission-box">
-              <h4><i class="fa-solid fa-rocket text-cyan"></i> Core Pillars of Action</h4>
-              <div class="pillars-grid">
-                <div class="pillar-tag"><i class="fa-solid fa-microchip"></i> Technology</div>
-                <div class="pillar-tag"><i class="fa-solid fa-users"></i> Community</div>
-                <div class="pillar-tag"><i class="fa-solid fa-lightbulb"></i> Innovation</div>
-                <div class="pillar-tag"><i class="fa-solid fa-handshake"></i> Professionalism</div>
-              </div>
-            </div>
-            <div class="highlights-list">
-              <div class="hl-item"><i class="fa-solid fa-check-circle"></i> Peer mentorship programs between seniors and juniors</div>
-              <div class="hl-item"><i class="fa-solid fa-check-circle"></i> Flagship annual symposiums, hackathons &amp; code jams</div>
-              <div class="hl-item"><i class="fa-solid fa-check-circle"></i> Career readiness &amp; open-source project incubators</div>
-            </div>
+        <!-- ANIMATED SECTION DIVIDER 6 -->
+        <div class="about-section-divider" aria-hidden="true">
+          <div class="divider-line">
+            <span class="divider-glow-node"></span>
           </div>
         </div>
 
-        <!-- Faculty & Administration Showcase -->
-        <div class="sub-section">
-          <div class="sub-header">
+        <!-- 8. FACULTY & ADMINISTRATION LEADERSHIP (PRESERVED) -->
+        <div class="sub-section about-faculty-section" id="about-faculty">
+          <div class="sub-header text-center about-reveal-up">
+            <span class="about-section-eyebrow"><i class="fa-solid fa-building-columns"></i> ACADEMIC MENTORSHIP</span>
             <h3 class="sub-title"><i class="fa-solid fa-user-tie"></i> Faculty &amp; Administration Leadership</h3>
-            <p class="sub-desc">Guided by distinguished educators and researchers committed to student advancement.</p>
+            <p class="sub-desc">Guided by distinguished educators and researchers committed to student advancement at SOE CUSAT.</p>
           </div>
 
           <div class="faculty-grid">
             <!-- HoD Card -->
-            <div class="glass-card faculty-card">
+            <div class="glass-card faculty-card about-reveal-up" data-delay="100">
               <div class="faculty-avatar-wrapper">
                 <div class="avatar-placeholder"><i class="fa-solid fa-user-graduate"></i></div>
                 <span class="role-badge badge-primary">Head of Division</span>
@@ -545,7 +887,7 @@
             </div>
 
             <!-- Staff Coordinator 1 -->
-            <div class="glass-card faculty-card">
+            <div class="glass-card faculty-card about-reveal-up" data-delay="200">
               <div class="faculty-avatar-wrapper">
                 <div class="avatar-placeholder"><i class="fa-solid fa-chalkboard-user"></i></div>
                 <span class="role-badge badge-secondary">Faculty Coordinator</span>
@@ -562,7 +904,7 @@
             </div>
 
             <!-- Staff Coordinator 2 -->
-            <div class="glass-card faculty-card">
+            <div class="glass-card faculty-card about-reveal-up" data-delay="300">
               <div class="faculty-avatar-wrapper">
                 <div class="avatar-placeholder"><i class="fa-solid fa-laptop-file"></i></div>
                 <span class="role-badge badge-secondary">Technical Advisor</span>
@@ -580,62 +922,6 @@
           </div>
         </div>
 
-        <!-- Interactive Milestone Timeline -->
-        <div class="sub-section">
-          <div class="sub-header">
-            <h3 class="sub-title"><i class="fa-solid fa-timeline"></i> Journey &amp; Milestones</h3>
-            <p class="sub-desc">Key historical achievements shaping the IT Division and SAIT community over the decades.</p>
-          </div>
-
-          <div class="milestone-timeline">
-            <div class="timeline-track"></div>
-            
-            <div class="timeline-node">
-              <div class="node-marker">1995</div>
-              <div class="glass-card node-content">
-                <span class="node-badge">Founding Era</span>
-                <h4>Department Establishment</h4>
-                <p>Establishment of the Division of Information Technology at School of Engineering, CUSAT, to pioneer computer engineering education in Kerala.</p>
-              </div>
-            </div>
-
-            <div class="timeline-node">
-              <div class="node-marker">2004</div>
-              <div class="glass-card node-content">
-                <span class="node-badge">Community Inception</span>
-                <h4>Birth of SAIT</h4>
-                <p>Students Association of Information Technology formally inaugurated to provide an autonomous platform for student technical endeavors.</p>
-              </div>
-            </div>
-
-            <div class="timeline-node">
-              <div class="node-marker">2014</div>
-              <div class="glass-card node-content">
-                <span class="node-badge">National Spotlight</span>
-                <h4>Infinitus &amp; National Hackathons</h4>
-                <p>Inception of Infinitus, SAIT's flagship national technology summit, drawing collegiate innovators across India.</p>
-              </div>
-            </div>
-
-            <div class="timeline-node">
-              <div class="node-marker">2021</div>
-              <div class="glass-card node-content">
-                <span class="node-badge">Modern Labs</span>
-                <h4>AI &amp; Cloud Research Labs</h4>
-                <p>Equipped specialized compute labs with high-end GPUs for AI/ML modeling, IoT prototypes, and distributed cloud computing.</p>
-              </div>
-            </div>
-
-            <div class="timeline-node">
-              <div class="node-marker">2026</div>
-              <div class="glass-card node-content">
-                <span class="node-badge">Next Generation</span>
-                <h4>Digital Redesign &amp; Activity Portal</h4>
-                <p>Rollout of the unified SAIT Digital Ecosystem with verified Activity Logger, dynamic alumni network, and automated event coordination.</p>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
 
