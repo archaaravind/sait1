@@ -1168,10 +1168,8 @@ ul, ol {
 .hero-architectural-stage {
   position: relative;
   width: 100%;
-  max-width: 460px;
+  max-width: 520px;
   display: flex;
-  flex-direction: column;
-  gap: 2.5rem;
   justify-content: center;
   align-items: center;
   transform-style: preserve-3d;
@@ -1181,90 +1179,15 @@ ul, ol {
 
 @media (min-width: 1200px) {
   .hero-architectural-stage {
-    max-width: 500px;
+    max-width: 540px;
   }
-}
-
-.hero-building-card {
-  width: 100%;
-  background: var(--bg-card);
-  border-radius: var(--radius-xl);
-  border: 1.5px solid rgba(181, 138, 58, 0.35);
-  box-shadow: 0 20px 45px rgba(8, 43, 76, 0.14), 0 0 25px rgba(181, 138, 58, 0.12);
-  overflow: hidden;
-  position: relative;
-  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
-}
-
-.hero-building-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 25px 55px rgba(8, 43, 76, 0.18), 0 0 35px rgba(181, 138, 58, 0.22);
-  border-color: var(--color-gold);
-}
-
-.hero-building-media {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 10;
-  height: auto;
-  overflow: hidden;
-  background: #082B4C;
-}
-
-.hero-building-photo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.hero-building-card:hover .hero-building-photo {
-  transform: scale(1.04);
-}
-
-.hero-building-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, transparent 55%, rgba(6, 31, 56, 0.65) 100%);
-  pointer-events: none;
-}
-
-.hero-building-tag {
-  position: absolute;
-  bottom: 14px;
-  left: 16px;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.35rem 0.85rem;
-  background: rgba(255, 253, 248, 0.94);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(181, 138, 58, 0.35);
-  border-radius: var(--radius-full);
-  font-family: var(--font-mono);
-  font-size: 0.76rem;
-  font-weight: 700;
-  color: var(--color-primary);
-  box-shadow: 0 4px 14px rgba(6, 31, 56, 0.18);
-  z-index: 2;
-}
-
-.tag-pin-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--color-gold);
-  box-shadow: 0 0 6px var(--color-gold);
 }
 
 /* Floating Official SAIT Logo with Orbital Tech Rings */
 .hero-floating-logo-badge {
   position: relative;
-  width: 175px;
-  height: 175px;
+  width: min(92vw, 500px);
+  aspect-ratio: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1273,8 +1196,7 @@ ul, ol {
 
 @media (min-width: 1200px) {
   .hero-floating-logo-badge {
-    width: 195px;
-    height: 195px;
+    width: min(42vw, 520px);
   }
 }
 
@@ -1337,6 +1259,37 @@ ul, ol {
   animation: sweepPulse 3s ease-in-out infinite alternate;
 }
 
+.orbit-particle-field {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: spinSlow 28s linear infinite;
+}
+
+.orbit-particle-field-b {
+  inset: 9%;
+  animation: spinCounterSlow 20s linear infinite;
+}
+
+.orbit-particle {
+  position: absolute;
+  width: clamp(4px, 0.7vw, 7px);
+  height: clamp(4px, 0.7vw, 7px);
+  border-radius: 50%;
+  background: var(--color-gold-soft);
+  box-shadow: 0 0 8px var(--color-gold), 0 0 16px rgba(181, 138, 58, 0.5);
+}
+
+.particle-1 { top: 4%; left: 48%; }
+.particle-2 { top: 29%; right: 4%; }
+.particle-3 { bottom: 9%; right: 26%; width: 4px; height: 4px; }
+.particle-4 { bottom: 26%; left: 2%; width: 5px; height: 5px; }
+.particle-5 { top: 12%; right: 20%; width: 4px; height: 4px; }
+.particle-6 { top: 55%; right: 1%; }
+.particle-7 { bottom: 4%; left: 45%; width: 4px; height: 4px; }
+.particle-8 { top: 49%; left: 4%; width: 5px; height: 5px; }
+
 .orbit-star {
   position: absolute;
   border-radius: 50%;
@@ -1350,40 +1303,28 @@ ul, ol {
 
 .hero-official-logo-box {
   position: relative;
-  width: 105px;
-  height: 105px;
-  border-radius: 24px;
-  background: #FFFDF8;
-  border: 2px solid var(--color-gold);
-  box-shadow: 0 10px 30px rgba(8, 43, 76, 0.16), 0 0 20px rgba(181, 138, 58, 0.24);
-  overflow: hidden;
+  width: 56%;
+  aspect-ratio: 1;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.65rem;
   z-index: 3;
   animation: logoFloatSubtle 5.5s ease-in-out infinite alternate, logoSoftBluePulse 4.5s ease-in-out infinite alternate;
   will-change: transform, box-shadow;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
 }
 
-@media (min-width: 1200px) {
-  .hero-official-logo-box {
-    width: 118px;
-    height: 118px;
-  }
-}
-
 .hero-official-logo-box:hover {
-  transform: scale(1.05) translateY(-3px);
-  box-shadow: 0 14px 40px rgba(8, 43, 76, 0.22), 0 0 35px rgba(181, 138, 58, 0.35);
+  transform: scale(1.03) translateY(-3px);
 }
 
 .hero-official-logo-img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  border-radius: 14px;
+  border-radius: 50%;
+  filter: drop-shadow(0 12px 24px rgba(8, 43, 76, 0.22));
 }
 
 /* Hero Wave Stream Base */
