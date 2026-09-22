@@ -190,28 +190,26 @@
   };
 
   /* ==========================================================================
-     2. LIVE IVORY, NAVY & WARM GOLD AMBIENT CANVAS SYSTEM
+     2. LIVE TECHNOLOGY BACKGROUND (CIRCUITS, PARTICLES, AMBIENT GLOW & GOLD STREAKS)
      ========================================================================== */
   const AmbientCanvasSystem = {
     canvas: null,
     ctx: null,
     particles: [],
+    circuits: [],
+    goldStreak: null,
+    nextStreakTime: 0,
     animId: null,
     width: 0,
     height: 0,
     dpr: 1,
     isRunning: false,
     mouse: { x: -1000, y: -1000, active: false },
+    time: 0,
 
-    // Ivory + Navy + Gold palette: Navy tones, Gold accents, Warm Ivory nodes
-    colors: [
-      { r: 8,   g: 43,  b: 76 },  // #082B4C Primary Navy
-      { r: 11,  g: 53,  b: 92 },  // #0B355C Navy Blue
-      { r: 23,  g: 74,  b: 115 }, // #174A73 Lighter Navy
-      { r: 181, g: 138, b: 58 },  // #B58A3A Warm Gold
-      { r: 208, g: 170, b: 91 },  // #D0AA5B Soft Gold
-      { r: 140, g: 105, b: 40 }   // #8C6928 Deep Gold
-    ],
+    isDarkTheme() {
+      return document.documentElement.getAttribute('data-theme') === 'dark';
+    },
 
     init() {
       this.canvas = document.getElementById('ambientCanvas');
@@ -223,13 +221,12 @@
       this.resize();
 
       if (prefersReducedMotion) {
-        // Draw one static frame without animation loop
-        this.initParticles();
+        this.initEntities();
         this.drawStatic();
         return;
       }
 
-      this.initParticles();
+      this.initEntities();
       this.bindEvents();
       this.start();
     },
@@ -248,28 +245,75 @@
       this.ctx.scale(this.dpr, this.dpr);
     },
 
-    initParticles() {
-      this.particles = [];
+    initEntities() {
       const isMobile = this.width < 768;
       const isTablet = this.width < 1024;
-      // Particle count optimized for smooth performance
-      const count = isMobile ? 18 : isTablet ? 28 : 40;
+      const dark = this.isDarkTheme();
 
-      for (let i = 0; i < count; i++) {
-        const color = this.colors[Math.floor(Math.random() * this.colors.length)];
+      // 1. Subtle Floating Particles
+      this.particles = [];
+      const pCount = isMobile ? 16 : isTablet ? 26 : 38;
+      const colors = dark ? [
+        { r: 0,   g: 180, b: 255 }, // Tech Cyan
+        { r: 208, g: 170, b: 91 },  // Soft Gold
+        { r: 23,  g: 74,  b: 115 }, // Mid Navy
+        { r: 248, g: 244, b: 234 }  // Light Ivory
+      ] : [
+        { r: 8,   g: 43,  b: 76 },  // Primary Navy
+        { r: 23,  g: 74,  b: 115 }, // Mid Navy
+        { r: 181, g: 138, b: 58 },  // Warm Gold
+        { r: 208, g: 170, b: 91 }   // Soft Gold
+      ];
+
+      for (let i = 0; i < pCount; i++) {
+        const c = colors[Math.floor(Math.random() * colors.length)];
         this.particles.push({
           x: Math.random() * this.width,
           y: Math.random() * this.height,
-          vx: (Math.random() - 0.5) * (isMobile ? 0.22 : 0.35),
-          vy: (Math.random() - 0.5) * (isMobile ? 0.22 : 0.35),
-          radius: Math.random() * 1.5 + 1.2,
-          color: color,
-          baseAlpha: Math.random() * 0.3 + 0.2,
-          alpha: 0.25,
-          pulseSpeed: Math.random() * 0.02 + 0.012,
+          vx: (Math.random() - 0.5) * (isMobile ? 0.20 : 0.28),
+          vy: (Math.random() - 0.5) * (isMobile ? 0.20 : 0.28),
+          radius: Math.random() * 1.4 + 1.1,
+          color: c,
+          baseAlpha: Math.random() * 0.25 + 0.15,
+          alpha: 0.2,
+          pulseSpeed: Math.random() * 0.018 + 0.010,
           pulsePhase: Math.random() * Math.PI * 2
         });
       }
+
+      // 2. Architectural PCB Circuit Lines
+      this.circuits = [];
+      const cCount = isMobile ? 5 : isTablet ? 8 : 12;
+      const gridSize = 64;
+
+      for (let i = 0; i < cCount; i++) {
+        // Generate orthogonal circuit traces
+        const gx = Math.floor(Math.random() * (this.width / gridSize)) * gridSize;
+        const gy = Math.floor(Math.random() * (this.height / gridSize)) * gridSize;
+        const dir = Math.random() > 0.5 ? 1 : -1;
+        const hLen = (Math.floor(Math.random() * 3) + 2) * gridSize * dir;
+        const vLen = (Math.floor(Math.random() * 2) + 1) * gridSize * (Math.random() > 0.5 ? 1 : -1);
+
+        const p0 = { x: gx, y: gy };
+        const p1 = { x: gx + hLen, y: gy };
+        const p2 = { x: gx + hLen, y: gy + vLen };
+
+        const seg1Len = Math.abs(hLen);
+        const seg2Len = Math.abs(vLen);
+        const totalLen = seg1Len + seg2Len;
+
+        this.circuits.push({
+          p0, p1, p2,
+          seg1Len, seg2Len, totalLen,
+          speed: Math.random() * 0.35 + 0.35, // slow, dignified speed
+          dist: Math.random() * totalLen,
+          pulseLen: Math.random() * 25 + 35,
+          active: true
+        });
+      }
+
+      // Streak timer
+      this.nextStreakTime = Date.now() + 4000;
     },
 
     bindEvents() {
@@ -278,11 +322,20 @@
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(() => {
           this.resize();
-          this.initParticles();
+          this.initEntities();
         }, 150);
       }, { passive: true });
 
-      // Track mouse position over canvas
+      // Listen for theme toggle to update colors smoothly
+      const observer = new MutationObserver(() => {
+        this.initEntities();
+      });
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['data-theme']
+      });
+
+      // Mouse tracking
       window.addEventListener('mousemove', (e) => {
         this.mouse.x = e.clientX;
         this.mouse.y = e.clientY;
@@ -295,22 +348,7 @@
         this.mouse.y = -1000;
       });
 
-      // Mobile touch
-      window.addEventListener('touchmove', (e) => {
-        if (e.touches && e.touches[0]) {
-          this.mouse.x = e.touches[0].clientX;
-          this.mouse.y = e.touches[0].clientY;
-          this.mouse.active = true;
-        }
-      }, { passive: true });
-
-      window.addEventListener('touchend', () => {
-        setTimeout(() => {
-          this.mouse.active = false;
-        }, 500);
-      });
-
-      // Pause when tab hidden to save CPU/battery
+      // Tab visibility
       document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
           this.stop();
@@ -323,8 +361,8 @@
     start() {
       if (this.isRunning) return;
       this.isRunning = true;
-      const loop = () => {
-        this.render();
+      const loop = (timestamp) => {
+        this.render(timestamp);
         this.animId = requestAnimationFrame(loop);
       };
       this.animId = requestAnimationFrame(loop);
@@ -338,57 +376,228 @@
       }
     },
 
-    render() {
+    // Compute point along 2-segment circuit path
+    getPointOnCircuit(c, d) {
+      if (d <= c.seg1Len) {
+        const t = d / c.seg1Len;
+        return {
+          x: c.p0.x + (c.p1.x - c.p0.x) * t,
+          y: c.p0.y
+        };
+      } else {
+        const t = (d - c.seg1Len) / c.seg2Len;
+        return {
+          x: c.p1.x,
+          y: c.p1.y + (c.p2.y - c.p1.y) * t
+        };
+      }
+    },
+
+    render(timestamp) {
+      this.time = timestamp || performance.now();
       const ctx = this.ctx;
       const w = this.width;
       const h = this.height;
+      const dark = this.isDarkTheme();
 
       ctx.clearRect(0, 0, w, h);
 
+      // -------------------------------------------------------------
+      // 1. Slow Blue Ambient Light Movement
+      // -------------------------------------------------------------
+      const t = this.time;
+      const glow1X = w * (0.28 + 0.12 * Math.sin(t * 0.00035));
+      const glow1Y = h * (0.32 + 0.08 * Math.cos(t * 0.00030));
+      const glow1R = Math.min(w, h) * 0.42;
+
+      const grad1 = ctx.createRadialGradient(glow1X, glow1Y, 0, glow1X, glow1Y, glow1R);
+      if (dark) {
+        grad1.addColorStop(0, 'rgba(0, 180, 255, 0.075)');
+        grad1.addColorStop(0.5, 'rgba(11, 53, 92, 0.035)');
+        grad1.addColorStop(1, 'transparent');
+      } else {
+        grad1.addColorStop(0, 'rgba(11, 53, 92, 0.055)');
+        grad1.addColorStop(0.5, 'rgba(23, 74, 115, 0.025)');
+        grad1.addColorStop(1, 'transparent');
+      }
+      ctx.fillStyle = grad1;
+      ctx.fillRect(0, 0, w, h);
+
+      const glow2X = w * (0.72 + 0.14 * Math.cos(t * 0.00028));
+      const glow2Y = h * (0.65 + 0.10 * Math.sin(t * 0.00038));
+      const glow2R = Math.min(w, h) * 0.46;
+
+      const grad2 = ctx.createRadialGradient(glow2X, glow2Y, 0, glow2X, glow2Y, glow2R);
+      if (dark) {
+        grad2.addColorStop(0, 'rgba(17, 74, 115, 0.065)');
+        grad2.addColorStop(0.6, 'rgba(3, 15, 28, 0.03)');
+        grad2.addColorStop(1, 'transparent');
+      } else {
+        grad2.addColorStop(0, 'rgba(8, 43, 76, 0.045)');
+        grad2.addColorStop(0.6, 'rgba(241, 235, 221, 0.02)');
+        grad2.addColorStop(1, 'transparent');
+      }
+      ctx.fillStyle = grad2;
+      ctx.fillRect(0, 0, w, h);
+
+      // -------------------------------------------------------------
+      // 2. Slowly Moving Circuit Lines & Data Packets
+      // -------------------------------------------------------------
+      const traceColor = dark ? 'rgba(0, 180, 255, 0.09)' : 'rgba(8, 43, 76, 0.08)';
+      const nodeColor = dark ? 'rgba(0, 180, 255, 0.22)' : 'rgba(181, 138, 58, 0.22)';
+      const pulseBaseColor = dark ? 'rgba(0, 210, 255,' : 'rgba(181, 138, 58,';
+
+      const cLen = this.circuits.length;
+      for (let i = 0; i < cLen; i++) {
+        const c = this.circuits[i];
+
+        // Draw circuit trace lines
+        ctx.beginPath();
+        ctx.moveTo(c.p0.x, c.p0.y);
+        ctx.lineTo(c.p1.x, c.p1.y);
+        ctx.lineTo(c.p2.x, c.p2.y);
+        ctx.strokeStyle = traceColor;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Solder pad terminals at start, turn, and end
+        ctx.beginPath();
+        ctx.arc(c.p0.x, c.p0.y, 2, 0, Math.PI * 2);
+        ctx.arc(c.p1.x, c.p1.y, 2, 0, Math.PI * 2);
+        ctx.arc(c.p2.x, c.p2.y, 2, 0, Math.PI * 2);
+        ctx.fillStyle = nodeColor;
+        ctx.fill();
+
+        // Advance pulse
+        c.dist += c.speed;
+        if (c.dist > c.totalLen) {
+          c.dist = 0;
+        }
+
+        // Draw moving light pulse packet
+        const headPt = this.getPointOnCircuit(c, c.dist);
+        const tailDist = Math.max(0, c.dist - c.pulseLen);
+        const tailPt = this.getPointOnCircuit(c, tailDist);
+
+        const pulseGrad = ctx.createLinearGradient(tailPt.x, tailPt.y, headPt.x, headPt.y);
+        pulseGrad.addColorStop(0, `${pulseBaseColor} 0)`);
+        pulseGrad.addColorStop(0.7, `${pulseBaseColor} 0.35)`);
+        pulseGrad.addColorStop(1, `${pulseBaseColor} 0.85)`);
+
+        ctx.beginPath();
+        ctx.moveTo(tailPt.x, tailPt.y);
+        if (c.dist > c.seg1Len && tailDist < c.seg1Len) {
+          ctx.lineTo(c.p1.x, c.p1.y);
+        }
+        ctx.lineTo(headPt.x, headPt.y);
+        ctx.strokeStyle = pulseGrad;
+        ctx.lineWidth = 1.8;
+        ctx.stroke();
+
+        // Head glowing dot
+        ctx.beginPath();
+        ctx.arc(headPt.x, headPt.y, 1.8, 0, Math.PI * 2);
+        ctx.fillStyle = `${pulseBaseColor} 0.95)`;
+        ctx.fill();
+      }
+
+      // -------------------------------------------------------------
+      // 3. Occasional Subtle Gold Light Streaks
+      // -------------------------------------------------------------
+      const now = Date.now();
+      if (!this.goldStreak && now > this.nextStreakTime && cLen > 0) {
+        const picked = this.circuits[Math.floor(Math.random() * cLen)];
+        this.goldStreak = {
+          circuit: picked,
+          progress: 0,
+          speed: 0.007, // ~2.4 seconds duration
+          streakLen: 65
+        };
+      }
+
+      if (this.goldStreak) {
+        const gs = this.goldStreak;
+        gs.progress += gs.speed;
+
+        if (gs.progress >= 1) {
+          this.goldStreak = null;
+          this.nextStreakTime = now + (Math.random() * 3000 + 6000); // next in 6-9s
+        } else {
+          const headDist = gs.progress * gs.circuit.totalLen;
+          const tailDist = Math.max(0, headDist - gs.streakLen);
+          const headPt = this.getPointOnCircuit(gs.circuit, headDist);
+          const tailPt = this.getPointOnCircuit(gs.circuit, tailDist);
+
+          // Alpha fade in & out curve
+          const streakAlpha = Math.sin(gs.progress * Math.PI) * (dark ? 0.9 : 0.75);
+
+          const streakGrad = ctx.createLinearGradient(tailPt.x, tailPt.y, headPt.x, headPt.y);
+          streakGrad.addColorStop(0, 'rgba(181, 138, 58, 0)');
+          streakGrad.addColorStop(0.6, `rgba(181, 138, 58, ${streakAlpha * 0.5})`);
+          streakGrad.addColorStop(1, `rgba(208, 170, 91, ${streakAlpha})`);
+
+          ctx.beginPath();
+          ctx.moveTo(tailPt.x, tailPt.y);
+          if (headDist > gs.circuit.seg1Len && tailDist < gs.circuit.seg1Len) {
+            ctx.lineTo(gs.circuit.p1.x, gs.circuit.p1.y);
+          }
+          ctx.lineTo(headPt.x, headPt.y);
+          ctx.strokeStyle = streakGrad;
+          ctx.lineWidth = 2.4;
+          ctx.stroke();
+
+          // Golden pulse halo at head
+          ctx.beginPath();
+          ctx.arc(headPt.x, headPt.y, 3, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(208, 170, 91, ${streakAlpha})`;
+          ctx.shadowColor = 'rgba(208, 170, 91, 0.8)';
+          ctx.shadowBlur = 8;
+          ctx.fill();
+          ctx.shadowBlur = 0; // reset
+        }
+      }
+
+      // -------------------------------------------------------------
+      // 4. Subtle Floating Particles
+      // -------------------------------------------------------------
       const isMobile = w < 768;
-      const maxConnectDist = isMobile ? 85 : 120;
+      const maxConnectDist = isMobile ? 80 : 115;
       const maxConnectDistSq = maxConnectDist * maxConnectDist;
       const mouseDistThreshold = isMobile ? 90 : 130;
       const mouseDistSq = mouseDistThreshold * mouseDistThreshold;
+      const connectColorBase = dark ? 'rgba(0, 180, 255,' : 'rgba(8, 43, 76,';
 
-      // Update and draw particles
       const pLen = this.particles.length;
       for (let i = 0; i < pLen; i++) {
         const p = this.particles[i];
 
-        // Move
         p.x += p.vx;
         p.y += p.vy;
 
-        // Wrap edges smoothly
         if (p.x < -10) p.x = w + 10;
         else if (p.x > w + 10) p.x = -10;
         if (p.y < -10) p.y = h + 10;
         else if (p.y > h + 10) p.y = -10;
 
-        // Mouse gentle repulsion
         if (this.mouse.active) {
           const dx = p.x - this.mouse.x;
           const dy = p.y - this.mouse.y;
           const dSq = dx * dx + dy * dy;
           if (dSq < mouseDistSq && dSq > 0) {
             const force = (1 - Math.sqrt(dSq) / mouseDistThreshold) * 0.7;
-            p.x += (dx / Math.sqrt(dSq)) * force * 1.4;
-            p.y += (dy / Math.sqrt(dSq)) * force * 1.4;
+            p.x += (dx / Math.sqrt(dSq)) * force * 1.2;
+            p.y += (dy / Math.sqrt(dSq)) * force * 1.2;
           }
         }
 
-        // Pulse alpha
         p.pulsePhase += p.pulseSpeed;
-        p.alpha = p.baseAlpha + Math.sin(p.pulsePhase) * 0.12;
+        p.alpha = p.baseAlpha + Math.sin(p.pulsePhase) * 0.08;
 
-        // Draw particle
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, ${Math.max(0.08, p.alpha)})`;
+        ctx.fillStyle = `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, ${Math.max(0.06, p.alpha)})`;
         ctx.fill();
 
-        // Connect nearby particles with subtle architectural lines
         for (let j = i + 1; j < pLen; j++) {
           const p2 = this.particles[j];
           const ldx = p.x - p2.x;
@@ -397,11 +606,11 @@
 
           if (ldSq < maxConnectDistSq) {
             const dist = Math.sqrt(ldSq);
-            const lineAlpha = (1 - dist / maxConnectDist) * 0.09;
+            const lineAlpha = (1 - dist / maxConnectDist) * (dark ? 0.09 : 0.07);
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(8, 43, 76, ${lineAlpha})`;
+            ctx.strokeStyle = `${connectColorBase} ${lineAlpha})`;
             ctx.lineWidth = 0.75;
             ctx.stroke();
           }
@@ -667,6 +876,13 @@
     HeroVisualController.init();
     ScrollRevealController.init();
     CardInteractionsController.init();
+
+    // Trigger hero entrance if intro is not active or reduced motion
+    if (!document.body.classList.contains('intro-active')) {
+      setTimeout(() => {
+        IntroSequenceController.triggerHeroEntrance();
+      }, 300);
+    }
   }
 
   if (document.readyState === 'loading') {
