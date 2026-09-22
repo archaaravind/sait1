@@ -559,7 +559,7 @@
      ========================================================================== */
 
   const STATE = {
-    theme: localStorage.getItem('sait_theme') || document.documentElement.getAttribute('data-theme') || 'dark',
+    theme: 'dark',
     registeredEvents: JSON.parse(localStorage.getItem('sait_registered_events') || '["infinitus-26", "ai-bootcamp"]'),
     activities: [],
     announcements: [],
@@ -670,26 +670,20 @@
   };
 
   /* ==========================================================================
-     4. THEME CONTROLLER (Dark / Light with LocalStorage)
+     4. THEME CONTROLLER (Permanent Dark Mode Only — SAIT Deep Navy)
      ========================================================================== */
 
   const ThemeController = {
     init() {
-      this.applyTheme(STATE.theme);
-
-      const toggleBtn = document.getElementById('themeToggleBtn');
-      if (toggleBtn) {
-        toggleBtn.addEventListener('click', () => {
-          STATE.theme = STATE.theme === 'dark' ? 'light' : 'dark';
-          localStorage.setItem('sait_theme', STATE.theme);
-          this.applyTheme(STATE.theme);
-          ToastManager.show(`Switched to ${STATE.theme === 'dark' ? 'Deep Navy Night' : 'Ivory & Navy'} Mode`, 'info');
-        });
-      }
+      STATE.theme = 'dark';
+      try {
+        localStorage.setItem('sait_theme', 'dark');
+      } catch (e) {}
+      this.applyTheme('dark');
     },
 
-    applyTheme(theme) {
-      document.documentElement.setAttribute('data-theme', theme);
+    applyTheme() {
+      document.documentElement.setAttribute('data-theme', 'dark');
     }
   };
 

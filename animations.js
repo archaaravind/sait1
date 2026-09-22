@@ -431,7 +431,7 @@
     activeTwinkleRate: 1.0,
 
     isDarkTheme() {
-      return document.documentElement.getAttribute('data-theme') !== 'light';
+      return true;
     },
 
     init() {
@@ -550,15 +550,6 @@
           this.initLayers();
         }, 150);
       }, { passive: true });
-
-      // Theme toggle observer
-      const observer = new MutationObserver(() => {
-        this.initLayers();
-      });
-      observer.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ['data-theme']
-      });
 
       // Desktop Pointer Tracking
       window.addEventListener('mousemove', (e) => {
